@@ -1,0 +1,6 @@
+{
+  "name": "Bon Yurt Circular - Alpina",
+  "description": "Plan de Implementación de Economía Circular para Bon Yurt de Alpina: Cerrar el ciclo es nutrir el futuro. Diagrama de Mariposa interactivo, ACV, 9R, Simulador y MRV.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
