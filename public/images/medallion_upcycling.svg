@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="upbg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E1F5FE"/>
+      <stop offset="100%" stop-color="#B3E5FC"/>
+    </linearGradient>
+  </defs>
+  <circle cx="100" cy="100" r="100" fill="url(#upbg)"/>
+  <!-- Upcycled cup / pencil holder -->
+  <path d="M 65 90 L 75 160 Q 100 168 125 160 L 135 90 Z" fill="#003876" stroke="#002554" stroke-width="3"/>
+  <ellipse cx="100" cy="90" rx="35" ry="10" fill="#1565C0" stroke="#002554" stroke-width="2"/>
+  <!-- Pencils inside cup -->
+  <!-- Yellow pencil -->
+  <polygon points="85,90 90,40 95,90" fill="#FFCA28"/>
+  <polygon points="90,40 88,30 92,30" fill="#212121"/>
+  <!-- Red pencil -->
+  <polygon points="100,90 108,35 116,90" fill="#E53935"/>
+  <polygon points="108,35 106,25 110,25" fill="#212121"/>
+  <!-- Green ruler -->
+  <rect x="70" y="45" width="12" height="50" rx="2" fill="#43A047" transform="rotate(-15 76 70)"/>
+  <!-- Star on cup -->
+  <polygon points="100,120 103,128 112,128 105,133 108,141 100,136 92,141 95,133 88,128 97,128" fill="#FFF59D"/>
+</svg>

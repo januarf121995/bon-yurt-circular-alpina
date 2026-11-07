@@ -53,7 +53,7 @@
       <!-- Image Canvas Container -->
       <div class="flex-1 overflow-auto p-2 sm:p-4 bg-slate-900/90 flex items-center justify-center">
         <img
-          src="/src/assets/images/infografia_oficial_mariposa.jpg"
+          src="/images/infografia_oficial.jpg"
           alt="Diagrama de Mariposa Oficial Bon Yurt Alpina"
           class="max-w-full max-h-[75vh] object-contain rounded-xl shadow-2xl"
         />

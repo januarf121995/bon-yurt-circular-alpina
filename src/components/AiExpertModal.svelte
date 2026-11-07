@@ -58,8 +58,11 @@
     }
   });
 
+  let lastHandledPrompt = '';
   $effect(() => {
-    if (initialPrompt && isOpen) {
+    if (initialPrompt && isOpen && initialPrompt !== lastHandledPrompt) {
+      lastHandledPrompt = initialPrompt;
+      mode = initialMode;
       sendMessage(initialPrompt, initialMode);
     }
   });

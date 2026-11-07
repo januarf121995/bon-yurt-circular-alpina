@@ -33,11 +33,11 @@
   function getStrategyImage(key?: string): string {
     switch (key) {
       case 'school':
-        return '/src/assets/images/bonyurt_school_prae_1794004446726.jpg';
+        return '/images/bonyurt_prae.jpg';
       case 'plant':
-        return '/src/assets/images/alpina_sustainable_plant_1794004445952.jpg';
+        return '/images/alpina_plant.jpg';
       default:
-        return '/src/assets/images/bonyurt_circular_hero_1794004446513.jpg';
+        return '/images/bonyurt_hero.jpg';
     }
   }
 </script>

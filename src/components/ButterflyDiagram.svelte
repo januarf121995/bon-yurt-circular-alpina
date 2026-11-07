@@ -47,19 +47,19 @@
   function getMedallionImage(loopId: string): string {
     switch (loopId) {
       case 'bio-regenerativo':
-        return 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=300&auto=format&fit=crop&q=80';
+        return '/images/medallion_sprout.svg';
       case 'bio-cascada':
-        return 'https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=300&auto=format&fit=crop&q=80';
+        return '/images/medallion_cheese.svg';
       case 'bio-corto':
-        return 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=300&auto=format&fit=crop&q=80';
+        return '/images/medallion_spoon.svg';
       case 'tec-corto':
-        return 'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=300&auto=format&fit=crop&q=80';
+        return '/images/medallion_upcycling.svg';
       case 'tec-local':
-        return '/src/assets/images/bonyurt_school_prae_1794004446726.jpg';
+        return '/images/bonyurt_prae.jpg';
       case 'tec-cascada':
-        return 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=300&auto=format&fit=crop&q=80';
+        return '/images/alpina_plant.jpg';
       default:
-        return '/src/assets/images/bonyurt_circular_hero_1794004446513.jpg';
+        return '/images/bonyurt_hero.jpg';
     }
   }
 </script>
@@ -212,7 +212,7 @@
           <!-- Curving Milk Waves -->
           <div class="relative mx-auto aspect-square max-w-[220px] rounded-2xl overflow-hidden bg-white border border-blue-100 shadow-inner group">
             <img
-              src="/src/assets/images/bonyurt_circular_hero_1794004446513.jpg"
+              src="/images/bonyurt_hero.jpg"
               alt="Bon Yurt de Alpina"
               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
