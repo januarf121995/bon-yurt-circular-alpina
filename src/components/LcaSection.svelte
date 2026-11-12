@@ -7,20 +7,19 @@
     Home,
     Recycle,
     Layers,
-    Clock,
     Sparkles,
     Users,
     Settings,
     Package,
     Droplet,
     Zap,
-    Wind,
     AlertCircle,
-    CheckCircle2,
-    FileSpreadsheet
+    FileSpreadsheet,
+    Image as ImageIcon,
+    ChevronDown,
+    ChevronUp
   } from 'lucide-svelte';
-  import { LCA_PHASES } from '../data/circularData';
-  import type { LcaPhase } from '../types/circular';
+  import { LCA_PHASES, LCA_HOTSPOTS_AND_GAPS, PROJECT_IDENTITY } from '../data/circularData';
 
   interface Props {
     onAskAi: (prompt: string) => void;
@@ -29,6 +28,7 @@
   let { onAskAi }: Props = $props();
 
   let activePhaseId = $state(1);
+  let showSlideVisual = $state(false);
 
   const activePhase = $derived(
     LCA_PHASES.find((p) => p.id === activePhaseId) || LCA_PHASES[0]
@@ -49,267 +49,208 @@
 
 <section class="py-6 sm:py-10 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-8">
   <!-- Header -->
-  <div class="max-w-3xl">
-    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-[#003876] text-xs font-bold mb-2">
-      <FileSpreadsheet class="w-3.5 h-3.5" />
-      <span>Componente 1 · Guía de Clase (Peso: 15% de la Rúbrica)</span>
+  <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+    <div class="max-w-3xl">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-[#003876] text-xs font-bold mb-2">
+        <FileSpreadsheet class="w-3.5 h-3.5" />
+        <span>Componente 1 · Diagnóstico ACV (Estándares GRI 301, 302, 303, 305, 306)</span>
+      </div>
+      <h2 class="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight font-brand">
+        Análisis de Ciclo de Vida (ACV · 6 Fases)
+      </h2>
+      <p class="text-slate-600 text-sm sm:text-base mt-1.5 leading-relaxed">
+        Mapeo completo de la cuna a la tumba para <strong>{PROJECT_IDENTITY.product}</strong> bajo <strong>{PROJECT_IDENTITY.route}</strong>.
+      </p>
     </div>
-    <h2 class="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight font-brand">
-      Diagnóstico de Análisis de Ciclo de Vida (ACV)
-    </h2>
-    <p class="text-slate-600 text-sm sm:text-base mt-1.5 leading-relaxed">
-      Inventario cualitativo y semicuantitativo de entradas, procesos, salidas e impactos desde la extracción de insumos hasta el cierre de ciclo en Colombia, cruzado con estándares <strong>GRI 301 a 306</strong>.
-    </p>
+
+    <button
+      onclick={() => (showSlideVisual = !showSlideVisual)}
+      class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold border border-slate-300 transition-colors cursor-pointer self-start md:self-auto"
+    >
+      <ImageIcon class="w-4 h-4 text-[#003876]" />
+      <span>{showSlideVisual ? 'Ocultar Lámina Oficial' : 'Ver Lámina Oficial (Diapositiva 3)'}</span>
+      {#if showSlideVisual}<ChevronUp class="w-3.5 h-3.5" />{:else}<ChevronDown class="w-3.5 h-3.5" />{/if}
+    </button>
   </div>
+
+  {#if showSlideVisual}
+    <div class="rounded-3xl overflow-hidden border-2 border-blue-200 bg-white shadow-lg p-3 space-y-2">
+      <img
+        src="/images/slides/slide_visual_1.png"
+        alt="Infografía oficial Componente 1: Ciclo de vida del producto Bonyurt"
+        class="w-full h-auto rounded-2xl object-contain max-h-[540px] mx-auto bg-slate-50"
+      />
+      <p class="text-[11px] text-center text-slate-500 font-medium">
+        Lámina oficial de la presentación ejecutiva (Diapositiva 3): 6 fases del ciclo de vida, ideas de reutilización y soluciones de vencidos.
+      </p>
+    </div>
+  {/if}
 
   <!-- Scope & System Boundary Cards -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs flex items-start gap-4">
-      <div class="w-12 h-12 rounded-xl bg-blue-50 text-[#003876] flex items-center justify-center font-black text-lg shrink-0 font-brand">
-        175g
+      <div class="w-12 h-12 rounded-xl bg-blue-50 text-[#003876] flex items-center justify-center font-black text-base shrink-0 font-brand">
+        175 g
       </div>
       <div>
-        <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
-          Unidad Funcional (UF)
-        </span>
-        <h3 class="text-base font-bold text-slate-900">
-          Entregar, proteger y fusionar 175 g de mezcla láctea
-        </h3>
-        <p class="text-xs text-slate-600 mt-1 leading-relaxed">
-          Vaso de base láctea (~150 g de yogurt o kumis) + sobrecopa transparente de cereales/toppings (~25 g de aliados como Jet, Chocoramo o Zucaritas) garantizando inocuidad en cadena de frío.
-        </p>
+        <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Unidad Funcional</span>
+        <h3 class="text-base font-bold text-slate-900">175 g de mezcla láctea (yogurt y cereales)</h3>
+        <p class="text-xs text-slate-600 mt-1 leading-relaxed">{PROJECT_IDENTITY.functionalUnit}</p>
       </div>
     </div>
 
     <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs flex items-start gap-4">
-      <div class="w-12 h-12 rounded-xl bg-emerald-50 text-[#2B8A1E] flex items-center justify-center font-black text-lg shrink-0 font-brand">
+      <div class="w-12 h-12 rounded-xl bg-emerald-50 text-[#2B8A1E] flex items-center justify-center font-black text-sm shrink-0 font-brand">
         C2C
       </div>
       <div>
-        <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
-          Límites del Sistema
-        </span>
-        <h3 class="text-base font-bold text-slate-900">
-          De la Cuna a la Tumba con Cierre Circular ("Cradle-to-Cradle")
-        </h3>
-        <p class="text-xs text-slate-600 mt-1 leading-relaxed">
-          Abarca las 6 fases: extracción agropecuaria, logística de frío, producción en planta Sopó, red nacional de distribución, consumo en loncheras y valorización posconsumo (PRAE y pupitres).
-        </p>
+        <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Límites del Sistema</span>
+        <h3 class="text-base font-bold text-slate-900">De la Cuna a la Tumba con Circularidad</h3>
+        <p class="text-xs text-slate-600 mt-1 leading-relaxed">{PROJECT_IDENTITY.systemBoundaries} ({PROJECT_IDENTITY.presence}).</p>
       </div>
     </div>
   </div>
 
-  <!-- Stepper Track for 6 Phases -->
-  <div class="bg-white rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-xs">
-    <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
-      <span class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-        <Clock class="w-4 h-4 text-slate-400" />
-        Línea de Tiempo del Ciclo de Vida (6 Fases Oficiales)
-      </span>
-      <span class="text-xs font-bold text-[#003876]">
-        Fase seleccionada: {activePhase.shortTitle}
-      </span>
-    </div>
-
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3">
+  <!-- Horizontal Phase Stepper -->
+  <div class="bg-slate-50 p-3 sm:p-4 rounded-3xl border border-slate-200">
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
       {#each LCA_PHASES as phase}
-        {@const IconComponent = getPhaseIcon(phase.id)}
-        {@const isSelected = activePhaseId === phase.id}
+        {@const Icon = getPhaseIcon(phase.id)}
         <button
-          onclick={() => activePhaseId = phase.id}
-          class={`p-3 rounded-2xl text-left transition-all border cursor-pointer focus:outline-none relative ${
-            isSelected
-              ? 'bg-blue-50 border-[#003876] shadow-xs'
-              : 'bg-slate-50 border-slate-200 hover:bg-white hover:border-slate-300'
+          onclick={() => (activePhaseId = phase.id)}
+          class={`relative p-3 rounded-2xl text-left transition-all cursor-pointer border-2 ${
+            activePhaseId === phase.id
+              ? 'bg-[#003876] text-white border-[#003876] shadow-md'
+              : 'bg-white text-slate-700 border-slate-200 hover:border-blue-300'
           }`}
         >
           {#if phase.isHotspot}
-            <span class="absolute -top-1.5 -right-1.5 w-3 h-3 rounded-full bg-rose-500 border-2 border-white" title="Punto Crítico (Hotspot)"></span>
+            <span class="absolute top-2 right-2 px-1.5 py-0.5 rounded text-[9px] font-black bg-amber-400 text-slate-950">
+              Hotspot
+            </span>
           {/if}
-          <div class="flex items-center justify-between mb-1.5">
-            <span
-              class={`w-6 h-6 rounded-lg text-xs font-bold flex items-center justify-center font-mono-numbers ${
-                isSelected ? 'bg-[#003876] text-white' : 'bg-slate-200 text-slate-600'
-              }`}
-            >
-              {phase.id}
-            </span>
-            <span class={isSelected ? 'text-[#003876]' : 'text-slate-400'}>
-              <IconComponent class="w-4 h-4" />
-            </span>
-          </div>
-          <h4 class={`text-xs font-bold line-clamp-1 ${isSelected ? 'text-[#003876]' : 'text-slate-800'}`}>
-            {phase.shortTitle}
-          </h4>
-          <span class="text-[10px] text-slate-500 line-clamp-1 block mt-0.5">
-            {phase.isHotspot ? '🔥 Punto Crítico' : 'Flujo Estándar'}
-          </span>
+          <Icon class={`w-5 h-5 mb-2 ${activePhaseId === phase.id ? 'text-amber-300' : 'text-[#003876]'}`} />
+          <span class="text-[10px] font-mono-numbers opacity-75 block">Fase {phase.id}</span>
+          <span class="text-xs font-bold block leading-tight mt-0.5">{phase.shortTitle}</span>
         </button>
       {/each}
     </div>
   </div>
 
-  <!-- Deep Dive Detail Card for Selected Phase -->
-  <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
-    <!-- Phase Header & AI Query -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+  <!-- Selected Phase Deep Dive -->
+  <div class="bg-white rounded-3xl p-6 sm:p-8 border-2 border-blue-200 shadow-sm space-y-6">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
       <div>
-        <div class="flex items-center gap-2 flex-wrap mb-1">
-          <span class="text-xs font-black uppercase text-[#2B8A1E] tracking-wider font-brand">
-            Fase 0{activePhase.id} de 06
-          </span>
-          {#if activePhase.isHotspot}
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 border border-rose-200">
-              Hotspot Ambiental Prioritario
-            </span>
-          {/if}
-        </div>
-        <h3 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight font-brand">
-          {activePhase.name}
-        </h3>
-        <p class="text-xs text-slate-500 font-medium mt-0.5">
-          Alcance operativo: {activePhase.durationOrScope}
-        </p>
-      </div>
-
-      <button
-        onclick={() => onAskAi(`Analiza detalladamente las entradas, procesos, salidas y puntos críticos de la ${activePhase.name} del Bon Yurt Alpina frente a los indicadores GRI.`)}
-        class="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-bold text-[#003876] bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-xl transition-colors cursor-pointer self-start sm:self-auto shadow-2xs"
-      >
-        <Sparkles class="w-3.5 h-3.5 text-blue-600" />
-        <span>Consultar Fase a la IA</span>
-      </button>
-    </div>
-
-    <!-- Hotspot & GRI Indicators Bar -->
-    <div class="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
-      <div class="flex items-center gap-2">
-        <span class="font-bold text-slate-700">Estándares GRI cubiertos:</span>
-        <div class="flex flex-wrap gap-1.5">
+        <div class="flex flex-wrap items-center gap-2 mb-1">
           {#each activePhase.griIndicators as gri}
-            <span class="px-2 py-0.5 rounded-md bg-white border border-slate-300 font-mono-numbers font-semibold text-slate-800 text-[11px]">
+            <span class="text-[10px] font-black px-2 py-0.5 rounded-md bg-blue-50 text-[#003876] border border-blue-200">
               {gri}
             </span>
           {/each}
+          <span class="text-xs text-slate-400 font-medium">{activePhase.durationOrScope}</span>
         </div>
+        <h3 class="text-xl sm:text-2xl font-black text-slate-900 font-brand">{activePhase.name}</h3>
       </div>
-      {#if activePhase.isHotspot && activePhase.hotspotReason}
-        <span class="text-rose-700 font-semibold text-xs flex items-center gap-1">
-          <AlertCircle class="w-3.5 h-3.5 shrink-0" />
-          <span>{activePhase.hotspotReason}</span>
-        </span>
-      {/if}
+
+      <button
+        onclick={() => onAskAi(`Detalla las entradas, salidas GRI y oportunidades circulares de la fase ACV "${activePhase.name}" en Bon Yurt Alpina.`)}
+        class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#003876] text-xs font-bold transition-colors cursor-pointer self-start sm:self-auto"
+      >
+        <Sparkles class="w-3.5 h-3.5 text-blue-600" />
+        <span>Consultar Fase con IA</span>
+      </button>
     </div>
 
-    <!-- 4 Pillars: Actores, Procesos, Entradas, Salidas -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-      <!-- 1. Actores (Quién) -->
-      <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
-        <div class="flex items-center gap-2 text-slate-900 font-bold text-xs uppercase tracking-wider">
-          <Users class="w-4 h-4 text-blue-600" />
-          <span>Actores (¿Quién?)</span>
+    {#if activePhase.isHotspot && activePhase.hotspotReason}
+      <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200 flex items-start gap-3 text-xs text-amber-950">
+        <AlertCircle class="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+        <div>
+          <strong class="block font-black uppercase text-[10px] tracking-wider text-amber-800">Punto Crítico (Hotspot) Detectado</strong>
+          <p class="mt-0.5 leading-relaxed">{activePhase.hotspotReason}</p>
         </div>
-        <ul class="space-y-2 text-xs text-slate-700">
-          {#each activePhase.actors as actor}
-            <li class="flex items-start gap-2 leading-relaxed">
-              <span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0"></span>
-              <span>{actor}</span>
-            </li>
-          {/each}
-        </ul>
       </div>
+    {/if}
 
-      <!-- 2. Procesos (Qué se hace) -->
-      <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
-        <div class="flex items-center gap-2 text-slate-900 font-bold text-xs uppercase tracking-wider">
-          <Settings class="w-4 h-4 text-emerald-600" />
-          <span>Procesos (¿Qué se hace?)</span>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+      <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+        <div class="flex items-center gap-1.5 font-black text-slate-800 uppercase text-[11px]">
+          <Users class="w-4 h-4 text-[#003876]" />
+          <span>Actores y Procesos</span>
         </div>
-        <ul class="space-y-2 text-xs text-slate-700">
+        <ul class="space-y-1.5 text-slate-700 list-disc pl-4">
+          {#each activePhase.actors as actor}<li>{actor}</li>{/each}
+        </ul>
+        <div class="pt-2 border-t border-slate-200">
+          <span class="font-bold text-slate-900 block mb-1">Procesos:</span>
           {#each activePhase.processes as proc}
-            <li class="flex items-start gap-2 leading-relaxed">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0"></span>
-              <span>{proc}</span>
-            </li>
+            <p class="text-slate-600 leading-relaxed mb-1">• {proc}</p>
           {/each}
-        </ul>
-      </div>
-
-      <!-- 3. Entradas (Materiales, Agua, Energía) -->
-      <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
-        <div class="flex items-center gap-2 text-slate-900 font-bold text-xs uppercase tracking-wider">
-          <Package class="w-4 h-4 text-indigo-600" />
-          <span>Entradas (Insumos)</span>
-        </div>
-        <div class="space-y-2 text-xs text-slate-700">
-          <div>
-            <span class="font-bold text-slate-900 block text-[11px]">Materiales:</span>
-            <ul class="mt-1 space-y-1">
-              {#each activePhase.inputs.material as mat}
-                <li class="flex items-start gap-1.5 text-slate-600">
-                  <span>•</span>
-                  <span>{mat}</span>
-                </li>
-              {/each}
-            </ul>
-          </div>
-          <div class="pt-1.5 border-t border-slate-200">
-            <span class="font-bold text-slate-900 text-[11px] flex items-center gap-1">
-              <Droplet class="w-3 h-3 text-cyan-600" /> Agua:
-            </span>
-            <p class="text-slate-600 mt-0.5">{activePhase.inputs.water}</p>
-          </div>
-          <div class="pt-1.5 border-t border-slate-200">
-            <span class="font-bold text-slate-900 text-[11px] flex items-center gap-1">
-              <Zap class="w-3 h-3 text-amber-500" /> Energía / Luz:
-            </span>
-            <p class="text-slate-600 mt-0.5">{activePhase.inputs.energy}</p>
-          </div>
         </div>
       </div>
 
-      <!-- 4. Salidas (Producto, Residuos, Emisiones, Subproductos) -->
-      <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
-        <div class="flex items-center gap-2 text-slate-900 font-bold text-xs uppercase tracking-wider">
-          <Wind class="w-4 h-4 text-rose-500" />
-          <span>Salidas e Impactos</span>
+      <div class="p-4 rounded-2xl bg-blue-50/50 border border-blue-200 space-y-2">
+        <div class="flex items-center gap-1.5 font-black text-[#003876] uppercase text-[11px]">
+          <Package class="w-4 h-4" />
+          <span>Entradas (GRI 301–303)</span>
         </div>
-        <div class="space-y-2 text-xs text-slate-700">
+        <div class="space-y-2 text-slate-700">
           <div>
-            <span class="font-bold text-emerald-800 block text-[11px]">Producto generado:</span>
-            <p class="text-slate-600">{activePhase.outputs.products.join(', ')}</p>
+            <strong>Materiales:</strong>
+            {#each activePhase.inputs.material as m}<p>• {m}</p>{/each}
           </div>
-          <div class="pt-1.5 border-t border-slate-200">
-            <span class="font-bold text-slate-900 text-[11px]">Residuos sólidos:</span>
-            <p class="text-slate-600">{activePhase.outputs.waste.join(', ')}</p>
-          </div>
-          <div class="pt-1.5 border-t border-slate-200">
-            <span class="font-bold text-slate-900 text-[11px]">Emisiones directas:</span>
-            <p class="text-slate-600">{activePhase.outputs.emissions}</p>
-          </div>
-          {#if activePhase.outputs.byproducts.length > 0}
-            <div class="pt-1.5 border-t border-slate-200">
-              <span class="font-bold text-emerald-700 text-[11px]">Subproductos en cascada:</span>
-              <p class="text-slate-600">{activePhase.outputs.byproducts.join(', ')}</p>
-            </div>
-          {/if}
+          <p class="flex items-start gap-1.5"><Droplet class="w-3.5 h-3.5 text-sky-600 shrink-0 mt-0.5" /><span><strong>Agua:</strong> {activePhase.inputs.water}</span></p>
+          <p class="flex items-start gap-1.5"><Zap class="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" /><span><strong>Energía:</strong> {activePhase.inputs.energy}</span></p>
         </div>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+        <div class="flex items-center gap-1.5 font-black text-slate-800 uppercase text-[11px]">
+          <Settings class="w-4 h-4 text-slate-600" />
+          <span>Salidas (GRI 305–306)</span>
+        </div>
+        <div class="space-y-1.5 text-slate-700">
+          {#each activePhase.outputs.products as pr}<p><strong>Producto:</strong> {pr}</p>{/each}
+          {#each activePhase.outputs.waste as w}<p class="text-rose-700"><strong>Residuos:</strong> {w}</p>{/each}
+          <p><strong>Emisiones/Aguas:</strong> {activePhase.outputs.emissions}</p>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-[#E8F5E9] border border-[#81C784] space-y-2">
+        <div class="flex items-center gap-1.5 font-black text-[#1B5E20] uppercase text-[11px]">
+          <Recycle class="w-4 h-4" />
+          <span>Oportunidad Circular</span>
+        </div>
+        <p class="text-slate-800 font-medium leading-relaxed">{activePhase.circularOpportunity}</p>
       </div>
     </div>
+  </div>
 
-    <!-- Circular Opportunity Callout -->
-    <div class="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-emerald-50 via-teal-50 to-blue-50 border border-emerald-300 flex items-start gap-3.5">
-      <div class="w-9 h-9 rounded-xl bg-[#2B8A1E] text-white flex items-center justify-center shrink-0 shadow-xs mt-0.5">
-        <Sparkles class="w-5 h-5" />
-      </div>
-      <div>
-        <h4 class="text-xs uppercase font-black text-[#1B5E20] tracking-wider font-brand">
-          Oportunidad de Economía Circular en esta Fase
-        </h4>
-        <p class="text-xs sm:text-sm text-slate-800 mt-1 leading-relaxed font-medium">
-          {activePhase.circularOpportunity}
-        </p>
-      </div>
+  <!-- 1.2 Puntos Críticos (Hotspots) y Brechas de Reporte Ruta A -->
+  <div class="space-y-4">
+    <h3 class="text-lg sm:text-xl font-black text-slate-900 font-brand">
+      1.2. Puntos Críticos (Hotspots) y Brechas de Reporte (Ruta A)
+    </h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {#each LCA_HOTSPOTS_AND_GAPS as item}
+        <div class={`p-5 rounded-2xl border space-y-1.5 ${
+          item.type === 'Hotspot'
+            ? 'bg-white border-amber-200'
+            : 'bg-blue-50/60 border-blue-200'
+        }`}>
+          <div class="flex items-center justify-between gap-2">
+            <span class={`text-[10px] font-black uppercase px-2 py-0.5 rounded-md ${
+              item.type === 'Hotspot'
+                ? 'bg-amber-100 text-amber-900'
+                : 'bg-[#003876] text-white'
+            }`}>
+              {item.id}. {item.type}
+            </span>
+            <span class="text-[11px] font-bold text-slate-500">{item.phaseRef}</span>
+          </div>
+          <h4 class="text-sm font-black text-slate-900">{item.title}</h4>
+          <p class="text-xs text-slate-700 leading-relaxed">{item.description}</p>
+        </div>
+      {/each}
     </div>
   </div>
 </section>

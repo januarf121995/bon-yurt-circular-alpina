@@ -19,7 +19,7 @@
     presentationTimerRunning: boolean;
     presentationTimeLeft: number;
     onTogglePresentationTimer: () => void;
-    onResetPresentationTimer: () => void;
+    onResetPresentationTimer: (minutes?: number) => void;
   }
 
   let {
@@ -38,10 +38,10 @@
   const navItems = [
     { id: 'mariposa', label: 'Mariposa Circular', badge: 'Comp. 2' },
     { id: 'acv', label: 'Diagnóstico ACV', badge: 'Comp. 1' },
-    { id: 'principios', label: 'Principios & 9R', badge: 'Comp. 3' },
-    { id: 'estrategias', label: 'Estrategias & Hoja de Ruta', badge: 'Comp. 4 (25%)' },
-    { id: 'simulador', label: 'Simulador & MRV', badge: 'Comp. 5 (20%)' },
-    { id: 'presentacion', label: 'Modo Sustentación (30 min)', badge: 'Rúbrica' },
+    { id: 'principios', label: 'Principios & 9R', badge: 'Comp. 3 (4/4/5)' },
+    { id: 'estrategias', label: 'Estrategias E1–E4', badge: 'Comp. 4 (25%)' },
+    { id: 'simulador', label: 'Indicadores & MRV', badge: 'Comp. 5 vs Sector' },
+    { id: 'presentacion', label: 'Sustentación (13 min)', badge: '12 Slides + Q&A' },
   ];
 
   function formatTime(seconds: number): string {
@@ -111,20 +111,20 @@
             class={`p-1 rounded-lg transition-colors cursor-pointer mr-1.5 ${
               presentationTimerRunning ? 'bg-amber-500 text-white' : 'bg-white text-slate-700 shadow-2xs'
             }`}
-            title={presentationTimerRunning ? 'Pausar cronómetro' : 'Iniciar cronómetro de clase (30 min)'}
+            title={presentationTimerRunning ? 'Pausar cronómetro' : 'Iniciar cronómetro de sustentación (13 min)'}
           >
             <Clock class="w-3.5 h-3.5" />
           </button>
           <div class="flex flex-col text-left">
             <span class="text-[9px] font-bold uppercase text-slate-400 leading-none">Sustentación</span>
-            <span class={`font-mono-numbers font-black text-xs leading-none mt-0.5 ${presentationTimeLeft < 300 ? 'text-rose-600 animate-pulse' : 'text-slate-800'}`}>
+            <span class={`font-mono-numbers font-black text-xs leading-none mt-0.5 ${presentationTimeLeft < 180 ? 'text-rose-600 animate-pulse' : 'text-slate-800'}`}>
               {formatTime(presentationTimeLeft)}
             </span>
           </div>
           <button
-            onclick={onResetPresentationTimer}
+            onclick={() => onResetPresentationTimer(13)}
             class="text-[10px] text-slate-400 hover:text-slate-700 ml-2 font-medium cursor-pointer"
-            title="Reiniciar a 30:00"
+            title="Reiniciar a 13:00"
           >
             ↺
           </button>

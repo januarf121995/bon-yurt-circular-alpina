@@ -7,6 +7,17 @@
   }
 
   let { isOpen, onClose }: Props = $props();
+
+  const SLIDE_GALLERY = [
+    { label: 'Mariposa Original', src: '/images/infografia_oficial.jpg' },
+    { label: 'Slide 3 · ACV', src: '/images/slides/slide_visual_1.png' },
+    { label: 'Slide 4 · Mariposa', src: '/images/slides/slide_visual_2.png' },
+    { label: 'Slide 5 · Principios y 9R', src: '/images/slides/slide_visual_3.png' },
+    { label: 'Slide 6 · Estrategias E1–E4', src: '/images/slides/slide_visual_4.png' },
+    { label: 'Slide 7 · Indicadores y MRV', src: '/images/slides/slide_visual_5.png' }
+  ];
+
+  let activeIdx = $state(0);
 </script>
 
 {#if isOpen}
@@ -42,20 +53,28 @@
         </button>
       </div>
 
-      <!-- Notice: Read-only reference -->
-      <div class="px-4 py-2 bg-blue-50 border-b border-blue-200 text-xs text-blue-900 flex items-center gap-2">
-        <ShieldAlert class="w-4 h-4 text-[#003876] shrink-0" />
-        <span>
-          <strong>Referencia Intacta:</strong> Visualizador de alta resolución correspondiente al archivo original en la carpeta <code>REFERENCIA OFICIAL</code>.
-        </span>
+      <!-- Gallery Switcher -->
+      <div class="px-4 py-2.5 bg-blue-50 border-b border-blue-200 flex flex-wrap items-center gap-1.5 text-xs">
+        {#each SLIDE_GALLERY as item, idx}
+          <button
+            onclick={() => (activeIdx = idx)}
+            class={`px-2.5 py-1 rounded-lg font-bold transition-colors cursor-pointer ${
+              activeIdx === idx
+                ? 'bg-[#003876] text-white'
+                : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
+            }`}
+          >
+            {item.label}
+          </button>
+        {/each}
       </div>
 
       <!-- Image Canvas Container -->
       <div class="flex-1 overflow-auto p-2 sm:p-4 bg-slate-900/90 flex items-center justify-center">
         <img
-          src="/images/infografia_oficial.jpg"
-          alt="Diagrama de Mariposa Oficial Bon Yurt Alpina"
-          class="max-w-full max-h-[75vh] object-contain rounded-xl shadow-2xl"
+          src={SLIDE_GALLERY[activeIdx].src}
+          alt={SLIDE_GALLERY[activeIdx].label}
+          class="max-w-full max-h-[72vh] object-contain rounded-xl shadow-2xl"
         />
       </div>
 

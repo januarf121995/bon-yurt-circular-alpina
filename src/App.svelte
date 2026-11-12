@@ -21,9 +21,9 @@
   let selectedLoop = $state<LoopItem | null>(null);
   let isInfographicOpen = $state<boolean>(false);
 
-  // 30-minute oral presentation countdown timer
+  // 13-minute 4-presenter oral presentation countdown timer (+5 min Q&A)
   let presentationTimerRunning = $state<boolean>(false);
-  let presentationTimeLeft = $state<number>(30 * 60); // 1800 seconds
+  let presentationTimeLeft = $state<number>(13 * 60); // 780 seconds
 
   $effect(() => {
     let interval: any = null;
@@ -45,9 +45,9 @@
     presentationTimerRunning = !presentationTimerRunning;
   }
 
-  function resetPresentationTimer() {
+  function resetPresentationTimer(minutes: number = 13) {
     presentationTimerRunning = false;
-    presentationTimeLeft = 30 * 60;
+    presentationTimeLeft = minutes * 60;
   }
 
   function handleAskAi(prompt: string, mode: 'expert' | 'evaluator' = 'expert') {

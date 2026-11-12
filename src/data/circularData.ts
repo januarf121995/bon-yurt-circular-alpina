@@ -1,998 +1,1376 @@
-import {
+import type {
   LoopItem,
+  CircularityFlowItem,
   LcaPhase,
+  LcaHotspotGap,
   EllenMacArthurPrinciple,
   NineRStrategy,
   PrioritizedStrategy,
+  AlpinaCorporateMetric,
   IndicatorSheet,
   MrvStage,
-  RubricCriterion,
+  OdsContribution,
+  PresentationSlide,
+  ProbableQA,
+  RubricCriterion
 } from '../types/circular';
 
+export const PROJECT_IDENTITY = {
+  company: 'Alpina Productos Alimenticios S.A.S. BIC',
+  product: 'Bon Yurt Alpina (Presentación clásica con vaso, sobrecopa transparente y cuchara)',
+  functionalUnit: 'Entregar, proteger y fusionar 175 g de mezcla láctea (yogurt y cereales) garantizando inocuidad, nutrición y vida útil óptima en cadena de frío para el consumidor final.',
+  systemBoundaries: 'De la cuna a la tumba, incorporando estrategias de economía circular, simbiosis industrial y programas posconsumo.',
+  route: 'Ruta A (Empresa con informes de sostenibilidad, metas y reportes públicos consolidados)',
+  baselineYear: '2025',
+  presence: '97% de los municipios de Colombia · Plantas estratégicas en Sopó, Caloto y Chinchiná'
+};
+
+export const KEY_RESULTS_INFOGRAPHIC = [
+  {
+    value: '95,2%',
+    label: 'Residuos postindustriales aprovechados en planta',
+    sublabel: 'Referente industria alimentos ANDI: 70%–80%',
+    color: 'text-emerald-600'
+  },
+  {
+    value: '75%',
+    label: 'Plástico reciclado (rPET) en sobrecopas Bon Yurt',
+    sublabel: 'Referente sector lácteo Colombia: 10%–15% (25% en vaso piloto)',
+    color: 'text-alpina-blue'
+  },
+  {
+    value: '59%',
+    label: 'Plástico Neutralidad con >450 recicladores de oficio',
+    sublabel: 'Supera ampliamente la meta legal Res. 1407 al 2030 (30%)',
+    color: 'text-emerald-600'
+  },
+  {
+    value: '51%',
+    label: 'Índice de Reciclabilidad (IR) corporativo actual',
+    sublabel: 'Referente sector agroalimentario Colombia: 25%–30% → Meta: 70%',
+    color: 'text-alpina-accent'
+  }
+];
+
+export const SEMI_CIRCULAR_DIAGNOSIS = {
+  status: 'Modelo híbrido de transición (Semi-circular)',
+  summary:
+    'Mientras que en las fases internas de manufactura (Fases 2 y 3) Alpina alcanza altos niveles de circularidad gracias al aprovechamiento del 95,2% de sus residuos postindustriales y la incorporación del 75% de material reciclado en la sobrecopa, en las fases posteriores al consumo (Fases 5 y 6) persiste una fuga lineal significativa en el vaso y la cuchara plástica, lo cual exige activar bucles más internos mediante ecodiseño y simbiosis industrial.',
+  sanitaryPrecaution:
+    'El material de la línea Bio solo debe ubicarse en el ciclo biológico si cuenta con certificación de compostabilidad y condiciones reales de disposición; de lo contrario, actúa como contaminante en el reciclaje plástico. Asimismo, los excedentes lácteos que hayan perdido la cadena de frío no deben destinarse a consumo humano directo sin validación microbiológica y trazabilidad estricta.'
+};
+
 export const BUTTERFLY_LOOPS: LoopItem[] = [
-  // --- CICLO BIOLÓGICO (Verde) ---
+  // ================= CICLO BIOLÓGICO =================
   {
     id: 'bio-regenerativo',
     cycle: 'biological',
     loopType: 'regenerativo',
-    title: 'Loop Regenerativo',
-    shortSubtitle: 'Retorno a la naturaleza',
-    tagline: 'Envases de la línea Bio biodegradables y etiquetas compostables con semillas',
+    title: 'Envases Bio y etiquetas con semillas',
+    shortSubtitle: 'Loop Regenerativo · Compostaje y retorno al suelo',
+    tagline: 'Biopolímeros certificados e iniciativas de retorno biológico seguro',
     iconName: 'Sprout',
     colorScheme: 'green',
-    highlightBadge: 'Biomateriales & Suelo',
+    highlightBadge: 'Exploración / Piloto · Loop Regenerativo',
     statusType: 'oportunidad',
     justification:
-      'Sustituir los polímeros fósiles convencionales por bioplásticos biodegradables y compostables (PLA/PHA) derivados de fuentes renovables, permitiendo que el envase se reintegre a los ciclos biológicos mediante compostaje certificado y etiquetas germinables con semillas.',
+      'En fase de exploración y piloto. Permite que los envases biodegradables y etiquetas con semillas retornen a la biosfera como nutrientes mediante compostaje industrial o doméstico controlado, siempre evitando la contaminación cruzada.',
     actors: [
-      { category: 'Proveedores de Biopolímeros', description: 'Empresas desarrolladoras de resinas biobasadas certificadas bajo normas EN 13432 y ASTM D6400.' },
-      { category: 'Alpina I+D+I y Calidad', description: 'Laboratorio de empaques para pruebas de barrera microbiológica y resistencia térmica.' },
-      { category: 'Consumidores y Colegios', description: 'Siembra comunitaria de etiquetas de papel semilla y compostaje doméstico/escolar.' },
-      { category: 'Gestores de Compostaje', description: 'Transformación controlada de envases posconsumo en abono orgánico para suelos agrícolas.' },
+      { category: 'Material', description: 'Biopolímeros compostables certificados y etiquetas con semillas viables.' },
+      { category: 'Hatos y Biogás', description: 'Ganadería sostenible certificada, acuerdos de cero deforestación y PTAR Sopó (38% biogás).' },
+      { category: 'Gestores', description: 'Plantas de compostaje industrial y consumidores capacitados.' }
     ],
     implementationStrategy: [
-      { step: 'Fase 1', title: 'Formulación y Prototipado', description: 'Desarrollo de películas termoformadas con PLA/PHA para copa y sobrecopa garantizando sellado hermético.' },
-      { step: 'Fase 2', title: 'Etiqueta Germinable', description: 'Impresión con tintas vegetales base agua sobre papel semilla de caléndula, albahaca o lechuga.' },
-      { step: 'Fase 3', title: 'Piloto en Línea Bio', description: 'Lanzamiento comercial en canales seleccionados verificando condiciones reales de tratamiento.' },
+      { step: '01', title: 'Certificación de compostabilidad', description: 'Asegurar norma internacional de compostabilidad industrial/doméstica en envases Bio.' },
+      { step: '02', title: 'Segregación estricta', description: 'Separar claramente el flujo Bio del plástico reciclable convencional para no contaminar el rPET.' },
+      { step: '03', title: 'Alianzas con gestores', description: 'Conectar puntos de retorno con gestores reales de compostaje agrícola.' }
     ],
     sanitaryNotes: [
       {
-        title: 'Certificación de Inocuidad y Migración Cero',
-        description: 'Verificación toxicológica y cumplimiento de límites de migración global y específica según regulaciones INVIMA y FDA para contacto directo con lácteos ácidos.',
-        criticality: 'Alta',
-      },
-      {
-        title: 'Condición de Compostabilidad Real',
-        description: 'El material Bio solo debe catalogarse en el ciclo biológico si su certificación y el sistema de recolección permiten realmente su compostaje. La biodegradabilidad por sí sola no lo garantiza.',
-        criticality: 'Alta',
-      },
+        title: 'Contaminación cruzada en reciclaje plástico',
+        description: 'Un envase Bio sin disposición diferenciada contamina los lotes de reciclaje mecánico de plásticos.',
+        criticality: 'Alta'
+      }
     ],
-    metricsGoal: 'Reemplazo del 25% de la resina virgen por biomateriales en 24 meses.',
+    metricsGoal: 'Garantizar certificación de compostabilidad y validar resistencia térmica en cadena de frío (E3).'
   },
   {
     id: 'bio-cascada',
     cycle: 'biological',
     loopType: 'cascada',
-    title: 'Loop en Cascada',
-    shortSubtitle: 'Transformación de subproductos',
-    tagline: 'Kumis → Quesos y mermas de cereales con aliados (Ramo, Jet, Nutresa)',
-    iconName: 'Workflow',
+    title: 'Kumis a quesos y simbiosis con Ramo, Nutresa y Kellanova',
+    shortSubtitle: 'Loop en Cascada · Valorización agroindustrial y mermas',
+    tagline: 'Sustitución de cereal virgen con mermas inocuas y derivación de excedentes lácteos',
+    iconName: 'Recycle',
     colorScheme: 'green',
-    highlightBadge: 'Simbiosis Industrial Alimentaria',
+    highlightBadge: 'Simbiosis Industrial · E2 (Prioridad 2)',
     statusType: 'oportunidad',
     justification:
-      'Aprovechar lotes de kumis o base láctea no conformes en viscosidad o volumen antes de su vencimiento para quesos análogos o concentrados; e incorporar excedentes y mermas de producción de empresas colombianas (Ramo, Jet, Kellanova/Nutresa) para sustitución parcial de cereales o alimentación pecuaria.',
+      'Conecta excedentes lácteos (kumis/yogurt próximos a vencer) con investigación en quesos y alimentación animal, junto a la incorporación de mermas inocuas de galletas, cereales y chocolates de empresas aliadas como Ramo, Jet, Nutresa y Kellanova (supuesto 5%–10% línea base → meta 15%).',
     actors: [
-      { category: 'Planta Quesería Alpina Sopó', description: 'Recepción y readecuación tecnológica de matrices lácteas fermentadas para cuajadas y quesos procesados.' },
-      { category: 'Aliados de Toppings (Ramo, Jet, Nutresa)', description: 'Gestión conjunta de excedentes de crocantes, galletas y copos de cereal aptos para consumo.' },
-      { category: 'Industria Agropecuaria', description: 'Formuladores de alimentos balanceados para nutrición animal de alto rendimiento.' },
+      { category: 'Aliados industriales', description: 'Ramo, Grupo Nutresa, Jet y Kellanova / Kellogg’s (mermas aptas para consumo humano).' },
+      { category: 'Cadena láctea', description: 'Plantas de Sopó, Caloto y Chinchiná + industria de alimentos balanceados para mascotas.' }
     ],
     implementationStrategy: [
-      { step: 'Fase 1', title: 'Segregación en Planta', description: 'Instalación de tanques pulmón para recuperar purgas de línea y arranques de producción de kumis.' },
-      { step: 'Fase 2', title: 'Ensayos de Coagulación', description: 'Desarrollo de recetas lácteas secundarias que aprovechan la acidez natural del kumis para precipitación de caseína.' },
-      { step: 'Fase 3', title: 'Alianza de Mermas de Cereal', description: 'Canalización directa de quiebres de cereal como sustrato energético certificado.' },
+      { step: '01', title: 'Mapeo de mermas inocuas', description: 'Identificar excedentes de galleta, cereal y chocolate que cumplan inocuidad alimentaria.' },
+      { step: '02', title: 'Protocolos de trazabilidad', description: 'Asegurar cadena de frío y validación microbiológica en cada lote derivado.' },
+      { step: '03', title: 'Reincorporación como toppings', description: 'Integrar los subproductos certificados directamente en la línea Bon Yurt y quesos.' }
     ],
     sanitaryNotes: [
       {
-        title: 'Validación Estricta de Cadena de Frío (Máx 4°C)',
-        description: 'El kumis que haya perdido la cadena de frío no debe destinarse directamente a alimentos para consumo humano. Debe contar con trazabilidad, inocuidad y validación microbiológica.',
-        criticality: 'Alta',
-      },
-      {
-        title: 'Control Microbiológico y de Alérgenos',
-        description: 'Monitoreo negativo para Listeria monocytogenes y Salmonella, además de cuarentena de alérgenos de frutos secos procedentes de toppings.',
-        criticality: 'Alta',
-      },
+        title: 'Validación microbiológica y cadena de frío',
+        description: 'Excedentes lácteos que rompan cadena de frío no deben ir a consumo humano directo sin análisis microbiológico.',
+        criticality: 'Alta'
+      }
     ],
-    metricsGoal: 'Reducción del 92% en desperdicio de matriz láctea y cereales en planta Sopó.',
+    metricsGoal: 'Sustituir ≥10% (meta 15% a 3 años) de cereal virgen por mermas aptas de aliados.'
   },
   {
     id: 'bio-corto',
     cycle: 'biological',
     loopType: 'corto',
-    title: 'Loop Corto',
-    shortSubtitle: 'Consumo y aprovechamiento',
-    tagline: 'Cucharas de galleta horneada y aprovechamiento de material orgánico',
+    title: 'Cucharas comestibles de galleta',
+    shortSubtitle: 'Loop Corto (Consumo) · Cero residuo plástico desde el diseño',
+    tagline: 'Eliminación en la fuente de la cuchara de poliestireno de un solo uso',
     iconName: 'Utensils',
     colorScheme: 'green',
-    highlightBadge: 'Cero Plástico Virgen',
-    statusType: 'actual',
+    highlightBadge: 'Prioridad 1 · Corto Plazo (0–12m)',
+    statusType: 'oportunidad',
     justification:
-      'Sustituir la cuchara convencional de plástico de un solo uso por una alternativa comestible de galleta crujiente horneada que se consume junto con el Bon Yurt, evitando la generación de residuos y mejorando la experiencia del consumidor.',
+      'Es el loop más interno del ciclo biológico: elimina el residuo desde el diseño al ser ingerida junto con el producto. Actualmente en piloto de ecodiseño (5% fase piloto); escalarla permite suprimir hasta 80% de cucharas plásticas en la línea clásica.',
     actors: [
-      { category: 'Aliados Panificadores', description: 'Co-desarrollo de formulación crujiente con harinas integrales, salvado de avena y aglutinantes naturales.' },
-      { category: 'Diseño de Empaques Alpina', description: 'Ingeniería de barrera antihumedad biodegradable para preservar la textura de la cuchara dentro de la sobrecopa.' },
-      { category: 'Consumidores Escolares y Jóvenes', description: 'Adopción del ritual de ingerir el utensilio tras finalizar el yogurt.' },
+      { category: 'Interno', description: 'Gerencia de I+D+i y Operaciones Alpina.' },
+      { category: 'Aliados externos', description: 'Proveedores de panificación y biotecnología alimentaria.' }
     ],
     implementationStrategy: [
-      { step: 'Fase 1', title: 'I+D Cuchara Crujiente', description: 'Pruebas de horneado para resistir 20 minutos sumergida en yogurt espeso sin ablandarse prematuramente.' },
-      { step: 'Fase 2', title: 'Acondicionamiento en Sobrecopa', description: 'Separador de celulosa biodegradable que aísla la cuchara del cereal hasta el consumo.' },
-      { step: 'Fase 3', title: 'Biodigestión de Remanentes', description: 'Los restos orgánicos no consumidos se dirigen al biodigestor de la planta para biogás.' },
+      { step: '01', title: 'Formulación antihumedad', description: 'Estandarizar galleta resistente al yogurt durante todo el consumo.' },
+      { step: '02', title: 'Integración en línea', description: 'Adaptar empaque en sobrecopa sin afectar sellado ni inocuidad.' },
+      { step: '03', title: 'Campaña al consumidor', description: 'Posicionar el atributo "cómete la cuchara" como diferenciador circular.' }
     ],
     sanitaryNotes: [
       {
-        title: 'Rotulado Obligatorio de Alérgenos',
-        description: 'Declaración clara de presencia de gluten (trigo y avena) y posibles trazas de soya en la cuchara horneada para proteger a consumidores celíacos.',
-        criticality: 'Alta',
-      },
-      {
-        title: 'Actividad de Agua (aw < 0.5)',
-        description: 'Validación de baja actividad acuosa para evitar proliferación de hongos o pérdida de textura durante los 45 días de vida útil comercial.',
-        criticality: 'Media',
-      },
+        title: 'Barrera de humedad e inocuidad en línea',
+        description: 'Requiere empaque hermético y cumplimiento de buenas prácticas de manufactura panificadora.',
+        criticality: 'Media'
+      }
     ],
-    metricsGoal: 'Eliminación del 100% de cucharas plásticas virgen (45M unidades/año).',
+    metricsGoal: 'Pasar de 5% piloto a 80% de sustitución de cucharas plásticas en 0–12 meses.'
   },
 
-  // --- CICLO TÉCNICO (Azul) ---
+  // ================= CICLO TÉCNICO =================
   {
     id: 'tec-corto',
     cycle: 'technical',
     loopType: 'corto',
-    title: 'Loop Corto (Reutilización)',
-    shortSubtitle: 'Reutilización directa en el hogar',
-    tagline: 'Reutilización de vasos, tapas y empaques en manualidades y nuevos usos',
-    iconName: 'RefreshCw',
+    title: 'Reutilización directa de vasos y tapas (PRAE / Manualidades)',
+    shortSubtitle: 'Loop Corto Técnico · Segundo uso escolar y doméstico',
+    tagline: 'Extensión de vida útil en colegios y hogares antes del reciclaje',
+    iconName: 'GraduationCap',
     colorScheme: 'blue',
-    highlightBadge: 'Extensión de Vida Útil',
+    highlightBadge: 'Educación Ambiental · E4 (Prioridad 4)',
     statusType: 'actual',
     justification:
-      'Mantener el valor material y funcional del vaso y la sobrecopa mediante diseño modular que permite apilamiento y ensamble, extendiendo la vida útil mediante actividades lúdicas, manualidades escolares y recipientes domésticos.',
+      'Promueve el lavado y segundo uso creativo de vasos y tapas en entornos escolares (manualidades y materas) y domésticos, prolongando la vida útil del polímero antes de su entrega a reciclaje limpio.',
     actors: [
-      { category: 'Consumidores y Familias', description: 'Reutilización doméstica de los vasos limpios para organización y huertas caseras.' },
-      { category: 'Docentes de Artes y Primaria', description: 'Guías curriculares de manualidades con envases de Bon Yurt.' },
-      { category: 'Comunidad Digital Alpina', description: 'Plataforma web con plantillas descargables y desafíos de Upcycling interactivos.' },
+      { category: 'Educación', description: 'Colegios con Proyectos Ambientales Escolares (PRAE), niños y docentes.' },
+      { category: 'Hogares', description: 'Familias colombianas en canales tradicionales y supermercados.' }
     ],
     implementationStrategy: [
-      { step: 'Fase 1', title: 'Ecodiseño de Encastre', description: 'Incorporación de pestañas de unión en base y sobrecopa para permitir acople modular.' },
-      { step: 'Fase 2', title: 'Código QR Educativo', description: 'Acceso directo desde el vaso a más de 30 tutoriales paso a paso de manualidades.' },
-      { step: 'Fase 3', title: 'Desafío #MiBonYurtReutilizado', description: 'Concurso digital mensual que premia los usos creativos más innovadores.' },
+      { step: '01', title: 'Concurso «Bon Yurt Transforma»', description: 'Activación pedagógica de lavado, manualidades y retorno escolar.' },
+      { step: '02', title: 'Guía de separación limpia', description: 'Educar sobre enjuague básico del vaso para evitar malos olores y vectores.' }
     ],
     sanitaryNotes: [
       {
-        title: 'Limpieza y Desinfección Doméstica',
-        description: 'Instrucciones obligatorias en el vaso para enjuagar con agua tibia y jabón antes de reutilizar, previniendo desarrollo de colonias bacterianas sobre restos lácteos.',
-        criticality: 'Media',
-      },
-      {
-        title: 'No Apto para Microondas ni Grasas Calientes',
-        description: 'Advertencia sobre el límite térmico del poliestireno (PS) y polipropileno (PP) para evitar deformación o migración de sustancias en contacto con calor.',
-        criticality: 'Alta',
-      },
+        title: 'Higienización previa',
+        description: 'Todo vaso reutilizado o acopiado en escuelas debe enjuagarse para evitar proliferación microbiana de residuos lácteos.',
+        criticality: 'Media'
+      }
     ],
-    metricsGoal: 'Más de 350.000 hogares reutilizando creativamente los empaques.',
+    metricsGoal: 'Escalar la red PRAE y conectar con gestores formales para no quedar solo en manualidades.'
   },
   {
     id: 'tec-local',
     cycle: 'technical',
     loopType: 'local',
-    title: 'Loop Local (Recuperación)',
-    shortSubtitle: 'Recuperación comunitaria',
-    tagline: 'PRAE y concursos escolares ("Bon Yurt Transforma") + canje de envases por premios',
-    iconName: 'GraduationCap',
+    title: 'Reciclaje posconsumo (>450 recicladores) y canje PRAE / REP',
+    shortSubtitle: 'Loop Local · Plástico Neutralidad 59% → 75% y 75% rPET sobrecopa',
+    tagline: 'Recuperación limpia con recicladores de oficio, programa de premios y planes REP',
+    iconName: 'Building2',
     colorScheme: 'blue',
-    highlightBadge: 'Educación & Red PRAE',
-    statusType: 'oportunidad',
+    highlightBadge: 'Operación Activa + E4',
+    statusType: 'actual',
     justification:
-      'Vincular directamente a los colegios colombianos mediante los Proyectos Ambientales Escolares (PRAE) como centros neurálgicos de recolección y sensibilización, canjeando envases limpios por premios y útiles escolares e involucrando recicladores de oficio.',
+      'La sobrecopa transparente ya incorpora 75% de rPET y facilita la separación óptica; sin embargo, el 41% de plásticos puestos en mercado aún no se recuperan y el vaso principal (~25% en piloto) sufre fuga hacia relleno sanitario. Con >450 recicladores de oficio y canje escolar se busca elevar la plástico neutralidad del 59% al 75%.',
     actors: [
-      { category: 'Instituciones Educativas (Red PRAE)', description: 'Colegios públicos y privados integrando el acopio en sus asignaturas ambientales.' },
-      { category: 'Asociaciones de Recicladores de Oficio', description: 'Rutas selectivas de recolección en colegios con pago de tarifa justa por kilo de plástico.' },
-      { category: 'Equipo de Sostenibilidad Alpina', description: 'Dotación de contenedores lúdicos "Come-Vasos" y entrega de kits escolares.' },
+      { category: 'Inclusión social', description: 'Más de 450 recicladores de oficio y asociaciones formalizadas (ODS 8).' },
+      { category: 'Canales', description: 'Colegios PRAE, puntos de canje "Recicla, juega y gana premios" y gestores REP Res. 1407.' }
     ],
     implementationStrategy: [
-      { step: 'Fase 1', title: 'Instalación de Come-Vasos', description: 'Disposición de contenedores lúdicos en cafeterías y patios escolares.' },
-      { step: 'Fase 2', title: 'Concurso "Bon Yurt Transforma"', description: 'Desafío intercolegiado anual donde el colegio con mayor recolección gana un parque infantil en madera plástica.' },
-      { step: 'Fase 3', title: 'Monedero Verde / Ecopuntos', description: 'Sistema de canje de envases por cuadernos ecológicos, colores y material didáctico.' },
+      { step: '01', title: 'Puntos de retorno escolar y retail', description: 'Instalar estaciones de acopio limpio en colegios y supermercados.' },
+      { step: '02', title: 'Pago justo a recicladores', description: 'Articular rutas de recolección con pago directo y certificación ANLA/VUCE.' },
+      { step: '03', title: 'Vaso monomaterial rPET', description: 'Transición del vaso multicapa a monomaterial 100% reciclable con validación INVIMA (E3).' }
     ],
     sanitaryNotes: [
       {
-        title: 'Protocolo de Escurrido y Secado Obligatorio',
-        description: 'Exigencia de escurrir el vaso en el punto de entrega escolar para evitar acumulación de olores y atracción de moscas o vectores.',
-        criticality: 'Alta',
-      },
-      {
-        title: 'Acopio Bajo Techo y Frecuencia de Retiro',
-        description: 'Normas de almacenamiento seguro en bodegas escolares con retiro no superior a 8 días hábiles por parte de la ruta de reciclaje.',
-        criticality: 'Media',
-      },
+        title: 'Grado alimentario FDA / INVIMA',
+        description: 'El rPET que vuelve a contacto directo con yogurt exige certificación estricta de descontaminación grado alimentario.',
+        criticality: 'Alta'
+      }
     ],
-    metricsGoal: 'Más de 250 colegios vinculados y 80 toneladas de plástico acopiadas anualmente.',
+    metricsGoal: 'Incrementar Plástico Neutralidad de 59% a 75% e Índice de Reciclabilidad de 51% a 70%.'
+  }
+];
+
+export const CIRCULARITY_FLOWS_TABLE: CircularityFlowItem[] = [
+  {
+    id: 'flow-sobrecopa',
+    material: 'Sobrecopa transparente (rPET)',
+    cycle: 'Técnico',
+    baselineAmount: '75% material reincorporado (Alpina, 2025).',
+    currentDestination: 'Reciclaje mediante redes de recicladores (59% recolección global).',
+    currentLoop: 'Loop local (Reciclaje).',
+    leakageOrLoss: '41% de plásticos puestos en el mercado aún no se recuperan.',
+    innerLoopOpportunity: 'Escalar al 100% de contenido reciclado y fortalecer puntos de retorno directo.',
+    statusType: 'actual'
   },
   {
-    id: 'tec-cascada',
-    cycle: 'technical',
-    loopType: 'cascada',
-    title: 'Loop en Cascada (Simbiosis industrial)',
-    shortSubtitle: 'Simbiosis industrial',
-    tagline: 'Aprovechamiento de empaques (cartón reciclado) y reciclaje de plásticos a madera plástica',
-    iconName: 'Factory',
-    colorScheme: 'blue',
-    highlightBadge: 'Mobiliario Escolar & Cartón',
-    statusType: 'oportunidad',
-    justification:
-      'Cerrar el ciclo técnico aliándose con transformadores plásticos para procesar mecánicamente vasos y sobrecopas posconsumo en perfiles de madera plástica para pupitres escolares, y reincorporar el cartón corrugado al 100% en cajas secundarias.',
-    actors: [
-      { category: 'Plantas Transformadoras de Plástico', description: 'Procesamiento mecánico de vasos limpios hacia perfiles estructurales de alta durabilidad.' },
-      { category: 'Industrias de Papel y Cartón (Smurfit Westrock)', description: 'Reciclaje de empaques secundarios para suministro de cajas 100% fibra reciclada.' },
-      { category: 'Secretarías de Educación Municipales', description: 'Recepción de pupitres, mesas y dotación escolar fabricada con el plástico reciclado.' },
-    ],
-    implementationStrategy: [
-      { step: 'Fase 1', title: 'Molienda y Homogenización', description: 'Lavado intensivo, peletizado y formulación con estabilizantes UV para uso a la intemperie.' },
-      { step: 'Fase 2', title: 'Fabricación de Mobiliario', description: 'Extrusión de tablas plásticas que no se astillan, impermeables y con vida útil de más de 30 años.' },
-      { step: 'Fase 3', title: 'Cierre de Ciclo en Escuelas Rurales', description: 'Entrega de aulas ecológicas completas en zonas rurales abastecedoras de leche Alpina.' },
-    ],
-    sanitaryNotes: [
-      {
-        title: 'No Contacto con Alimentos (No Food-Contact)',
-        description: 'La madera plástica reciclada posconsumo está destinada estrictamente a mobiliario e infraestructura; no debe emplearse en empaques de alimentos primarios.',
-        criticality: 'Alta',
-      },
-      {
-        title: 'Certificación de No Toxicidad y Resistencia Mecánica',
-        description: 'Ensayos de lixiviación de metales pesados y pruebas de carga según normas NTC para garantizar seguridad total de los niños en los pupitres.',
-        criticality: 'Alta',
-      },
-    ],
-    metricsGoal: 'Más de 1.800 pupitres y 25 parques infantiles donados a escuelas rurales.',
+    id: 'flow-vaso',
+    material: 'Vaso plástico y cuchara convencional',
+    cycle: 'Técnico',
+    baselineAmount: '~25% material reciclado en líneas piloto; resto resina virgen.',
+    currentDestination: 'Relleno sanitario (mayoría) y reciclaje parcial.',
+    currentLoop: 'Ninguno (Lineal) / Loop local parcial.',
+    leakageOrLoss: 'Pérdida de polímeros de alto valor en rellenos sanitarios.',
+    innerLoopOpportunity: 'Loop corto: Sustituir cuchara por galleta comestible; migrar vaso a monomaterial 100% reciclable o Bio certificado.',
+    statusType: 'parcial'
   },
+  {
+    id: 'flow-cuchara',
+    material: 'Cucharas comestibles de galleta',
+    cycle: 'Biológico',
+    baselineAmount: 'Piloto de ecodiseño (5% fase piloto / 0% plástico).',
+    currentDestination: 'Consumo humano directo junto al producto.',
+    currentLoop: 'Loop corto (Consumo).',
+    leakageOrLoss: 'Ninguna (elimina el residuo desde el diseño).',
+    innerLoopOpportunity: 'Masificar en toda la línea clásica de Bon Yurt (hasta 80% en 12 meses).',
+    statusType: 'oportunidad'
+  },
+  {
+    id: 'flow-lacteos',
+    material: 'Excedentes lácteos (kumis / yogurt próximo a vencer)',
+    cycle: 'Biológico',
+    baselineAmount: 'Mermas controladas en planta y devoluciones.',
+    currentDestination: 'Alimentación animal e investigación en quesos.',
+    currentLoop: 'Loop en cascada.',
+    leakageOrLoss: 'Pérdida de valor nutricional si se rompe la cadena de frío.',
+    innerLoopOpportunity: 'Estandarizar protocolos sanitarios para derivación segura a quesos y derivados lácteos.',
+    statusType: 'actual'
+  },
+  {
+    id: 'flow-cereales',
+    material: 'Mermas de cereales y chocolates',
+    cycle: 'Biológico',
+    baselineAmount: 'Supuesto: 5% – 10% de sustitución potencial de cereal virgen (0% comercial).',
+    currentDestination: 'Subproductos en industrias aliadas (Ramo, Nutresa, Jet).',
+    currentLoop: 'Loop en cascada (Simbiosis industrial).',
+    leakageOrLoss: 'Subutilización de materias primas aptas para consumo humano.',
+    innerLoopOpportunity: 'Formalizar acuerdos de simbiosis industrial para reincorporar mermas certificadas como toppings (meta 15%).',
+    statusType: 'oportunidad'
+  },
+  {
+    id: 'flow-bio',
+    material: 'Envases de la línea Bio y etiquetas con semillas',
+    cycle: 'Biológico',
+    baselineAmount: 'En fase de exploración / piloto.',
+    currentDestination: 'Compostaje industrial o doméstico (si existe gestión).',
+    currentLoop: 'Loop regenerativo.',
+    leakageOrLoss: 'Riesgo de contaminación cruzada si terminan en relleno sanitario sin compostaje.',
+    innerLoopOpportunity: 'Garantizar certificación de compostabilidad y alianzas con gestores de compostaje.',
+    statusType: 'oportunidad'
+  },
+  {
+    id: 'flow-prae',
+    material: 'Vasos y tapas en colegios (PRAE)',
+    cycle: 'Técnico',
+    baselineAmount: 'Alcance educativo en instituciones aliadas.',
+    currentDestination: 'Reutilización en manualidades y acopio escolar.',
+    currentLoop: 'Loop local / Loop corto.',
+    leakageOrLoss: 'Baja escalabilidad si no se articula con gestores formales.',
+    innerLoopOpportunity: 'Escalar el concurso «Bon Yurt Transforma» articulado con asociaciones de recicladores.',
+    statusType: 'parcial'
+  }
 ];
 
 export const LCA_PHASES: LcaPhase[] = [
   {
     id: 1,
-    name: '1. Extracción y Materias Primas',
-    shortTitle: 'Materias Primas',
-    durationOrScope: 'Hatos lecheros, cultivos de cereales y petroquímica',
+    name: '1. Extracción y materias primas (Hatos y Cultivos)',
+    shortTitle: 'Extracción y Campo',
+    durationOrScope: 'Hatos lecheros, cultivos agrícolas y petroquímica',
     isHotspot: true,
-    hotspotReason: 'Hotspot Crítico: Emisiones entéricas bovinas de metano (CH4) y extracción de resinas fósiles vírgenes.',
-    griIndicators: ['GRI 301: Materiales', 'GRI 305: Emisiones GEI', 'GRI 303: Agua'],
-    actors: [
-      'Ganaderos aliados de la Sabana de Bogotá, Ubaté y Nariño',
-      'Productores de cereales (alianzas con Kellogg\'s / Kellanova)',
-      'Industria petroquímica de resinas plásticas vírgenes y bio-resinas',
-    ],
+    hotspotReason: 'Hotspot Hídrico y Climático: La ganadería lechera y el cultivo de cereales concentran el mayor consumo de agua y emisiones de metano/GEI de toda la cadena de valor.',
+    griIndicators: ['GRI 301', 'GRI 302', 'GRI 303', 'GRI 305', 'GRI 306'],
+    actors: ['Ganaderos aliados (hatos lecheros)', 'Productores de cereales (alianzas con Kellogg’s / Kellanova)', 'Industria petroquímica'],
     processes: [
-      'Producción primaria de leche cruda bajo criterios de ganadería sostenible y silvopastoreo.',
-      'Cosecha y molienda de cereales y cacao con trazabilidad de origen.',
-      'Polimerización de monómeros fósiles y síntesis de biopolímeros.',
+      'Producción primaria de leche cruda bajo criterios de ganadería sostenible y cero deforestación',
+      'Cultivo y procesamiento de cereales',
+      'Extracción y síntesis de resinas plásticas vírgenes y bio-resinas'
     ],
     inputs: {
-      material: ['Leche cruda entera (3.2% grasa)', 'Cereales (maíz, trigo, chocolate)', 'Resinas vírgenes PS/PP y biopolímeros PLA/PHA', 'Azúcares y cultivos lácticos'],
-      water: 'Riego agrícola y consumo en hatos (~3.5 L agua/L leche).',
-      energy: 'Electricidad en ordeño mecánico y combustibles diésel para maquinaria agrícola.',
+      material: ['Leche cruda y materias primas agrícolas (GRI 301)', 'Insumos de nutrición animal'],
+      water: 'Riego de cultivos y consumo en hatos lecheros (GRI 303)',
+      energy: 'Electricidad y combustibles en maquinaria agrícola, ordeño mecánico e iluminación de hatos (GRI 302)'
     },
     outputs: {
-      products: ['Leche cruda estandarizada', 'Toppings crocantes', 'Resinas y biopolímeros'],
-      waste: ['Purines y estiércol bovino', 'Cascarilla y mermas agrícolas de baja escala'],
-      emissions: 'Emisiones de GEI agrícolas (CH4 y N2O) mitigadas por silvopastoreo.',
-      byproducts: ['Abono orgánico compostable de fincas'],
+      products: ['Leche cruda y cereales cosechados', 'Resinas plásticas y biopolímeros'],
+      waste: ['Residuos orgánicos agrícolas de baja escala (GRI 306)'],
+      emissions: 'GEI agrícolas mitigados por estrategias de cambio climático (GRI 305)',
+      byproducts: ['Acuerdos de cero deforestación']
     },
-    circularOpportunity:
-      'Transición a silvopastoreo intensivo con más de 250 hatos para secuestro de carbono, y sustitución paulatina de resinas fósiles por almidones vegetales locales.',
+    circularOpportunity: 'Integrar mermas alimentarias inocuas de Ramo, Nutresa y Kellanova para sustituir hasta 15% de cereal virgen y reducir huella hídrica agrícola.'
   },
   {
     id: 2,
-    name: '2. Proveedores y Transporte de Entrada',
-    shortTitle: 'Proveedores y Transporte',
-    durationOrScope: 'Red logística de acopio hacia Planta Sopó, Caloto y Chinchiná',
+    name: '2. Proveedores y transporte de entrada',
+    shortTitle: 'Transporte de Entrada',
+    durationOrScope: 'Hatos y centros de acopio → Plantas Sopó, Caloto y Chinchiná',
     isHotspot: false,
-    griIndicators: ['GRI 302: Energía', 'GRI 305: Emisiones'],
-    actors: [
-      'Red logística de Alpina y transportadores certificados',
-      'Proveedores de empaques (líneas Bio y cartón reciclado)',
-      'Productores de cereales aliados',
-    ],
+    griIndicators: ['GRI 301', 'GRI 302', 'GRI 303', 'GRI 305', 'GRI 306'],
+    actors: ['Red logística de Alpina', 'Proveedores certificados', 'Transportadores'],
     processes: [
-      'Traslado de leche cruda en carrotanques isotérmicos asegurando trazabilidad y cadena de frío.',
-      'Transporte de insumos empacados, sobrecopas selladas y foil de aluminio.',
-      'Control de recepción y análisis microbiológicos en muelles de descarga.',
+      'Traslado de leche cruda desde hatos hacia centros de acopio y plantas estratégicas (Sopó, Caloto, Chinchiná) asegurando trazabilidad y cadena de frío'
     ],
     inputs: {
-      material: ['Insumos empacados', 'Canastillas plásticas reutilizables', 'Cajas de cartón corrugado reciclado'],
-      water: 'Lavado de carrotanques y tanques de acopio.',
-      energy: 'Diésel/gasolina para flota de transporte pesado y electricidad para refrigeración en tránsito.',
+      material: ['Insumos empacados y envases (líneas Bio y cartón reciclado) (GRI 301)'],
+      water: 'Lavado de carrotanques y tanques de acopio (GRI 303)',
+      energy: 'Combustible diésel/gasolina para flotas y electricidad en refrigeración en tránsito (GRI 302)'
     },
     outputs: {
-      products: ['Insumos aprobados en cadena de valor sostenible'],
-      waste: ['Material particulado', 'Películas stretch y zunchos de embalaje'],
-      emissions: 'Emisiones de transporte (CO2 vehicular).',
-      byproducts: ['Aguas de lavado tratadas en trampas de grasa'],
+      products: ['Materias primas en planta con trazabilidad completa'],
+      waste: ['Aguas de lavado tratadas (GRI 303/306)'],
+      emissions: 'Emisiones de transporte (CO2) y material particulado (GRI 305)',
+      byproducts: ['Cartón reciclado en embalajes de entrada']
     },
-    circularOpportunity:
-      'Rutas logísticas optimizadas con telemetría satelital, camiones dedicados a gas natural y uso de canastillas plegables 100% retornables con proveedores de toppings.',
+    circularOpportunity: 'Suministro regional cercano y optimización de carga para reducir intensidad de CO2 por tonelada transportada.'
   },
   {
     id: 3,
-    name: '3. Producción o Transformación',
+    name: '3. Producción o transformación',
     shortTitle: 'Producción en Planta',
-    durationOrScope: 'Planta Industrial Alpina Sopó, Cundinamarca',
+    durationOrScope: 'Sopó, Caloto y Chinchiná · 95,2% aprovechamiento y 38% biogás Sopó',
     isHotspot: true,
-    hotspotReason: 'Hotspot Operativo: Alta intensidad hídrica y energética en pasteurización, fermentación y línea de frío continuo.',
-    griIndicators: ['GRI 302: Energía', 'GRI 303: Agua', 'GRI 306: Residuos'],
-    actors: [
-      'Operarios y supervisores de producción láctea',
-      'Equipos de I+D+I (Innovación en Empaques y Formulaciones)',
-      'Ingenieros de saneamiento y PTAR',
-    ],
+    hotspotReason: 'Hotspot Energético en Cadena de Frío (Fases 3 y 4): Alta demanda eléctrica en maquinaria, sellado y refrigeración continua, compensada parcialmente por 24% autogeneración (38% biogás en Sopó).',
+    griIndicators: ['GRI 301', 'GRI 302', 'GRI 303', 'GRI 306'],
+    actors: ['Plantas de producción Alpina', 'Equipos de I+D+i (Innovación)', 'Operarios'],
     processes: [
-      'Pasteurización y fermentación de la base láctea (yogurt o kumis).',
-      'Termoformado in situ de vasos y sobrecopas transparentes que facilitan el reciclaje.',
-      'Línea de investigación: derivación de excedentes de kumis para quesos análogos o concentrados.',
+      'Pasteurización y fermentación de la base láctea',
+      'Termoformado de vasos y sobrecopas transparentes (75% plástico reincorporado rPET)',
+      'Integración de cereales; investigación en derivación de excedentes lácteos para quesos o subproductos'
     ],
     inputs: {
-      material: ['Leche pasteurizada, cultivos probióticos, cereales, resinas y cartón reciclado'],
-      water: 'Agua industrial para limpieza CIP, vapor y refrigeración.',
-      energy: 'Electricidad para maquinaria, líneas de sellado y cadena de frío permanente en planta.',
+      material: ['Leche, cultivos, cereales, azúcares, resinas y cartón reciclado (GRI 301)'],
+      water: 'Agua industrial para limpieza, vapor, refrigeración y saneamiento (GRI 303)',
+      energy: 'Alta demanda eléctrica para maquinaria, líneas de sellado y cadena de frío (24% autogenerada nacional) (GRI 302)'
     },
     outputs: {
-      products: ['Bon Yurt terminado y empacado herméticamente'],
-      waste: ['Aguas residuales enviadas a PTAR', 'Lodos deshidratados'],
-      emissions: 'Vapor de escape y CO2 de combustión de calderas industriales.',
-      byproducts: ['Subproductos lácteos aprovechados en cascada (>95% valorización postindustrial)'],
+      products: ['Bon Yurt terminado y empacado (unidad funcional 175 g)'],
+      waste: ['Residuos postindustriales aprovechables: 95,2% de aprovechamiento (GRI 306)'],
+      emissions: 'Aguas residuales enviadas a PTAR con generación de biogás en Sopó (38% electricidad de planta)',
+      byproducts: ['Subproductos lácteos aprovechados en cascada']
     },
-    circularOpportunity:
-      'Cogeneración de biogás en la PTAR de Sopó, recuperación en circuito cerrado del agua de enjuague CIP y aligeramiento del 18% del gramaje del vaso.',
+    circularOpportunity: 'Escalar 95,2% → 98% con Certificación Vertedero Cero en todas las plantas, autogeneración 24% → 30% e integración de cucharas de galleta en línea.'
   },
   {
     id: 4,
-    name: '4. Empaque y Distribución',
+    name: '4. Empaque y distribución',
     shortTitle: 'Empaque y Distribución',
-    durationOrScope: 'Centros de distribución (CEDI) y cobertura comercial en 97% de municipios',
-    isHotspot: false,
-    griIndicators: ['GRI 301: Materiales', 'GRI 302: Energía'],
-    actors: [
-      'Centros de distribución (CEDI)',
-      'Canales de retail, grandes superficies y tiendas de barrio',
-      'Equipo logístico de última milla',
-    ],
+    durationOrScope: 'CEDI (ej. Galapa solar) → 97% de los municipios de Colombia',
+    isHotspot: true,
+    hotspotReason: 'Hotspot Energético en Cadena de Frío (Fases 3 y 4): Electricidad intensiva para refrigeración estática en CEDI y cámaras frías, además de mermas por rotación o daño en transporte.',
+    griIndicators: ['GRI 301', 'GRI 302', 'GRI 303', 'GRI 305', 'GRI 306'],
+    actors: ['Centros de distribución (CEDI)', 'Canales de retail', 'Tiendas de barrio', 'Supermercados'],
     processes: [
-      'Almacenamiento masivo en frío a 4°C en cámaras frigoríficas.',
-      'Gestión de inventarios y distribución capilar nacional llegando al 97% de municipios.',
-      'Termosellado con foil monomaterial y ensamble de cucharas comestibles.',
+      'Almacenamiento masivo en frío y gestión de inventarios',
+      'Distribución nacional al 97% de municipios apalancada en sistemas solares (destacando CEDI Galapa)'
     ],
     inputs: {
-      material: ['Productos terminados (Bon Yurt 175 g)', 'Bandejas y canastillas retornables'],
-      water: 'Consumo menor administrativo y de sanitización en bodegas.',
-      energy: 'Electricidad intensiva para refrigeración estática en cámaras frigoríficas de CEDI.',
+      material: ['Productos terminados Bon Yurt y embalajes secundarios de cartón'],
+      water: 'Consumo menor en instalaciones administrativas y logísticas (GRI 303)',
+      energy: 'Electricidad intensiva para refrigeración estática en CEDI y cámaras frías (6% solar nacional) (GRI 302)'
     },
     outputs: {
-      products: ['Bon Yurt entregado en puntos de venta en óptimas condiciones'],
-      waste: ['Mermas por rotación o daños en transporte'],
-      emissions: 'Emisiones por logística de distribución refrigerada.',
-      byproducts: ['Cartón secundario compactado para reproceso'],
+      products: ['Bon Yurt entregado en puntos de venta'],
+      waste: ['Mermas de producto por rotación o daños en transporte (GRI 306)'],
+      emissions: 'Emisiones por logística de distribución (GRI 305)',
+      byproducts: ['Embalajes de cartón corrugado reincorporados']
     },
-    circularOpportunity:
-      'Monitoreo IoT de cadena de frío para evitar descomposiciones y sustitución total de empaques secundarios por cartón 100% fibra reciclada certificada.',
+    circularOpportunity: 'Ampliar energía solar en CEDI regionales e implementar simbiosis reversa para devoluciones antes de vencimiento.'
   },
   {
     id: 5,
-    name: '5. Uso o Consumo',
-    shortTitle: 'Uso y Consumo',
-    durationOrScope: 'Hogares colombianos, colegios, universidades y tiendas',
+    name: '5. Uso o consumo',
+    shortTitle: 'Consumo y Ecodiseño',
+    durationOrScope: 'Hogares colombianos, colegios y tiendas · Brecha de reporte doméstico',
     isHotspot: true,
-    hotspotReason: 'Hotspot de Fuga: Riesgo de que vasos y sobrecopas terminen en rellenos sanitarios si el consumidor no separa adecuadamente.',
-    griIndicators: ['GRI 301: Materiales', 'GRI 306: Residuos'],
-    actors: [
-      'Hogares colombianos y madres de familia',
-      'Niños y jóvenes (público núcleo)',
-      'Tiendas escolares y tenderos de barrio',
-    ],
+    hotspotReason: 'Hotspot Crítico de Plásticos de un Solo Uso + Brecha Ruta A: El vaso y la cuchara plástica convencional generan el mayor volumen de fuga por baja separación, sin desagregación exacta por SKU en informes públicos.',
+    griIndicators: ['GRI 302', 'GRI 303', 'GRI 306'],
+    actors: ['Hogares colombianos', 'Tiendas de barrio', 'Niños y jóvenes (consumidor potencial)'],
     processes: [
-      'Comercialización y refrigeración doméstica en neveras.',
-      'Apertura, mezcla lúdica del cereal crocante en el yogurt y consumo del alimento.',
-      'Ecodiseño: consumo de la cuchara comestible horneada y uso de sobrecopa transparente para fácil separación.',
+      'Comercialización, refrigeración en punto de venta y hogar, apertura y mezcla del cereal',
+      'Ecodiseño: exploración de cucharas de galleta comestibles (5% piloto) y sobrecopas transparentes (75% rPET)'
     ],
     inputs: {
       material: ['Bon Yurt listo para consumir'],
-      water: 'Uso doméstico de enjuague rápido del vaso.',
-      energy: 'Energía de refrigeración en neveras residenciales.',
+      water: 'Uso doméstico asociado al consumo y enjuague de envases (GRI 303)',
+      energy: 'Energía eléctrica en neveras de hogares y tiendas para mantener cadena de frío (GRI 302)'
     },
     outputs: {
-      products: ['Nutrición y energía asimilada por el consumidor'],
-      waste: ['Envases vacíos (vaso y sobrecopa transparente sin cuchara plástica)'],
-      emissions: 'Residuos sólidos potencialmente destinados a rellenos sanitarios (Doña Juana / locales).',
-      byproducts: ['Envases limpios separados para upcycling o PRAE'],
+      products: ['Alimento consumido por el usuario (175 g)'],
+      waste: ['Envases vacíos: vaso, sobrecopa transparente y cuchara (GRI 306)'],
+      emissions: 'Emisiones indirectas de refrigeración doméstica (no desagregadas en reporte Ruta A)',
+      byproducts: ['Inversión social y educativa de marca con clientes potenciales']
     },
-    circularOpportunity:
-      'Campaña pedagógica "Enjuaga, Aplana y Separa", envases apilables para juegos en el hogar y puntos de acopio escolar.',
+    circularOpportunity: 'Eliminar hasta el 80% de cucharas plásticas con cuchara de galleta (E1) y activar incentivos de lavado y canje en hogares y colegios (E4).'
   },
   {
     id: 6,
-    name: '6. Transformación Posconsumo y Cierre de Ciclo',
-    shortTitle: 'Transformación Posconsumo',
-    durationOrScope: 'Rutas selectivas de reciclaje, red de colegios PRAE y plantas transformadoras',
-    isHotspot: false,
-    griIndicators: ['GRI 301: Materiales', 'GRI 306: Residuos'],
-    actors: [
-      'Consumidores y niños de colegios PRAE',
-      'Redes de recicladores de oficio y cooperativas autorizadas',
-      'Transformadores de plástico en madera plástica e industria de alimentos balanceados',
-    ],
+    name: '6. Fin de vida (Posconsumo y Valorización)',
+    shortTitle: 'Fin de Vida y Valorización',
+    durationOrScope: '>450 recicladores · PRAE · Alimento mascotas y quesos',
+    isHotspot: true,
+    hotspotReason: 'Hotspot de Fuga Lineal Posconsumo: El 41% de plásticos aún no se recuperan y no existe desagregación pública del % exacto de vasos Bon Yurt en relleno sanitario vs. recuperados.',
+    griIndicators: ['GRI 302', 'GRI 303', 'GRI 305', 'GRI 306'],
+    actors: ['Consumidores y niños', 'Redes de recicladores de oficio (>450)', 'Gestores aliados REP', 'Industria de alimentos balanceados'],
     processes: [
-      'Programas posconsumo lúdicos: canje de envases por premios y útiles escolares.',
-      'Transformación de mermas y vencidos en alimentos para mascotas o lodos para biogás.',
-      'Triturado, lavado y extrusión de vasos a perfiles de madera plástica para pupitres escolares.',
+      'Programas posconsumo y PRAE: canje de envases y sobrecopas («Recicla, juega y gana premios»)',
+      'Nuevos usos: manualidades educativas (macetas) e incorporación de cartón reciclado',
+      'Valorización de vencidos: alimento para mascotas, investigación en quesos y alimentos funcionales'
     ],
     inputs: {
-      material: ['Residuos posconsumo recuperados (vasos, sobrecopas, cartón)'],
-      water: 'Agua para lavado y flotación en plantas de reciclaje.',
-      energy: 'Energía eléctrica en molinos, extrusoras térmicas y prensas.',
+      material: ['Residuos postconsumo recuperados (vasos, sobrecopas, cartón)'],
+      water: 'Lavado y acondicionamiento en plantas transformadoras (GRI 303)',
+      energy: 'Electricidad en plantas de reciclaje asociadas y centros de acopio (GRI 302)'
     },
     outputs: {
-      products: ['Mobiliario escolar durable (pupitres)', 'Parques infantiles', 'Cajas de cartón reciclado', 'Compost'],
-      waste: ['Plásticos no recuperables de baja calidad'],
-      emissions: 'Gases de extrusión con filtros de captación.',
-      byproducts: ['Plásticos reintroducidos al ciclo técnico; co-beneficios sociales a recicladores'],
+      products: ['Materiales plásticos reintroducidos al ciclo técnico', 'Materia prima para alimentación animal'],
+      waste: ['Reducción de envases en rellenos sanitarios (59% plástico neutralidad actual)'],
+      emissions: 'Emisiones y residuos evitados (GRI 305/306)',
+      byproducts: ['Inclusión social y económica de >450 recicladores de oficio (ODS 8)']
     },
-    circularOpportunity:
-      'Cierre de ciclo "Cradle-to-Cradle": la entrega de pupitres de plástico reciclado a escuelas rurales cierra formalmente la meta de la Resolución 1407/2018 y dignifica la labor de los recicladores.',
+    circularOpportunity: 'Migrar el vaso a monomaterial 100% rPET/Bio certificado (E3: IR 51%→70%) y escalar «Bon Yurt Transforma» para llevar plástico neutralidad de 59% a 75%.'
+  }
+];
+
+export const LCA_HOTSPOTS_AND_GAPS: LcaHotspotGap[] = [
+  {
+    id: 1,
+    title: 'Generación de plásticos de un solo uso',
+    phaseRef: 'Fases 5 y 6 (Uso y Fin de Vida)',
+    type: 'Hotspot',
+    description: 'El vaso principal y la cuchara plástica convencional representan el mayor volumen de fuga hacia rellenos sanitarios debido a la baja separación en la fuente por parte del consumidor final.'
   },
+  {
+    id: 2,
+    title: 'Consumo intensivo de energía en cadena de frío',
+    phaseRef: 'Fases 3 y 4 (Producción y Distribución)',
+    type: 'Hotspot',
+    description: 'La refrigeración continua en plantas, CEDI y puntos de venta concentra una proporción crítica de la huella de carbono operacional (GRI 302 y 305).'
+  },
+  {
+    id: 3,
+    title: 'Huella hídrica y emisiones en producción primaria',
+    phaseRef: 'Fase 1 (Extracción y Cultivos)',
+    type: 'Hotspot',
+    description: 'La ganadería lechera y el cultivo de cereales concentran el mayor consumo de agua y emisiones de metano/GEI de toda la cadena de valor.'
+  },
+  {
+    id: 4,
+    title: 'Brechas en los reportes públicos (Ruta A)',
+    phaseRef: 'Fases 5 y 6 (Refrigeración doméstica y recuperación por SKU)',
+    type: 'Brecha de Reporte (Ruta A)',
+    description: 'Aunque Alpina reporta de manera consolidada sus indicadores GRI 301, 302, 303, 305 y 306 a nivel corporativo y de plantas propias (Fases 2, 3 y 4), los informes públicos no desagregan el impacto específico por referencia de producto (Bon Yurt) ni cuantifican con exactitud el consumo eléctrico doméstico (Fase 5) o el porcentaje exacto de vasos en relleno vs. recuperados (Fase 6).'
+  }
 ];
 
 export const ELLEN_MACARTHUR_PRINCIPLES: EllenMacArthurPrinciple[] = [
   {
     id: 1,
-    name: 'Principio 1: Eliminar residuos y contaminación desde el diseño',
-    description:
-      'Diseñar el producto, sus componentes y materiales para evitar la generación de residuos tóxicos o no reciclables desde la fase conceptual de ingeniería.',
+    name: '1. Eliminar residuos y contaminación desde el diseño',
+    status: 'Sí (Parcial)',
+    description: 'Aligeramiento de empaques, transparencia óptica y eliminación en fuente de accesorios de un solo uso.',
     maturityLevel: 4,
-    levelLabel: 'Nivel 4: Ecodiseño Integral y Sustitución de Componentes Críticos',
+    levelLabel: 'Avanzado con Brecha en Cuchara (4/5)',
     bonYurtEvidence: [
-      'Reducción del gramaje de la pared del vaso en un 18% mediante optimización por elementos finitos, ahorrando cientos de toneladas de plástico virgen.',
-      'Sustitución de la cuchara plástica desechable por una cuchara crujiente comestible de galleta horneada enriquecida con fibra de avena.',
-      'Uso de sobrecopas transparentes sin pigmentos oscuros para optimizar la separación óptica en plantas de reciclaje mecánico.',
-      'Adhesivos hidrosolubles de grado alimentario que se limpian fácilmente en los tanques de lavado.',
+      'Aligeramiento continuo de gramajes en envases y uso de sobrecopas transparentes para facilitar la separación óptica.',
+      'Pilotos activos de cuchara comestible de galleta (5% piloto) y exploración de línea Bio.',
+      'Brecha detectada: persiste el uso de cuchara plástica desechable en la presentación tradicional.'
     ],
-    impactMetric: '-18% resina virgen en vaso y 0 cucharas plásticas desechables.',
+    impactMetric: '4/5 · Meta E1: -80% cucharas plásticas en 12 meses'
   },
   {
     id: 2,
-    name: 'Principio 2: Circular productos y materiales en su valor más alto',
-    description:
-      'Mantener componentes y materiales circulando dentro de la economía en ciclos técnicos y biológicos de alto valor, evitando el downcycling o la incineración.',
+    name: '2. Circular productos y materiales en su máximo valor',
+    status: 'Sí',
+    description: 'Reincorporación de polímeros reciclados, valorización postindustrial y redes de recuperación posconsumo.',
     maturityLevel: 4,
-    levelLabel: 'Nivel 4: Simbiosis Industrial y Cierre de Ciclo en Cadena de Valor',
+    levelLabel: 'Consolidado en Planta / Parcial Posconsumo (4/5)',
     bonYurtEvidence: [
-      'Alianza de simbiosis industrial con Nutresa, Ramo y Compañía Nacional de Chocolates para valorizar las mermas de cereales como suplemento pecuario de alta energía.',
-      'Línea de investigación para aprovechar lotes de kumis no conformes por volumen o acidez en quesos análogos o sueros enriquecidos.',
-      'Reciclaje mecánico de circuito cerrado de vasos posconsumo para transformarlos en perfiles de madera plástica de alta resistencia.',
-      'Donación de pupitres y mesas escolares a colegios rurales en zonas ganaderas de Alpina.',
+      'Reincorporación del 75% de plástico reciclado (rPET) en la sobrecopa del Bon Yurt y 25% en vaso piloto.',
+      'Alianzas con más de 450 recicladores de oficio para lograr el 59% de plástico neutralidad (Alpina, 2025).',
+      'Aprovechamiento del 95,2% de residuos postindustriales y cascada láctea hacia quesos y alimento animal.'
     ],
-    impactMetric: '>95% residuos postindustriales aprovechados y 1.800 pupitres fabricados.',
+    impactMetric: '4/5 · 75% rPET sobrecopa · 59% Plástico Neutralidad'
   },
   {
     id: 3,
-    name: 'Principio 3: Regenerar los sistemas naturales',
-    description:
-      'Devolver nutrientes biológicos al suelo y transitar hacia modelos productivos que restauren la biodiversidad, la salud edáfica y los acuíferos.',
-    maturityLevel: 3,
-    levelLabel: 'Nivel 3: Regeneración Biológica y Ganadería Sostenible',
+    name: '3. Regenerar la naturaleza',
+    status: 'Sí',
+    description: 'Sistemas agropecuarios sostenibles, protección de bosques, energías limpias y retorno biológico certificado.',
+    maturityLevel: 5,
+    levelLabel: 'Madurez Plena / Referente BIC (5/5)',
     bonYurtEvidence: [
-      'Desarrollo de la línea Bon Yurt Bio con envases fabricados en biopolímeros (PLA/PHA) compostables bajo normas EN 13432 y ASTM D6400.',
-      'Etiquetas desprendibles impresas en papel semilla germinable (caléndula, lechuga y albahaca) para huertos escolares y caseros.',
-      'Programa de ganadería regenerativa y silvopastoreo con más de 250 hatos lecheros proveedores en Cundinamarca y Boyacá.',
-      'Biodigestión anaerobia de lodos en la PTAR de Sopó para generar biogás y biofertilizante orgánico.',
+      'Integrado al modelo de Sociedad de Beneficio e Interés Colectivo (BIC).',
+      'Ganadería sostenible certificada y acuerdos de cero deforestación en hatos lecheros aliados.',
+      'Autogeneración del 38% de la electricidad en Planta Sopó mediante biogás de su PTAR y 6% energía solar nacional (ej. CEDI Galapa).'
     ],
-    impactMetric: 'Biomateriales compostables y restauración de praderas lecheras.',
-  },
+    impactMetric: '5/5 · 38% Biogás Sopó · Cero Deforestación'
+  }
 ];
 
 export const NINE_R_STRATEGIES: NineRStrategy[] = [
   {
+    code: 'R0',
+    name: 'Rechazar',
+    group: 'Uso inteligente y manufactura',
+    status: 'Parcial',
+    lifecyclePhase: 'Producción / Uso',
+    definition: 'Hacer que el producto o componente plástico de un solo uso sea redundante abandonando su función desechable.',
+    application: 'Pilotos de eliminación de cucharas plásticas mediante cucharas de galleta comestibles (5% actual).',
+    reductionDetail: 'Brecha: Aún no se escala al 100% del portafolio; E1 busca sustituir hasta el 80% en la línea clásica.',
+    maturityScore: 3,
+    progressPercentage: 60
+  },
+  {
+    code: 'R1',
+    name: 'Repensar',
+    group: 'Uso inteligente y manufactura',
+    status: 'Parcial',
+    lifecyclePhase: 'Diseño / Consumo',
+    definition: 'Hacer el uso del producto y empaque más intensivo y pedagógico, replanteando materiales y hábitos de consumo.',
+    application: 'Rediseño conceptual de envases Bio con etiquetas de semillas y proyectos educativos PRAE.',
+    reductionDetail: 'Brecha: Fase piloto/conceptual; requiere certificar compostabilidad y masificar cultura de no-descarte.',
+    maturityScore: 3,
+    progressPercentage: 60
+  },
+  {
     code: 'R2',
     name: 'Reducir',
-    group: 'Uso y fabricación más inteligente',
-    definition: 'Disminuir la cantidad de materiales y energía consumidos por unidad funcional.',
-    application: 'Reducción de calibre de pared del vaso (-18%) y erradicación de cuchara plástica de un solo uso.',
-    reductionDetail: 'Disminución directa de 420 toneladas anuales de resina virgen de poliestireno y 45 millones de cucharitas plásticas.',
+    group: 'Uso inteligente y manufactura',
+    status: 'Sí',
+    lifecyclePhase: 'Producción / Empaque',
+    definition: 'Aumentar la eficiencia en la fabricación consumiendo menos recursos naturales, resinas vírgenes y energía convencional.',
+    application: 'Reducción sistemática del peso de resinas vírgenes por unidad de empaque y 38% menos electricidad convencional en Sopó gracias al biogás.',
+    reductionDetail: 'Autogeneración energética nacional del 24% (6% solar CEDI Galapa + 18% nacional desde biogás Sopó).',
     maturityScore: 4,
-    progressPercentage: 85,
+    progressPercentage: 80
   },
   {
     code: 'R3',
     name: 'Reutilizar',
-    group: 'Extender la vida útil del producto',
-    definition: 'Permitir que el producto o sus partes cumplan una nueva función útil en buen estado.',
-    application: 'Sobrecopa y vaso con pestañas encajables modulares para upcycling doméstico y escolar.',
-    reductionDetail: 'Transformación de envases en portalápices, maceteros autorregables y bloques lúdicos mediante tutoriales descargables por QR.',
+    group: 'Extender vida útil',
+    status: 'Parcial',
+    lifecyclePhase: 'Uso / Fin de vida',
+    definition: 'Reutilización directa de vasos y tapas limpios para otros fines domésticos y pedagógicos antes del reciclaje.',
+    application: 'Promoción de segundo uso de vasos y tapas en entornos escolares (PRAE) y hogares (manualidades y materas).',
+    reductionDetail: 'Brecha: Limitado a campañas locales; E4 integra estas iniciativas con gestores formales para no perder el material.',
     maturityScore: 3,
-    progressPercentage: 70,
+    progressPercentage: 60
+  },
+  {
+    code: 'R7',
+    name: 'Reutilizar con otro propósito',
+    group: 'Extender vida útil / Cascada',
+    status: 'Sí',
+    lifecyclePhase: 'Producción / Fin de vida',
+    definition: 'Utilizar subproductos descartados o excedentes en una nueva función o industria alimentaria con menor exigencia.',
+    application: 'Derivación de subproductos lácteos (kumis/yogurt vencido) hacia quesos y alimentación animal, y simbiosis de mermas de cereales con Ramo, Nutresa y Kellanova.',
+    reductionDetail: 'Valorización en cascada consolidada en planta; E2 busca llevar la sustitución de cereal virgen del 0% piloto al 15%.',
+    maturityScore: 4,
+    progressPercentage: 80
   },
   {
     code: 'R8',
     name: 'Reciclar',
     group: 'Aplicación útil de materiales',
-    definition: 'Procesar mecánicamente materiales posconsumo para reincorporarlos con calidad estructural.',
-    application: 'Reciclaje formal de PP y PS hacia perfiles de madera plástica para mobiliario escolar y cartón 100% reciclado.',
-    reductionDetail: 'Cierre de ciclo técnico certificado para cumplir la meta de la Resolución 1407/2018 con trazabilidad total hacia pupitres.',
+    status: 'Sí',
+    lifecyclePhase: 'Fin de vida',
+    definition: 'Procesar materiales para obtener igual calidad (rPET grado alimentario) o calidad secundaria mediante reciclaje mecánico y REP.',
+    application: 'Índice de Reciclabilidad corporativo del 51%, aprovechamiento del 95,2% de residuos postindustriales y 59% de plástico neutralidad mediante planes REP.',
+    reductionDetail: '75% rPET en sobrecopa y >450 recicladores; brecha en el vaso principal (~25% piloto) que aborda E3 (meta IR 70%).',
     maturityScore: 4,
-    progressPercentage: 65,
+    progressPercentage: 80
   },
+  {
+    code: 'R9',
+    name: 'Recuperar',
+    group: 'Aplicación útil de materiales',
+    status: 'Sí',
+    lifecyclePhase: 'Producción / Fin de vida',
+    definition: 'Valorización energética (biogás) e incineración controlada / co-procesamiento de fracciones no reciclables.',
+    application: 'Valorización energética mediante biogás en PTAR de Sopó (38% electricidad de planta) y co-procesamiento de residuos no reciclables con gestores autorizados bajo directriz Vertedero Cero.',
+    reductionDetail: 'Complementa el 95,2% de aprovechamiento industrial rumbo a la meta del 98% Vertedero Cero.',
+    maturityScore: 4,
+    progressPercentage: 80
+  }
 ];
 
 export const PRIORITIZED_STRATEGIES: PrioritizedStrategy[] = [
   {
-    id: 'strat-1',
-    number: '01',
-    title: 'Insumos Circulares y Línea Bio',
-    tagline: 'Ecodiseño radical con biopolímeros, papel semilla y cuchara comestible de galleta',
-    principleR: 'R2 Reducir / Principio 1 y 3 MacArthur',
-    phaseTransformed: 'Fase 1 (Materias Primas) y Fase 4 (Empaque)',
+    id: 'E1',
+    number: 'E1',
+    priorityRank: 1,
+    title: 'Escalamiento de cucharas comestibles de galleta',
+    tagline: 'Prioridad 1 · Corto Plazo (0–12 meses) · R0 (Rechazar)',
+    principleR: 'R0 (Rechazar) / Eliminar residuos desde el diseño',
+    phaseTransformed: 'Empaque, Uso y Fin de vida',
     horizon: 'Corto plazo (0-12m)',
-    impactScore: 9,
-    feasibilityScore: 8,
-    objective:
-      'Transformar la arquitectura de materiales del Bon Yurt sustituyendo polímeros fósiles por biopolímeros compostables certificados y utensilios comestibles que eliminan el desecho.',
-    targetAudience: 'Consumidores jóvenes, niños, familias y eco-tiendas.',
-    responsible: 'Gerencia de I+D+I y Dirección de Empaques Alpina.',
-    externalAllies: ['Proveedores de PLA/PHA certificados', 'Panificadores aliados para cuchara horneada', 'Gestores de compostaje'],
+    impactLabel: 'Alto',
+    feasibilityLabel: 'Alta',
+    impactScore: 8.5,
+    feasibilityScore: 9.0,
+    objective: 'Eliminar el residuo plástico de un solo uso de la cuchara convencional en la fuente mediante escalamiento de galleta comestible diferenciando la marca.',
+    targetAudience: 'Niños, jóvenes, familias y canales de consumo masivo de la línea clásica de Bon Yurt.',
+    responsible: 'Gerencia de I+D+i y Operaciones Alpina',
+    externalAllies: ['Proveedores de panificación y biotecnología alimentaria'],
     actions: [
-      'Desarrollo de películas termoformadas de PLA/PHA con barrera al oxígeno y vapor de agua.',
-      'Industrialización de la cuchara horneada crujiente a base de salvado de avena y harina enriquecida (aw < 0.5).',
-      'Etiquetas desprendibles en papel semilla germinable con tintas vegetales ecológicas.',
-      'Certificación internacional de compostabilidad doméstica e industrial libre de ftalatos y microplásticos.',
+      '1. Estandarizar formulación de cuchara de galleta resistente a la humedad del yogurt.',
+      '2. Integrar dosificación y sellado en línea de empaque sin afectar inocuidad ni vida útil.',
+      '3. Desplegar campaña de comunicación al consumidor resaltando la experiencia sin residuo plástico.'
     ],
     barriersAndMitigation: [
-      { barrier: 'Costo superior (25-35%) de resinas biobasadas frente a polímeros fósiles.', mitigation: 'Absorción por economías de escala y prima de precio en la línea premium Bon Yurt Bio.' },
-      { barrier: 'Pocas plantas de compostaje industrial en Colombia.', mitigation: 'Diseño mixto: compostaje doméstico para etiquetas semilla y recolección piloto guiada.' },
+      {
+        barrier: 'Costo unitario mayor frente a cuchara de poliestireno convencional y sensibilidad a humedad.',
+        mitigation: 'Alianzas de escala con panificadoras, empaque sellado en sobrecopa y crédito verde / beneficios tributarios en Colombia.'
+      }
     ],
-    expectedImpact: 'Eliminación del 100% de cucharas plásticas y transición del 30% del volumen a envases biológicos.',
-    imageKey: 'hero',
+    expectedImpact: 'Eliminación de hasta el 80% de cucharas plásticas en la línea clásica y ahorro en compras de poliestireno.',
+    imageKey: '/images/slides/slide_visual_4.png'
   },
   {
-    id: 'strat-2',
-    number: '02',
-    title: 'Estrategia Posconsumo Lúdica Escolar',
-    tagline: 'Red PRAE, Concurso "Bon Yurt Transforma" y Puntos Come-Vasos',
-    principleR: 'R3 Reutilizar / R8 Reciclar',
-    phaseTransformed: 'Fase 5 (Consumo) y Fase 6 (Transformación)',
-    horizon: 'Corto plazo (0-12m)',
-    impactScore: 10,
-    feasibilityScore: 9,
-    objective:
-      'Articular la mayor red de recuperación de envases lácteos en colegios de Colombia, generando cultura ambiental activa, hábitos de separación y sentido de pertenencia en niños.',
-    targetAudience: 'Estudiantes de primaria y secundaria, docentes de ciencias y rectores escolares.',
-    responsible: 'Gerencia de Sostenibilidad y Área de Mercadeo Social Alpina.',
-    externalAllies: ['Instituciones Educativas (Red PRAE)', 'Ministerio de Educación Nacional', 'Asociaciones de Recicladores de Oficio'],
+    id: 'E2',
+    number: 'E2',
+    priorityRank: 2,
+    title: 'Simbiosis industrial de mermas alimentarias',
+    tagline: 'Prioridad 2 · Corto Plazo (6–18 meses) · R7 (Reutilizar con otro propósito)',
+    principleR: 'R7 (Reutilizar con otro propósito) / Recuperación de recursos',
+    phaseTransformed: 'Extracción y Producción',
+    horizon: 'Corto plazo (6-18m)',
+    impactLabel: 'Alto',
+    feasibilityLabel: 'Alta',
+    impactScore: 8.5,
+    feasibilityScore: 8.2,
+    objective: 'Reducir el desperdicio de alimentos y la huella hídrica agrícola aprovechando mermas inocuas de galletas, cereales y chocolates de industrias colombianas aliadas.',
+    targetAudience: 'Cadena de suministro de toppings y áreas de compras sostenibles y calidad.',
+    responsible: 'Gerencia de Calidad y Compras Sostenibles',
+    externalAllies: ['Empresas aliadas: Ramo, Grupo Nutresa (Jet) y Kellanova'],
     actions: [
-      'Instalación de contenedores lúdicos "Come-Vasos" en cafeterías escolares con escurridor de restos.',
-      'Concurso intercolegiado anual "Bon Yurt Transforma", premiando al colegio líder con un parque infantil en madera plástica.',
-      'Monedero de Ecopuntos: los niños canjean vasos limpios por cuadernos ecológicos, colores y material didáctico.',
-      'Articulación formal con los Proyectos Ambientales Escolares (PRAE) del Ministerio de Educación Nacional.',
+      '1. Mapear mermas inocuas de galletas, cereales y chocolates compatibles en granulometría y sabor.',
+      '2. Establecer protocolos estrictos de trazabilidad, cadena de frío e inocuidad alimentaria.',
+      '3. Incorporar las mermas certificadas como toppings en la sobrecopa del Bon Yurt.'
     ],
     barriersAndMitigation: [
-      { barrier: 'Contaminación biológica por restos lácteos mal escurridos.', mitigation: 'Diseño del Come-Vasos con boquilla escurridora obligatoria e infografía visual de 3 pasos.' },
-      { barrier: 'Logística de recolección en colegios apartados.', mitigation: 'Alianzas con asociaciones locales de recicladores de oficio con rutas selectivas quincenales.' },
+      {
+        barrier: 'Riesgo sanitario por pérdida de trazabilidad o estándares INVIMA para reincorporación alimentaria.',
+        mitigation: 'Validación microbiológica por lote, acuerdos de calidad origen-destino y trazabilidad digital continua.'
+      }
     ],
-    expectedImpact: 'Vinculación de más de 250 colegios y recolección de más de 80 toneladas de plástico al año.',
-    imageKey: 'school',
+    expectedImpact: 'Sustitución de al menos 10% de cereal virgen (meta 15% a 3 años), reducción de huella hídrica y ahorro en costos de materia prima.',
+    imageKey: '/images/slides/slide_visual_4.png'
   },
   {
-    id: 'strat-3',
-    number: '03',
-    title: 'Simbiosis Industrial y Valorización Biológica',
-    tagline: 'Cierre de ciclo entre líderes de la industria láctea, confitera y de reciclaje mecánico',
-    principleR: 'R8 Reciclar / Principio 2 MacArthur',
-    phaseTransformed: 'Fase 3 (Producción) y Fase 6 (Transformación)',
-    horizon: 'Mediano plazo (1-3a)',
-    impactScore: 9,
-    feasibilityScore: 7,
-    objective:
-      'Maximizar la circularidad entre cadenas productivas complementarias para que los subproductos de una industria se conviertan en nutrientes de otra, eliminando mermas orgánicas y plásticas.',
-    targetAudience: 'Aliados de confitería (Nutresa, Ramo, Jet), transformadores de plástico y sector pecuario.',
-    responsible: 'Dirección Técnica de Operaciones y Gerencia de Cadena de Suministro.',
-    externalAllies: ['Ramo S.A.', 'Compañía Nacional de Chocolates / Nutresa', 'Smurfit Westrock', 'Transformadores de madera plástica'],
+    id: 'E3',
+    number: 'E3',
+    priorityRank: 3,
+    title: 'Transición del vaso a monomaterial 100% rPET / Bio certificado',
+    tagline: 'Prioridad 3 · Mediano Plazo (12–36 meses) · R2 & R8',
+    principleR: 'R2 (Reducir) y R8 (Reciclar) / Insumos circulares',
+    phaseTransformed: 'Producción y Fin de vida',
+    horizon: 'Mediano plazo (12-36m)',
+    impactLabel: 'Muy Alto',
+    feasibilityLabel: 'Media',
+    impactScore: 9.6,
+    feasibilityScore: 5.5,
+    objective: 'Cerrar el ciclo técnico del componente de mayor peso del empaque sustituyendo vasos multicapa difíciles de reciclar por monomateriales 100% reciclables o biopolímeros compostables certificados.',
+    targetAudience: 'Proveedores de resinas circulares, transformadores de termoformado y autoridad sanitaria INVIMA.',
+    responsible: 'Dirección de Sostenibilidad y Empaques',
+    externalAllies: ['Proveedores de resinas circulares', 'INVIMA', 'Gestores REP'],
     actions: [
-      'Canalización de mermas de cereales y galletas hacia dietas balanceadas para ganadería lechera en Boyacá y Cundinamarca.',
-      'Investigación para transformar lotes no conformes de kumis en quesos análogos o sueros desmineralizados.',
-      'Alianza con empresas extrusoras de madera plástica para fabricar pupitres escolares certificados con sello ICONTEC.',
-      'Uso exclusivo de cajas secundarias de cartón corrugado 100% reciclado y reutilizable.',
+      '1. Sustituir vasos multicapa por monomateriales de alta reciclabilidad (100% rPET grado alimentario) o biopolímeros compostables certificados.',
+      '2. Validar resistencia mecánica, sellado térmico y barrera microbiológica en cadena de frío.',
+      '3. Gestionar registros sanitarios ante INVIMA y ajustar moldes de termoformado.'
     ],
     barriersAndMitigation: [
-      { barrier: 'Pérdida imprevista de cadena de frío en lotes de kumis (>4°C).', mitigation: 'Protocolo sanitario no negociable: lotes con quiebre térmico van a biodigestión o nutrición animal, nunca a consumo humano.' },
-      { barrier: 'Resistencia mecánica y durabilidad de la madera plástica.', mitigation: 'Pruebas de flexión y fatiga certificadas bajo norma técnica colombiana NTC para mobiliario infantil.' },
+      {
+        barrier: 'INVIMA exige estrictos estándares de inocuidad en contacto directo con lácteos y mayor CAPEX de ajuste de moldes.',
+        mitigation: 'Resinas rPET con certificación grado alimentario FDA/INVIMA, descuento en renta / exclusión de IVA (Estatuto Tributario) y crédito verde Bancóldex.'
+      }
     ],
-    expectedImpact: 'Aprovechamiento >95% de mermas postindustriales y entrega de 1.800 pupitres en escuelas rurales.',
-    imageKey: 'plant',
+    expectedImpact: 'Incremento del Índice de Reciclabilidad (IR) corporativo del 51% actual al 70% y MCI ≥ 0,68.',
+    imageKey: '/images/slides/slide_visual_4.png'
   },
+  {
+    id: 'E4',
+    number: 'E4',
+    priorityRank: 4,
+    title: 'Red de retorno escolar y comunitaria «Bon Yurt Transforma» (PRAE)',
+    tagline: 'Prioridad 4 · Corto-Mediano Plazo (6–24 meses) · R3 & R8',
+    principleR: 'R3 (Reutilizar) y R8 (Reciclar) / Circular materiales',
+    phaseTransformed: 'Uso y Fin de vida',
+    horizon: 'Corto-mediano plazo (6-24m)',
+    impactLabel: 'Medio-Alto',
+    feasibilityLabel: 'Alta',
+    impactScore: 7.5,
+    feasibilityScore: 8.6,
+    objective: 'Aumentar la tasa de recolección limpia posconsumo en colegios y hogares integrando educación ambiental, canje lúdico e inclusión formal de recicladores de oficio.',
+    targetAudience: 'Estudiantes de colegios (PRAE), hogares en canales retail y asociaciones de recicladores de oficio.',
+    responsible: 'Gerencia de Asuntos Corporativos y Mercadeo',
+    externalAllies: ['Colegios (PRAE)', 'Asociaciones de recicladores de oficio (>450)', 'Cadenas retail'],
+    actions: [
+      '1. Instalar puntos de recolección limpia en colegios y supermercados con concurso «Bon Yurt Transforma».',
+      '2. Vincular asociaciones de recicladores de oficio para recolección directa, trazabilidad REP y pago justo.'
+    ],
+    barriersAndMitigation: [
+      {
+        barrier: 'Baja cultura de separación y lavado de envases lácteos en los hogares colombianos.',
+        mitigation: 'Incentivos lúdicos de canje en puntos de venta ("Recicla, juega y gana premios") y sensibilización práctica en colegios.'
+      }
+    ],
+    expectedImpact: 'Incrementar la tasa de plástico neutralidad del 59% actual al 75% en el segmento escolar y fortalecer el ODS 8.',
+    imageKey: '/images/slides/slide_visual_4.png'
+  }
+];
+
+export const VIABILITY_RISKS = [
+  {
+    category: 'Barreras regulatorias y sanitarias',
+    risk: 'El INVIMA exige estrictos estándares de inocuidad para materiales reciclados en contacto directo con alimentos lácteos y para el aprovechamiento de excedentes alimentarios.',
+    mitigation: 'Utilizar resinas rPET con certificación grado alimentario FDA/INVIMA y mantener trazabilidad de cadena de frío ininterrumpida.'
+  },
+  {
+    category: 'Barreras financieras y de mercado',
+    risk: 'El costo de los biopolímeros certificados y las cucharas comestibles puede superar al del plástico virgen convencional.',
+    mitigation: 'Acceder a incentivos tributarios en Colombia por inversiones en control y mejoramiento del medio ambiente (descuento en renta y exclusión de IVA según Estatuto Tributario) y líneas de crédito verde de Bancóldex.'
+  },
+  {
+    category: 'Barreras culturales',
+    risk: 'Baja cultura de separación y lavado de envases lácteos en los hogares.',
+    mitigation: 'Incentivos lúdicos de canje en puntos de venta y sensibilización en colegios (PRAE «Bon Yurt Transforma»).'
+  }
+];
+
+export const ALPINA_CORPORATE_BASELINE: AlpinaCorporateMetric[] = [
+  {
+    id: 'corp-ir',
+    pillar: 'Envases y Circularidad',
+    name: 'Índice de Reciclabilidad (IR)',
+    alpinaValue: 51,
+    alpinaLabel: '51% Alpina (2025)',
+    sectorValue: 27.5,
+    sectorLabel: '25%–30% Sector Agroalimentario CO',
+    sectorSource: 'Ref. sector agroalimentario Colombia',
+    detail: '51% tras evaluar decenas de familias de productos mediante ecodiseño y aligeramiento de envases.',
+    highlightTag: '+21 a +26 pts sobre el sector'
+  },
+  {
+    id: 'corp-rpet',
+    pillar: 'Envases y Circularidad',
+    name: 'Plástico Reincorporado (rPET en sobrecopa)',
+    alpinaValue: 75,
+    alpinaLabel: '75% sobrecopa (25% vaso piloto)',
+    sectorValue: 12.5,
+    sectorLabel: '10%–15% Sector Lácteo CO',
+    sectorSource: 'Ref. sector lácteo Colombia',
+    detail: '75% de plástico reciclado rPET implementado en las sobrecopas del Bon Yurt (y 25% en referencias como Mini Bon Yurt y Frutto).',
+    highlightTag: '5x el promedio del sector lácteo'
+  },
+  {
+    id: 'corp-neutralidad',
+    pillar: 'Envases y Circularidad',
+    name: 'Plástico Neutralidad (Recuperación REP)',
+    alpinaValue: 59,
+    alpinaLabel: '59% recuperado (>450 recicladores)',
+    sectorValue: 30,
+    sectorLabel: '30% Meta Legal Res. 1407 al 2030',
+    sectorSource: 'Resolución 1407 de 2018 (MADS)',
+    detail: '59% de recolección y transformación del plástico puesto en el mercado con >450 recicladores de oficio, superando casi al doble la meta normativa 2030.',
+    highlightTag: 'Supera casi 2x la meta 2030'
+  },
+  {
+    id: 'corp-postind',
+    pillar: 'Operación Limpia y Residuos',
+    name: 'Aprovechamiento Residuos Postindustriales',
+    alpinaValue: 95.2,
+    alpinaLabel: '95,2% valorizados en planta',
+    sectorValue: 75,
+    sectorLabel: '70%–80% Industria Alimentos ANDI',
+    sectorSource: 'Referente industria alimentos ANDI',
+    detail: '95,2% de los residuos generados en plantas son valorizados bajo directriz de Vertedero Cero mediante co-procesamiento y compostaje.',
+    highlightTag: '+15 pts sobre referente ANDI'
+  },
+  {
+    id: 'corp-energia',
+    pillar: 'Energía y Autogeneración',
+    name: 'Autogeneración Energética Nacional',
+    alpinaValue: 24,
+    alpinaLabel: '24% nacional (38% biogás Sopó)',
+    sectorValue: 7.5,
+    sectorLabel: '5%–10% Sector Alimentos',
+    sectorSource: 'Ref. sector alimentos Colombia',
+    detail: '24% nacional (6% solar destacando CEDI Galapa + 18% nacional por biogás PTAR de Sopó que cubre el 38% de la planta).',
+    highlightTag: '3x referente sector alimentos'
+  }
 ];
 
 export const INDICATOR_SHEETS: IndicatorSheet[] = [
   {
-    id: 'ind-1',
-    name: '% de Contenido de Material Reciclado o Bio en Empaque',
+    id: 'IND-01',
+    name: '1. Contenido de material reciclado o renovable en envases',
     category: 'Entradas',
-    formula: '(Peso de resina reciclada + biomaterial / Peso total del envase) × 100',
-    unit: '% en peso',
-    baseline: '0% (Empaque 100% virgen fósil)',
-    target: '45% en 24 meses; 70% en 48 meses',
-    periodicity: 'Mensual',
-    responsible: 'Jefe de Ingeniería de Empaques',
-    source: 'Órdenes de compra y fichas técnicas de proveedores de resina',
-    scale: 'Micro (Producto/Planta)',
-    synergy: 'Resolución 1407/2018 y Ley 2232 de 2022.',
+    formula: '(Peso rPET o Bio (g) / Peso total envase (g)) × 100',
+    unit: '%',
+    baseline: '75% en sobrecopa / 25% en vaso piloto (Ref. sector lácteo: 10%–15%)',
+    alpinaBaseline: '75% sobrecopa / 25% vaso piloto',
+    sectorBenchmark: '10%–15% (Sector lácteo CO)',
+    target: '85% promedio ponderado en todo el set de empaque Bon Yurt',
+    periodicity: 'Mensual / Trimestral',
+    responsible: 'Dirección de Sostenibilidad y Empaques',
+    source: 'Forética (2019) / GRI 301-2',
+    scale: 'Micro (Producto)',
+    synergy: 'Cierra la brecha del vaso principal (E3) manteniendo liderazgo frente al 10%–15% del sector.'
   },
   {
-    id: 'ind-2',
-    name: 'Tasa de Recuperación Posconsumo Escolar (Red PRAE)',
+    id: 'IND-02',
+    name: '2. Porcentaje de mermas de terceros incorporadas (Simbiosis)',
+    category: 'Entradas',
+    formula: '(kg mermas aliadas / kg totales de cereal) × 100',
+    unit: '%',
+    baseline: '0% en línea comercial (Piloto de investigación)',
+    alpinaBaseline: '0% comercial (supuesto 5%–10% potencial)',
+    sectorBenchmark: 'Referente emergente de simbiosis (Forética)',
+    target: '15% de sustitución de cereal virgen por mermas aptas',
+    periodicity: 'Mensual / Trimestral',
+    responsible: 'Gerencia de Calidad y Compras Sostenibles',
+    source: 'Forética (2019)',
+    scale: 'Meso (Cadena de valor)',
+    synergy: 'Activa E2 con Ramo, Nutresa y Kellanova reduciendo huella hídrica agrícola y ODS 12.3.'
+  },
+  {
+    id: 'IND-03',
+    name: '3. Intensidad energética y autogeneración limpia',
+    category: 'Entradas',
+    formula: 'kWh / unidad producida y % autogeneración',
+    unit: 'kWh/u y %',
+    baseline: '24% autogeneración nacional (38% biogás en Sopó) · Sector: 5%–10%',
+    alpinaBaseline: '24% nacional (38% Sopó · 6% solar)',
+    sectorBenchmark: '5%–10% (Sector alimentos CO)',
+    target: '30% autogeneración nacional y -8% en intensidad energética',
+    periodicity: 'Mensual',
+    responsible: 'Gerencia de Operaciones y Plantas',
+    source: 'Forética (2019) / GRI 302-3',
+    scale: 'Micro (Planta)',
+    synergy: 'Mitiga el hotspot de refrigeración (Fases 3 y 4) y contribuye al ODS 13.'
+  },
+  {
+    id: 'IND-04',
+    name: '4. Tasa de aprovechamiento de residuos postindustriales',
     category: 'Salidas',
-    formula: '(Toneladas de envases Bon Yurt recuperadas en colegios / Toneladas puestas en mercado) × 100',
-    unit: '% de recuperación',
-    baseline: '3.5% (rutas tradicionales)',
-    target: '30% en colegios vinculados al segundo año',
+    formula: '(t aprovechadas / t generadas) × 100',
+    unit: '%',
+    baseline: '95,2% en plantas Alpina (Ref. industria alimentos ANDI: 70%–80%)',
+    alpinaBaseline: '95,2% en plantas',
+    sectorBenchmark: '70%–80% (Industria alimentos ANDI)',
+    target: '98% (Consolidación Certificación Vertedero Cero en todas las plantas)',
+    periodicity: 'Mensual / Anual',
+    responsible: 'Área Operativa y Gestión Ambiental',
+    source: 'GRI 306-4',
+    scale: 'Micro (Planta)',
+    synergy: 'Consolida la manufactura limpia y la cascada láctea hacia quesos y alimento animal.'
+  },
+  {
+    id: 'IND-05',
+    name: '5. Tasa de recuperación posconsumo (Plástico Neutralidad)',
+    category: 'Salidas',
+    formula: '(t plástico recuperado / t plástico en mercado) × 100',
+    unit: '%',
+    baseline: '59% recolectado con >450 recicladores (Meta legal Res. 1407 al 2030: 30%)',
+    alpinaBaseline: '59% con >450 recicladores',
+    sectorBenchmark: '30% (Meta Res. 1407 al 2030)',
+    target: '75% de recolección y transformación efectiva',
+    periodicity: 'Trimestral / Anual',
+    responsible: 'Asuntos Corporativos, Mercadeo y Gestores REP',
+    source: 'Forética / REP Res. 1407',
+    scale: 'Meso / Macro (Nacional)',
+    synergy: 'Apalancada por E4 («Bon Yurt Transforma» PRAE), alimenta cuentas nacionales DANE/ENEC.'
+  },
+  {
+    id: 'IND-06',
+    name: '6. Tasa de sustitución de cucharas plásticas (Ecodiseño)',
+    category: 'Producto',
+    formula: '(Unidades con cuchara galleta / Unidades totales vendidas) × 100',
+    unit: '%',
+    baseline: '5% (Fase piloto / lanzamiento comercial)',
+    alpinaBaseline: '5% fase piloto',
+    sectorBenchmark: 'Transición normativa plásticos de un solo uso',
+    target: '80% de sustitución en la presentación clásica de Bon Yurt',
+    periodicity: 'Mensual',
+    responsible: 'Gerencia de I+D+i y Operaciones Alpina',
+    source: 'Forética (2019)',
+    scale: 'Micro (Producto)',
+    synergy: 'Indicador directo de E1 (Prioridad 1) y del principio R0 Rechazar en consumo masivo.'
+  },
+  {
+    id: 'IND-07',
+    name: '7. Ahorro por eficiencia de materiales y simbiosis',
+    category: 'Económicos',
+    formula: 'COP / año ahorrados en resinas vírgenes y materias primas (variación %)',
+    unit: '% ahorro COP/año',
+    baseline: 'Línea base por consolidar en primer trimestre de operación (costos unitarios reservados)',
+    alpinaBaseline: 'Por consolidar Q1',
+    sectorBenchmark: 'Referente financiero relativo (reserva industrial)',
+    target: 'Ahorro neto mínimo del 12% en costos de empaque y toppings',
     periodicity: 'Trimestral',
-    responsible: 'Coordinador de Sostenibilidad y PRAE',
-    source: 'Planillas de pesaje firmadas con asociaciones de recicladores',
-    scale: 'Meso (Cadena/Red PRAE)',
-    synergy: 'Metas REP MinAmbiente y Estándar GRI 306-4.',
+    responsible: 'Compras Sostenibles y Finanzas',
+    source: 'Forética (2019)',
+    scale: 'Micro (Financiero)',
+    synergy: 'Convierte la economía circular en rentabilidad real junto a incentivos tributarios y Bancóldex.'
   },
   {
-    id: 'ind-3',
-    name: 'Tasa de Aprovechamiento de Residuos Postindustriales',
-    category: 'Salidas',
-    formula: '(Toneladas de mermas valorizadas o transformadas / Total mermas generadas) × 100',
-    unit: '% aprovechamiento',
-    baseline: '91.2%',
-    target: '≥ 95% (Cero residuos a relleno sanitario)',
-    periodicity: 'Mensual',
-    responsible: 'Gerencia de Planta Sopó',
-    source: 'Reporte del Sistema de Gestión Ambiental ISO 14001',
-    scale: 'Micro (Producto/Planta)',
-    synergy: 'GRI 306-2 y Política Nacional de Economía Circular.',
-  },
-  {
-    id: 'ind-4',
-    name: 'Intensidad Energética Específica de Bon Yurt',
-    category: 'Entradas',
-    formula: 'kWh totales consumidos en producción y frío / Tonelada de Bon Yurt producida',
-    unit: 'kWh / tonelada',
-    baseline: '385 kWh/t',
-    target: '310 kWh/t (-19.5% por cogeneración a biogás)',
-    periodicity: 'Mensual',
-    responsible: 'Director de Mantenimiento y Energía',
-    source: 'Telemetría de subestaciones y medidores de caldera',
-    scale: 'Micro (Producto/Planta)',
-    synergy: 'GRI 302-3 y ODS 7 (Energía Asequible y No Contaminante).',
-  },
-  {
-    id: 'ind-5',
-    name: 'Intensidad Hídrica Específica',
-    category: 'Entradas',
-    formula: 'm³ de agua captada y tratada / Tonelada de Bon Yurt producida',
-    unit: 'm³ / tonelada',
-    baseline: '4.2 m³/t',
-    target: '2.8 m³/t (-33% por circuito cerrado CIP)',
-    periodicity: 'Mensual',
-    responsible: 'Jefe de PTAR y Aguas Industriales',
-    source: 'Caudalímetros de entrada y salida de PTAR',
-    scale: 'Micro (Producto/Planta)',
-    synergy: 'GRI 303-3 y ODS 6 (Agua Limpia y Saneamiento).',
-  },
-  {
-    id: 'ind-6',
-    name: 'Mobiliario Escolar Producido con Plástico Reciclado',
-    category: 'Social',
-    formula: 'Número total de pupitres y mesas de madera plástica entregadas a escuelas rurales',
-    unit: 'Unidades / año',
-    baseline: '0 unidades',
-    target: '1.800 pupitres y 25 parques infantiles donados',
-    periodicity: 'Semestral',
-    responsible: 'Fundación Alpina y Gerencia de Sostenibilidad',
-    source: 'Actas de entrega firmadas por rectores y Secretarías de Educación',
-    scale: 'Meso (Cadena/Red PRAE)',
-    synergy: 'ODS 4 (Educación de Calidad) y ODS 12 (Producción Responsable).',
-  },
-  {
-    id: 'ind-7',
-    name: 'Reducción de Huella de Carbono (Alcance 3)',
-    category: 'Integrado',
-    formula: 't CO₂eq evitadas por ecodiseño (-18% resina), reciclaje mecánico y silvopastoreo',
-    unit: 't CO₂eq / año',
-    baseline: 'Línea base ACV 2024',
-    target: '-28% de emisiones asociadas a empaque y fin de vida',
+    id: 'IND-08',
+    name: '8. Índice de Circularidad de Material (MCI) / IR',
+    category: 'Integrados',
+    formula: 'Índice de 0 a 1 (MCI) y % de Reciclabilidad (IR)',
+    unit: 'Índice (0-1) / % IR',
+    baseline: 'IR: 51% (Ref. sector agroalimentario Colombia: 25%–30%)',
+    alpinaBaseline: 'IR 51%',
+    sectorBenchmark: '25%–30% IR (Sector agroalimentario CO)',
+    target: 'IR: 70% / MCI ≥ 0,68 para la línea Bon Yurt',
     periodicity: 'Anual',
-    responsible: 'Gerencia Legal y Asuntos Regulatorios',
-    source: 'Inventario de GEI auditado por ICONTEC según ISO 14064',
-    scale: 'Macro (Nacional/REP)',
-    synergy: 'GRI 305-5, ODS 13 (Acción por el Clima) y Contribución Nacional (NDC Colombia).',
-  },
+    responsible: 'Comité Directivo de Sostenibilidad Alpina',
+    source: 'Ellen MacArthur / WBCSD CTI',
+    scale: 'Micro / Meso',
+    synergy: 'Sintetiza E1+E2+E3+E4 evitando el greenwashing con respaldo metodológico internacional.'
+  }
 ];
 
 export const MRV_STAGES: MrvStage[] = [
   {
     step: 1,
-    title: '1. Medición Operativa (Monitoreo)',
-    focus: 'Captura primaria de datos de entradas, salidas y pesajes en puntos de generación.',
-    toolsAndStandards: [
-      'Básculas electrónicas calibradas en planta Sopó y muelles de acopio escolar.',
-      'Sensores IoT de temperatura para trazabilidad de cadena de frío a 4°C.',
-      'Módulo de trazabilidad ambiental en SAP S/4HANA.',
-    ],
-    responsible: 'Jefes de Planta, Supervisores de Calidad y Coordinadores PRAE.',
-    frequency: 'Diaria / Registro por lote',
-    deliverable: 'Planillas digitales de pesaje diario de materiales recuperados y mermas valorizadas.',
+    title: '1. Medición / Monitoreo',
+    focus: 'Registro operativo continuo de gramajes de empaque, consumo de rPET, recepción de mermas de aliados, generación de biogás y certificados de recolección REP.',
+    toolsAndStandards: ['Básculas industriales', 'Medidores inteligentes PTAR/solar', 'Módulo ambiental ERP (SAP)'],
+    responsible: 'Área Operativa, Plantas de Producción y Gestores Aliados',
+    frequency: 'Diaria / Mensual',
+    deliverable: 'Registros primarios trazables en ERP (SAP)'
   },
   {
     step: 2,
-    title: '2. Reporte Interno (Tablero Gerencial)',
-    focus: 'Consolidación de indicadores de intensidad de materiales y avance mensual frente a metas.',
-    toolsAndStandards: [
-      'Tablero de control ejecutivo en PowerBI / Looker con actualización en tiempo real.',
-      'Control de costos y rentabilidad de acuerdos de simbiosis industrial.',
-      'Auditorías internas de segregación en líneas de envasado.',
-    ],
-    responsible: 'Coordinador de Sostenibilidad y Gerencia de Operaciones.',
-    frequency: 'Mensual / Trimestral',
-    deliverable: 'Informe trimestral de desempeño circular para el Comité de Dirección.',
+    title: '2. Reporte Interno',
+    focus: 'Consolidación de los 8 indicadores del Bon Yurt frente a las metas trimestrales y análisis de desviaciones económicas y operativas.',
+    toolsAndStandards: ['Tablero de control (Dashboard de Economía Circular)'],
+    responsible: 'Coordinador de Sostenibilidad y Líder de I+D+i',
+    frequency: 'Trimestral',
+    deliverable: 'Tablero ejecutivo trimestral de brechas y ahorros'
   },
   {
     step: 3,
-    title: '3. Reporte Externo y Normativo',
-    focus: 'Comunicación pública a autoridades ambientales y grupos de interés bajo estándares internacionales.',
-    toolsAndStandards: [
-      'Plan de Gestión Ambiental de Residuos de Envases y Empaques (Resolución 1407/2018).',
-      'Cumplimiento gradual de la Ley 2232 de 2022 de plásticos de un solo uso.',
-      'Memoria de Sostenibilidad bajo estándares GRI 301 (Materiales) y GRI 306 (Residuos).',
-    ],
-    responsible: 'Dirección de Asuntos Corporativos y Asesoría Jurídica Ambiental.',
+    title: '3. Reporte Externo',
+    focus: 'Divulgación pública de resultados y trazabilidad ante grupos de interés, DANE (CAEFM-RS) y autoridades ambientales bajo ENEC.',
+    toolsAndStandards: ['Informe Integrado de Sostenibilidad (GRI)', 'Plataforma ANLA/VUCE (Plan REP Res. 1407)', 'Reporte BIC'],
+    responsible: 'Dirección de Asuntos Corporativos y Sostenibilidad',
     frequency: 'Anual',
-    deliverable: 'Informe público de Sostenibilidad Alpina radicado anualmente ante la ANLA y MinAmbiente.',
+    deliverable: 'Reporte público GRI / BIC y radicación ANLA'
   },
   {
     step: 4,
-    title: '4. Verificación Independiente (Auditoría)',
-    focus: 'Validación de tercera parte imparcial sobre la exactitud, trazabilidad y veracidad de las cifras.',
-    toolsAndStandards: [
-      'Auditoría física en plantas de reciclaje y centros de acopio autorizados.',
-      'Dictamen de aseguramiento limitado según estándar ISAE 3000.',
-      'Certificación de cadena de custodia y contenido reciclado bajo ISO 14021.',
-    ],
-    responsible: 'Organismo auditor externo independiente (ICONTEC / SGS / Bureau Veritas).',
+    title: '4. Verificación',
+    focus: 'Auditoría de calidad de datos, validación de certificados de aprovechamiento de recicladores y auditorías sanitarias.',
+    toolsAndStandards: ['Verificación externa GRI', 'Auditoría Certificación Vertedero Cero', 'ISO 14001'],
+    responsible: 'Auditoría Interna y Tercero Independiente (ej. ICONTEC / PwC / Deloitte)',
     frequency: 'Anual',
-    deliverable: 'Certificado de Conformidad y Declaración de Aseguramiento de Metas Circulares.',
+    deliverable: 'Dictamen independiente sin greenwashing'
   },
   {
     step: 5,
-    title: '5. Ajuste y Mejora Continua (Ciclo PHVA)',
-    focus: 'Revisión estratégica de metas, retroalimentación del mercado y reasignación de inversiones de I+D+I.',
-    toolsAndStandards: [
-      'Ciclo PHVA (Planear, Hacer, Verificar, Actuar) corporativo.',
-      'Análisis de brechas tecnológicas y actualización de costos de biopolímeros.',
-      'Retroalimentación pedagógica con docentes rectores de la Red PRAE.',
-    ],
-    responsible: 'Comité Directivo de Alpina S.A.S. BIC.',
-    frequency: 'Anual (Cierre de vigencia)',
-    deliverable: 'Plan de Ajuste de Circularidad y presupuesto de I+D+I aprobado para el año siguiente.',
+    title: '5. Ajuste',
+    focus: 'Evaluación estratégica del desempeño del plan y actualización de metas e inversiones bajo el ciclo PHVA.',
+    toolsAndStandards: ['Revisión por la dirección (Ciclo PHVA)'],
+    responsible: 'Comité Directivo de Sostenibilidad Alpina',
+    frequency: 'Anual',
+    deliverable: 'Hoja de ruta recalibrada para siguiente ciclo anual'
+  }
+];
+
+export const ODS_CONTRIBUTIONS: OdsContribution[] = [
+  {
+    ods: 'ODS 8',
+    title: 'Trabajo decente y crecimiento económico',
+    description: 'Formalización e inclusión económica de más de 450 recicladores de oficio.'
   },
+  {
+    ods: 'ODS 9',
+    title: 'Industria, innovación e infraestructura',
+    description: 'Ecodiseño de cucharas comestibles, aprovechamiento de biogás (38% Sopó) y energía solar (CEDI Galapa).'
+  },
+  {
+    ods: 'ODS 12',
+    title: 'Producción y consumo responsables',
+    description: 'Reducción de plásticos de un solo uso (Meta 12.5) y reducción del desperdicio de alimentos mediante simbiosis industrial (Meta 12.3).'
+  },
+  {
+    ods: 'ODS 13',
+    title: 'Acción por el clima',
+    description: 'Mitigación de emisiones de GEI mediante autogeneración renovable y sustitución de resinas vírgenes.'
+  }
+];
+
+export const CONCLUSIONS_AND_LIMITATIONS = {
+  conclusions: [
+    {
+      title: 'Viabilidad de transición en consumo masivo',
+      text: 'El caso del Bon Yurt demuestra que los productos lácteos de alta rotación pueden migrar de un modelo lineal a uno circular cuando se combinan el ecodiseño desde la fuente (cucharas comestibles y sobrecopas con 75% de rPET) con el fortalecimiento de la infraestructura de recuperación posconsumo.'
+    },
+    {
+      title: 'Sinergia entre ciclos técnicos y biológicos',
+      text: 'La articulación del Diagrama de Mariposa permite aprovechar simultáneamente los residuos orgánicos y mermas alimentarias en cascada (simbiosis industrial y biogás en Sopó) y cerrar el ciclo técnico de los polímeros mediante alianzas con recicladores de oficio.'
+    },
+    {
+      title: 'Rigor en la medición como motor estratégico',
+      text: 'La integración de los indicadores sectoriales de Forética con la línea base verificable de Alpina evita el greenwashing y convierte la sostenibilidad en ahorro operativo (≥12%) y cumplimiento regulatorio anticipado frente a la Resolución 1407.'
+    }
+  ],
+  limitations: [
+    {
+      title: 'Confidencialidad de costos unitarios',
+      text: 'Por políticas de reserva industrial, los informes públicos de Alpina no detallan los costos unitarios de fabricación de moldes ni los márgenes exactos por referencia de producto, por lo que las metas financieras se expresan en variaciones porcentuales relativas.'
+    },
+    {
+      title: 'Trazabilidad en el hogar del consumidor',
+      text: 'Existe incertidumbre sobre el comportamiento final de separación en la fuente de cada consumidor en municipios apartados, lo cual exige mantener supuestos conservadores en las tasas de retorno postconsumo.'
+    }
+  ],
+  references: [
+    'Alpina Productos Alimenticios S.A.S. BIC. (2025). Informe de Sostenibilidad e Integrado. Alpina. https://online.fliphtml5.com/aatse/Inform_Sost_Alpina_2025-ZDDq/',
+    'Departamento Administrativo Nacional de Estadística (DANE). (2024). Cuenta Ambiental y Económica de Flujos de Materiales de Residuos Sólidos (CAEFM-RS) 2023–2024p. Boletín Técnico DANE. https://www.dane.gov.co',
+    'Forética. (2019). La medida de la economía circular: Marcos, indicadores e impacto en la gestión empresarial. Grupo de Acción en Economía Circular, Forética. https://www.foretica.org',
+    'Fundación Ellen MacArthur. (s.f.). El diagrama de mariposa: visualizar la economía circular. https://www.ellenmacarthurfoundation.org',
+    'Kirchherr, J., Reike, D., & Hekkert, M. (2017). Conceptualizing the circular economy: An analysis of 114 definitions. Resources, Conservation and Recycling, 127, 221–232. https://doi.org/10.1016/j.resconrec.2017.09.005',
+    'Ministerio de Ambiente y Desarrollo Sostenible. (2018). Resolución 1407 de 2018: Gestión ambiental de residuos de envases y empaques. MADS, Colombia.',
+    'Ministerio de Ambiente y Desarrollo Sostenible. (2019). Estrategia Nacional de Economía Circular (ENEC). MADS, Colombia.',
+    'World Business Council for Sustainable Development (WBCSD). (2021). Circular Transition Indicators (CTI): Guía de métricas para la circularidad empresarial. https://www.wbcsd.org'
+  ]
+};
+
+export const PRESENTERS_SCHEDULE = [
+  { presenter: 'Presentador 1', slides: '1–3', topic: 'Apertura, resumen ejecutivo y ciclo de vida (6 fases)', time: '3 min' },
+  { presenter: 'Presentador 2', slides: '4–5', topic: 'Diagrama de mariposa, principios y madurez 9R', time: '3 min' },
+  { presenter: 'Presentador 3', slides: '6–8', topic: 'Estrategias E1–E4, indicadores Alpina vs. sector y metas', time: '4 min' },
+  { presenter: 'Presentador 4', slides: '9–12', topic: 'MRV, riesgos, conclusiones y referencias APA', time: '3 min' }
+];
+
+export const PRESENTATION_SLIDES: PresentationSlide[] = [
+  {
+    id: 1,
+    presenter: 'Presentador 1',
+    presenterTheme: 'Apertura y Ciclo de Vida (3 min)',
+    duration: '30 s',
+    title: 'Portada · Bon Yurt: de un empaque lineal a un sistema circular',
+    subtitle: 'Plan de Economía Circular · Ruta A · Alpina Productos Alimenticios S.A.S. BIC',
+    scriptText:
+      '«Buenas tardes. Hoy presentamos el plan de economía circular para el Bon Yurt de Alpina: cómo pasar de un empaque lineal a un sistema circular. Somos [nombres]. Trabajamos con la Ruta A, es decir, con los informes públicos de sostenibilidad de la compañía.»',
+    keyDataPoints: [
+      'Empresa: Alpina Productos Alimenticios S.A.S. BIC (97% municipios de Colombia)',
+      'Unidad funcional: 175 g de mezcla láctea (vaso, sobrecopa transparente y cuchara)',
+      'Ruta A: Reportes GRI 301, 302, 303, 305 y 306 verificados (Alpina 2025)'
+    ]
+  },
+  {
+    id: 2,
+    presenter: 'Presentador 1',
+    presenterTheme: 'Apertura y Ciclo de Vida (3 min)',
+    duration: '1 min',
+    title: 'Resumen Ejecutivo y Diagnóstico Semi-circular',
+    subtitle: 'Cifras de línea base oficial (Informe de Sostenibilidad Alpina 2025)',
+    scriptText:
+      '«Alpina parte de una base sólida. Aprovecha el 95,2% de sus residuos postindustriales. La sobrecopa lleva 75% de plástico reciclado. El plástico neutralidad llega a 59%, con más de 450 recicladores de oficio, y el Índice de Reciclabilidad es 51%. Nuestro diagnóstico: el Bon Yurt es semi-circular. La manufactura es muy circular, pero el vaso y la cuchara plástica siguen siendo una fuga lineal tras el consumo.»',
+    keyDataPoints: [
+      '95,2% residuos postindustriales aprovechados en planta',
+      '75% rPET en sobrecopa transparente (25% en vaso piloto)',
+      '59% Plástico Neutralidad con >450 recicladores de oficio',
+      '51% Índice de Reciclabilidad (IR) corporativo'
+    ]
+  },
+  {
+    id: 3,
+    presenter: 'Presentador 1',
+    presenterTheme: 'Apertura y Ciclo de Vida (3 min)',
+    duration: '1 min 30 s',
+    title: 'Ciclo de Vida del Producto Bon Yurt (6 Fases · ACV)',
+    subtitle: 'De la cuna a la tumba · Estándares GRI 301–306 + ideas de reutilización y vencidos',
+    scriptText:
+      '«Mapeamos el Bon Yurt en seis fases. Empieza en el campo, con ganaderos aliados y proveedores de cereales y cacao. Sigue el transporte de entrada y la producción en planta, donde se fermenta el yogurt y se termoforman los envases; ahí se aprovecha el 95,2% de los residuos. Luego vienen el empaque y la distribución, que llegan al 97% de los municipios, y el consumo en los hogares. La sexta fase es el posconsumo. Con el programa «Recicla, juega y gana premios», niños y familias canjean envases y tapas por premios, y los recicladores y gestores REP los transforman en nuevos materiales. En la parte inferior hay tres ideas de reutilización: macetas, cucharas de galleta y cartón reciclado; y soluciones para vencidos: alimento para mascotas, quesos con kumis vencido e investigación en alimentos funcionales.»',
+    bridgeLine: '«Con esta fotografía del ciclo, [Presentador 2] muestra qué tan circular es hoy el producto.»',
+    slideImage: '/images/slides/slide_visual_1.png',
+    keyDataPoints: [
+      '6 fases ACV completas (Hatos → Transporte → Planta → CEDI 97% municipios → Hogar → Posconsumo)',
+      '4 Hotspots & Brechas: Plástico 1 uso (F5-6), Frío (F3-4), Campo/Agua/GEI (F1), Brecha reporte SKU',
+      'Vencidos: Alimento mascotas, quesos de kumis vencido y línea de alimentos funcionales'
+    ]
+  },
+  {
+    id: 4,
+    presenter: 'Presentador 2',
+    presenterTheme: 'Circularidad y Madurez (3 min)',
+    duration: '1 min 30 s',
+    title: 'Diagrama de Mariposa – Economía Circular Bon Yurt',
+    subtitle: 'Ciclo Biológico (Regeneración) & Ciclo Técnico (Conservación de valor)',
+    scriptText:
+      '«Usamos el modelo de la Fundación Ellen MacArthur, con dos ciclos alrededor del Bon Yurt. A la izquierda, el biológico, que regenera recursos naturales. Tiene un loop regenerativo, con envases Bio y etiquetas con semillas; un loop en cascada, que convierte el kumis en quesos y aprovecha mermas de cereales con Ramo, Jet y Nutresa; y un loop corto, con las cucharas de galleta. A la derecha, el técnico, que conserva el valor de los materiales. Tiene un loop corto de reutilización de vasos y tapas en manualidades; un loop local, con el programa escolar PRAE y el canje de envases por premios; y un loop en cascada de simbiosis industrial, con cartón reciclado y reciclaje de plásticos. Una precaución: los envases Bio solo cierran el ciclo biológico si tienen compostabilidad certificada.»',
+    slideImage: '/images/slides/slide_visual_2.png',
+    keyDataPoints: [
+      'Ciclo Biológico: Cucharas galleta (corto), Kumis/mermas Ramo-Nutresa-Jet (cascada), Bio/semillas (regenerativo)',
+      'Ciclo Técnico: Manualidades PRAE (corto), Canje & >450 recicladores REP (local), 75% rPET sobrecopa',
+      'Alerta sanitaria: Compostabilidad certificada para Bio y cadena de frío estricta en excedentes'
+    ]
+  },
+  {
+    id: 5,
+    presenter: 'Presentador 2',
+    presenterTheme: 'Circularidad y Madurez (3 min)',
+    duration: '1 min 30 s',
+    title: 'Componente 3 · Principios Ellen MacArthur y Jerarquía 9R',
+    subtitle: 'Principios en madurez 4/5, 4/5 y 5/5 · Matriz de 7 estrategias R (R0, R1, R2, R3, R7, R8, R9)',
+    scriptText:
+      '«A la izquierda, los tres principios de Ellen MacArthur: eliminar residuos desde el diseño tiene 4 de 5; circular materiales, 4 de 5; y regenerar la naturaleza, 5 de 5, por la ganadería sostenible y el biogás de Sopó. A la derecha, las 9R. Reducir, reutilizar con otro propósito, reciclar y recuperar están en nivel 4. Rechazar, repensar y reutilizar están en nivel 3: la cuchara de galleta es un piloto, los envases Bio y el PRAE están en etapa conceptual, y el segundo uso se limita a escuelas y hogares. La oportunidad es eliminar del todo los plásticos de un solo uso.»',
+    bridgeLine: '«Esas brechas definen las cuatro estrategias que presenta [Presentador 3].»',
+    slideImage: '/images/slides/slide_visual_3.png',
+    keyDataPoints: [
+      'MacArthur: Eliminar desde diseño (4/5 Parcial) · Circular materiales (4/5 Sí) · Regenerar naturaleza (5/5 Sí BIC)',
+      'Nivel 4/5: R2 Reducir, R7 Reutilizar otro propósito, R8 Reciclar, R9 Recuperar',
+      'Nivel 3/5 (Brecha): R0 Rechazar (cuchara piloto), R1 Repensar (Bio/PRAE), R3 Reutilizar (escuelas)'
+    ]
+  },
+  {
+    id: 6,
+    presenter: 'Presentador 3',
+    presenterTheme: 'Estrategias, Indicadores y Metas (4 min)',
+    duration: '2 min',
+    title: 'Componente 4 · Estrategias Priorizadas (E1–E4) y Plan de Implementación',
+    subtitle: 'Matriz Impacto vs. Facilidad + Viabilidad y Riesgos',
+    scriptText:
+      '«Priorizamos cuatro estrategias por impacto y facilidad. La prioridad 1 es escalar las cucharas comestibles de galleta: impacto alto, facilidad alta, hasta 80% menos cucharas plásticas, en 0 a 12 meses, con I+D+i y Operaciones y aliados panificadores. La prioridad 2 es la simbiosis de mermas con Ramo, Nutresa y Kellanova: reemplaza al menos 10% del cereal virgen, en 6 a 18 meses. La prioridad 3 es el vaso monomaterial 100% rPET o Bio: es el de mayor impacto, pero de facilidad media, porque requiere validación de INVIMA; lleva el Índice de Reciclabilidad de 51% a 70% en 12 a 36 meses. La prioridad 4 es Bon Yurt Transforma, con colegios y recicladores: sube el plástico neutralidad al 75% en 6 a 24 meses.»',
+    slideImage: '/images/slides/slide_visual_4.png',
+    keyDataPoints: [
+      'Prioridad 1 (E1 · 0–12m): Cucharas comestibles de galleta (Alto / Alta · R0)',
+      'Prioridad 2 (E2 · 6–18m): Simbiosis mermas Ramo, Nutresa, Kellanova (Alto / Alta · R7)',
+      'Prioridad 3 (E3 · 12–36m): Vaso monomaterial 100% rPET / Bio INVIMA (Muy Alto / Media · R2, R8)',
+      'Prioridad 4 (E4 · 6–24m): Red «Bon Yurt Transforma» PRAE + recicladores (Medio-Alto / Alta · R3, R8)'
+    ]
+  },
+  {
+    id: 7,
+    presenter: 'Presentador 3',
+    presenterTheme: 'Estrategias, Indicadores y Metas (4 min)',
+    duration: '1 min',
+    title: 'Componente 5 · Indicadores Corporativos Alpina vs. Sector',
+    subtitle: 'Línea base oficial 2025 comparada con referentes agroalimentario, lácteo, ANDI y Res. 1407',
+    scriptText:
+      '«Primero la línea base, que ya existe en Alpina: Índice de Reciclabilidad de 51%, 75% de plástico reincorporado en la sobrecopa y 59% de plástico neutralidad con más de 450 recicladores. En operación limpia, 95,2% de aprovechamiento de residuos y Vertedero Cero en plantas estratégicas. En energía, 24% de autogeneración, con 6% solar en el CEDI Galapa y 38% de biogás en Sopó. A la derecha está la matriz de ocho indicadores del plan.»',
+    slideImage: '/images/slides/slide_visual_5.png',
+    keyDataPoints: [
+      'IR: 51% Alpina vs. 25%–30% sector agroalimentario · rPET: 75% vs. 10%–15% lácteo',
+      'Plástico Neutralidad: 59% vs. 30% meta legal Res. 1407 al 2030',
+      'Postindustriales: 95,2% vs. 70%–80% ANDI · Energía: 24% (38% biogás Sopó) vs. 5%–10% alimentos'
+    ]
+  },
+  {
+    id: 8,
+    presenter: 'Presentador 3',
+    presenterTheme: 'Estrategias, Indicadores y Metas (4 min)',
+    duration: '1 min',
+    title: 'Metas a 3 Años frente a la Línea Base (8 Indicadores)',
+    subtitle: 'Alineación Forética (2019), GRI 301/302/306 y WBCSD CTI',
+    scriptText:
+      '«Estas son las metas frente a la línea base. La sustitución de cucharas plásticas pasa de 5% a 80%. El material reciclado en envases llega a 85%. La recuperación posconsumo sube de 59% a 75%. El aprovechamiento de residuos pasa de 95,2% a 98%. La autogeneración llega a 30%, con 8% menos de intensidad energética. Las mermas de terceros pasan de 0% a 15% del cereal. Y el Índice de Reciclabilidad llega a 70%, con un índice de circularidad de al menos 0,68. El ahorro mínimo es de 12% en empaque.»',
+    bridgeLine: '«Para saber si cumplimos esas metas, [Presentador 4] explica cómo las vamos a medir.»',
+    keyDataPoints: [
+      'Cucharas plásticas sustituidas: 5% → 80% · rPET/Bio ponderado envase: 75%/25% → 85%',
+      'Mermas terceros: 0% → 15% cereal · Recuperación posconsumo: 59% → 75%',
+      'Postindustriales: 95,2% → 98% · Autogeneración: 24% → 30% (-8% intensidad)',
+      'Ahorro empaque/toppings: ≥12% · IR: 51% → 70% y MCI ≥ 0,68'
+    ]
+  },
+  {
+    id: 9,
+    presenter: 'Presentador 4',
+    presenterTheme: 'Medición, Riesgos y Cierre (3 min)',
+    duration: '1 min',
+    title: 'Sistema de Medición, Reporte y Verificación (MRV) y ODS',
+    subtitle: 'Ciclo de 5 etapas (SAP → Dashboard → GRI/ANLA → Auditoría → PHVA) y escalas Micro-Meso-Macro',
+    scriptText:
+      '«El plan se mide en cinco pasos. Medición diaria y mensual de gramajes, rPET, mermas, biogás y certificados REP. Reporte interno trimestral en un tablero de economía circular. Reporte externo anual con el informe GRI y el reporte BIC. Verificación anual con auditoría interna y un tercero independiente. Y un ajuste anual bajo el ciclo PHVA. Los datos se miden a escala micro, se conectan a escala meso con alianzas y recicladores, y alimentan DANE y ENEC. El plan contribuye a los ODS 8, 9, 12 y 13.»',
+    keyDataPoints: [
+      '5 etapas MRV: ERP SAP (Diaria/Mensual) → Dashboard (Trimestral) → GRI/ANLA/BIC → Auditoría ICONTEC/PwC → PHVA',
+      'Escalas: Micro (Bon Yurt/Sopó) → Meso (Simbiosis/PRAE) → Macro (DANE CAEFM-RS y ENEC)',
+      'ODS 8 (>450 recicladores), ODS 9 (Ecodiseño/Biogás), ODS 12 (Metas 12.3 y 12.5), ODS 13 (GEI)'
+    ]
+  },
+  {
+    id: 10,
+    presenter: 'Presentador 4',
+    presenterTheme: 'Medición, Riesgos y Cierre (3 min)',
+    duration: '45 s',
+    title: 'Análisis de Viabilidad, Riesgos, Mitigaciones y Limitaciones',
+    subtitle: 'Barreras regulatorias (INVIMA), financieras (Bancóldex / Tributario) y culturales (Hogar)',
+    scriptText:
+      '«Ya los vieron resumidos en la diapositiva 6. El riesgo regulatorio: INVIMA exige inocuidad estricta, y lo mitigamos con rPET de grado alimentario y cadena de frío continua. El financiero: los biopolímeros y las cucharas comestibles pueden costar más, y lo mitigamos con incentivos tributarios y crédito verde de Bancóldex. El cultural: poca separación de envases en los hogares, que atendemos con incentivos de canje y colegios. Como limitaciones, los costos unitarios son reservados y la separación en el hogar es incierta en municipios apartados.»',
+    keyDataPoints: [
+      'Regulatorio: Resinas rPET grado alimentario FDA/INVIMA y trazabilidad en cadena de frío',
+      'Financiero: Descuento renta, exclusión IVA (Estatuto Tributario) y crédito verde Bancóldex',
+      'Cultural y Limitaciones: Canje lúdico + PRAE; costos unitarios reservados y supuestos conservadores posconsumo'
+    ]
+  },
+  {
+    id: 11,
+    presenter: 'Presentador 4',
+    presenterTheme: 'Medición, Riesgos y Cierre (3 min)',
+    duration: '1 min',
+    title: 'Conclusiones Estratégicas del Plan',
+    subtitle: 'Viabilidad en consumo masivo · Sinergia biológico-técnica · Medición contra greenwashing',
+    scriptText:
+      '«Tres ideas para cerrar. Primera, la transición es viable en un producto de consumo masivo si se combinan ecodiseño y recuperación posconsumo. Segunda, los ciclos biológico y técnico se refuerzan entre sí. Tercera, medir con rigor evita el greenwashing y convierte la sostenibilidad en ahorro y en cumplimiento anticipado de la Resolución 1407. El siguiente paso: escalar la cuchara comestible en los próximos 12 meses y validar el vaso monomaterial ante INVIMA.»',
+    keyDataPoints: [
+      '1. Transición viable combinando cuchara comestible + 75% rPET + recuperación posconsumo',
+      '2. Sinergia de ciclos: cascadas de mermas/biogás (bio) + cierre polímeros recicladores (técnico)',
+      '3. Medición Forética + línea base 2025 evita greenwashing y logra ≥12% ahorro operativo'
+    ]
+  },
+  {
+    id: 12,
+    presenter: 'Presentador 4',
+    presenterTheme: 'Medición, Riesgos y Cierre (3 min)',
+    duration: '15 s',
+    title: 'Referencias Bibliográficas (APA 7ª Edición)',
+    subtitle: 'Alpina (2025), DANE (2024), Forética (2019), Ellen MacArthur, Kirchherr et al. (2017), MADS & WBCSD',
+    scriptText:
+      '«Las fuentes están en la última diapositiva: el informe de sostenibilidad de Alpina 2025, DANE, Forética, la Fundación Ellen MacArthur, Kirchherr y colegas, el Ministerio de Ambiente y WBCSD. Muchas gracias; quedamos atentos a sus preguntas.»',
+    keyDataPoints: [
+      'Alpina Productos Alimenticios S.A.S. BIC (2025) · Informe de Sostenibilidad e Integrado',
+      'DANE (2024) CAEFM-RS · Forética (2019) · Ellen MacArthur · Kirchherr et al. (2017)',
+      'MinAmbiente Colombia (Res. 1407/2018 & ENEC 2019) · WBCSD (2021) CTI'
+    ]
+  }
+];
+
+export const PROBABLE_QA: ProbableQA[] = [
+  {
+    id: 1,
+    question: '¿Qué tan circular es hoy el Bon Yurt?',
+    shortAnswer: 'Es semi-circular: muy circular en planta (95,2% aprovechamiento postindustrial y 75% rPET en sobrecopa), con fuga lineal en el vaso y la cuchara tras el consumo.',
+    responder: 'Presentador 2'
+  },
+  {
+    id: 2,
+    question: '¿Por qué empezar con la cuchara comestible?',
+    shortAnswer: 'Es la prioridad 1 (E1): alto impacto, alta facilidad y tecnología alimentaria disponible en panificación, ejecutable en 0 a 12 meses (hasta 80% menos cucharas plásticas).',
+    responder: 'Presentador 3'
+  },
+  {
+    id: 3,
+    question: '¿Cuánto cuesta el plan?',
+    shortAnswer: 'Los costos unitarios son reservados por política industrial; las metas financieras son variaciones porcentuales relativas, proyectando un ahorro neto mínimo del 12% en empaque y toppings.',
+    responder: 'Presentador 3'
+  },
+  {
+    id: 4,
+    question: '¿Es seguro usar reciclados y mermas con alimentos?',
+    shortAnswer: 'Sí, utilizando resinas rPET con certificación grado alimentario FDA/INVIMA, validación microbiológica y trazabilidad ininterrumpida de la cadena de frío.',
+    responder: 'Presentador 4'
+  },
+  {
+    id: 5,
+    question: '¿Qué pasa si el consumidor no separa los envases?',
+    shortAnswer: 'Se mitiga con incentivos lúdicos de canje en puntos de venta y sensibilización escolar (PRAE «Bon Yurt Transforma»), manteniendo supuestos conservadores en las tasas de retorno.',
+    responder: 'Presentador 4'
+  },
+  {
+    id: 6,
+    question: '¿Cómo evitan el greenwashing?',
+    shortAnswer: 'Con una matriz de 8 indicadores medibles comparados frente a referentes sectoriales (Forética/GRI/WBCSD), línea base oficial 2025 y verificación externa anual (ICONTEC/PwC/Deloitte).',
+    responder: 'Presentador 4'
+  },
+  {
+    id: 7,
+    question: '¿Qué pasa con los productos vencidos?',
+    shortAnswer: 'Se derivan a alimento para mascotas, investigación en quesos y derivados lácteos (kumis vencido) y alimentos funcionales; si rompen cadena de frío exigen validación microbiológica.',
+    responder: 'Presentador 1'
+  },
+  {
+    id: 8,
+    question: '¿Cómo se recupera el envase tras el consumo?',
+    shortAnswer: 'Mediante el programa escolar PRAE «Bon Yurt Transforma», la iniciativa de canje «Recicla, juega y gana premios», redes de >450 recicladores de oficio y gestores REP (Res. 1407).',
+    responder: 'Presentador 2'
+  }
 ];
 
 export const RUBRIC_CRITERIA: RubricCriterion[] = [
   {
     id: 'rub-1',
     number: 1,
-    name: '1. Diagnóstico de Ciclo de Vida (ACV)',
-    weight: 15,
-    excellentCriteria: 'Todas las fases, actores, entradas y salidas con fuente; hotspots justificados con rigor técnico.',
-    acceptableCriteria: 'Fases completas con vacíos de datos menores.',
-    insufficientCriteria: 'Fases incompletas o sin entradas y salidas definidas.',
-    bonYurtFulfillment: '6 fases mapeadas con UF de 175 g (C2C), 3 Hotspots justificados (hatos, frío, empaques) e indicadores GRI 301-306 vinculados.',
+    name: 'Mapeo de Ciclo de Vida (ACV · GRI 301-306)',
+    weight: 20,
+    excellentCriteria: '6 fases completas de cuna a tumba con unidad funcional (175 g), entradas/salidas GRI y detección precisa de hotspots y brechas Ruta A.',
+    acceptableCriteria: 'Mapea fases generales del ciclo sin desagregar brechas ni hotspots energéticos/plásticos.',
+    insufficientCriteria: 'Descripción superficial sin estándares GRI ni análisis de entradas/salidas.',
+    bonYurtFulfillment: '100% Cubierto: 6 fases completas, unidad funcional 175 g, estándares GRI 301-306 y 4 hotspots/brechas Ruta A documentados.'
   },
   {
     id: 'rub-2',
     number: 2,
-    name: '2. Análisis de Circularidades (Mariposa)',
-    weight: 15,
-    excellentCriteria: 'Mariposa propia, flujos clasificados en biológico/técnico, fugas cuantificadas y oportunidades fundamentadas.',
-    acceptableCriteria: 'Flujos clasificados con poca cuantificación de fugas.',
-    insufficientCriteria: 'Descripción genérica sin flujos reales de la empresa.',
-    bonYurtFulfillment: 'Diagrama de Mariposa propio con 3 loops biológicos (Bio, Kumis/Quesos, Cuchara) y 3 loops técnicos (Reuso, PRAE, Madera plástica), señalando bucle actual, oportunidad y fuga.',
+    name: 'Análisis de Circularidad (Diagrama de Mariposa)',
+    weight: 20,
+    excellentCriteria: 'Clasificación rigurosa de flujos técnico/biológico, 4 tipos de bucles (cortos, locales, cascada, regenerativos), precauciones sanitarias y diagnóstico híbrido.',
+    acceptableCriteria: 'Menciona ciclos biológicos y técnicos sin precisar fugas ni oportunidades de bucle interno.',
+    insufficientCriteria: 'Confunde compostables con reciclables plásticos sin precauciones técnicas.',
+    bonYurtFulfillment: '100% Cubierto: Tabla de 7 flujos reales, diagnóstico semi-circular, alerta Bio vs. plástico y protocolo de cadena de frío.'
   },
   {
     id: 'rub-3',
     number: 3,
-    name: '3. Principios Aplicados y Jerarquía 9R',
-    weight: 10,
-    excellentCriteria: 'Matriz con evidencia concreta, madurez razonada (escala 1 a 5) y ausencia de greenwashing.',
-    acceptableCriteria: 'Evidencia parcial con fundamentación incompleta.',
-    insufficientCriteria: 'Afirmaciones sin evidencia.',
-    bonYurtFulfillment: 'Evaluación de los 3 principios MacArthur (Nivel 4, 4 y 3) y jerarquía 9R priorizando R2 (-18% peso y sin cuchara fósil), R3 (upcycling) y R8 (pupitres).',
+    name: 'Principios MacArthur y Jerarquía de las 9R',
+    weight: 15,
+    excellentCriteria: 'Evaluación cuantificada (1–5) de los 3 principios MacArthur y evidencia corporativa verificable en la matriz 9R detectando brechas de madurez.',
+    acceptableCriteria: 'Lista los principios o R sin asignar madurez ni detectar brechas por fase.',
+    insufficientCriteria: 'Evaluación cualitativa vaga sin soporte documental de la empresa.',
+    bonYurtFulfillment: '100% Cubierto: Principios 4/5, 4/5 y 5/5 (BIC/Sopó) y Matriz 9R de 7 niveles (R0, R1, R2, R3, R7, R8, R9).'
   },
   {
     id: 'rub-4',
     number: 4,
-    name: '4. Estrategias y Plan de Implementación',
+    name: 'Priorización de Estrategias y Viabilidad (E1–E4)',
     weight: 25,
-    excellentCriteria: 'Estrategias priorizadas, viables, con matriz impacto/facilidad, responsables, plazos, riesgos y aliados.',
-    acceptableCriteria: 'Estrategias pertinentes sin plan de implementación completo.',
-    insufficientCriteria: 'Lista de ideas sueltas sin priorización.',
-    bonYurtFulfillment: '3 estrategias priorizadas (Insumos Bio, Posconsumo PRAE, Simbiosis Kumis/Toppings) con matriz de impacto, horizonte temporal, barreras y mitigación sanitaria.',
+    excellentCriteria: 'Matriz Impacto vs. Facilidad, plan detallado con responsables, aliados externos (Ramo, Nutresa, Kellanova, PRAE), plazos y mitigación de riesgos INVIMA/Bancóldex.',
+    acceptableCriteria: 'Propone ideas sueltas de reciclaje sin matriz de priorización ni análisis financiero/regulatorio.',
+    insufficientCriteria: 'Repite programas existentes sin estrategias accionables.',
+    bonYurtFulfillment: '100% Cubierto: E1–E4 en orden de prioridad exacto, responsables, aliados, incentivos tributarios y crédito verde Bancóldex.'
   },
   {
     id: 'rub-5',
     number: 5,
-    name: '5. Indicadores y Sistema MRV',
+    name: 'Indicadores Sectoriales y Sistema MRV (5 Etapas)',
     weight: 20,
-    excellentCriteria: 'Fichas completas (mínimo 6), línea base, metas, 5 fases MRV, escalas micro/meso/macro y sinergias ODS/REP.',
-    acceptableCriteria: 'Indicadores sin línea base o MRV incompleto.',
-    insufficientCriteria: 'Indicadores genéricos sin sistema de monitoreo.',
-    bonYurtFulfillment: '7 fichas técnicas de indicadores con fórmula, línea base, meta, frecuencia, escalas (micro/meso/macro) y el ciclo MRV completo de 5 etapas.',
-  },
-  {
-    id: 'rub-6',
-    number: 6,
-    name: '6. Coherencia y Pensamiento Crítico',
-    weight: 10,
-    excellentCriteria: 'Hilo claro del diagnóstico a la propuesta; brechas y limitaciones sanitarias/económicas reconocidas con rigor.',
-    acceptableCriteria: 'Coherencia parcial con algunos cabos sueltos.',
-    insufficientCriteria: 'Componentes desconectados entre sí.',
-    bonYurtFulfillment: 'Ruta A estricta: análisis de barrera de compostaje en Colombia, protocolo de seguridad para kumis (<4°C) y costo de resinas biobasadas.',
-  },
-  {
-    id: 'rub-7',
-    number: 7,
-    name: '7. Comunicación y Soporte Digital',
-    weight: 5,
-    excellentCriteria: 'Redacción clara, figuras legibles, branding oficial fiel, presentación fluida dentro de los 30 minutos.',
-    acceptableCriteria: 'Errores menores que no impiden la comprensión.',
-    insufficientCriteria: 'Errores que dificultan severamente la lectura.',
-    bonYurtFulfillment: 'Aplicación en Svelte 5 con cronómetro de sustentación de 30 minutos, paleta oficial de la infografía y exportación a PDF para jurados.',
-  },
-];
-
-export const PRESENTATION_SLIDES = [
-  {
-    id: 1,
-    title: 'Portada y Equipo',
-    sectionCode: 'PORTADA',
-    timeAllocation: '2 min',
-    subtitle: 'Plan de Implementación de Economía Circular: Bon Yurt de Alpina S.A.S. BIC',
-    keyPoints: [
-      'Cerrar el ciclo, es nutrir el futuro: De un modelo lineal a un modelo regenerativo.',
-      'Enfoque de sustentación: Ruta A (Empresa con avances, metas REP y reporte GRI consolidado).',
-      'Unidad Funcional analizada: 175 g de mezcla láctea (yogurt/kumis + sobrecopa de cereal + cuchara).',
-      'Framework tecnológico de soporte: Svelte 5 (Arquitectura sin Virtual DOM, eco-eficiente por diseño).',
-    ],
-  },
-  {
-    id: 2,
-    title: 'Contexto Corporativo & Marco Regulatorio',
-    sectionCode: 'CONTEXTO',
-    timeAllocation: '3 min',
-    subtitle: 'Alpina S.A.S. BIC en el panorama ambiental colombiano',
-    keyPoints: [
-      'Presencia en el 97% de los municipios de Colombia; plantas clave en Sopó, Caloto y Chinchiná.',
-      'Cumplimiento de la Resolución 1407 de 2018 (Metas REP de empaques) y Ley 2232 de 2022.',
-      'Línea base corporativa: >95% de aprovechamiento postindustrial en planta.',
-      'Desafío central: Cerrar la brecha en el fin de vida del envase posconsumo en colegios y hogares.',
-    ],
-  },
-  {
-    id: 3,
-    title: 'Componente 1: Diagnóstico de Ciclo de Vida (ACV)',
-    sectionCode: 'COMP 1 · ACV',
-    timeAllocation: '4 min',
-    subtitle: 'Mapeo de la Cuna a la Tumba con Cierre Circular (6 Fases)',
-    keyPoints: [
-      'Unidad Funcional: 175 g de mezcla láctea con cereal crocante y cuchara integrada.',
-      'Hotspot 1: Emisiones de metano en hatos lecheros → Mitigado con ganadería silvopastoril.',
-      'Hotspot 2: Consumo de energía y refrigerantes en cadena de frío → Logística inteligente.',
-      'Hotspot 3: Generación de empaques plásticos posconsumo → Sustitución y programa PRAE.',
-      'Cruce con estándares internacionales: GRI 301 (Materiales), 302 (Energía), 303 (Agua) y 306 (Residuos).',
-    ],
-  },
-  {
-    id: 4,
-    title: 'Componente 2: Análisis de Circularidades (Mariposa)',
-    sectionCode: 'COMP 2 · MARIPOSA',
-    timeAllocation: '5 min',
-    subtitle: 'Diagrama de Mariposa de la Fundación Ellen MacArthur aplicado al Bon Yurt',
-    keyPoints: [
-      'Ciclo Biológico (Verde): Loop Regenerativo (Envases Bio y papel semilla), Loop en Cascada (Kumis a quesos y cereales a concentrado animal) y Loop Corto (Cuchara comestible).',
-      'Ciclo Técnico (Azul): Loop Corto (Reutilización en hogar), Loop Local (PRAE Come-Vasos) y Loop en Cascada (Madera plástica a pupitres escolares).',
-      'Mapeo de fugas: Se cuantifica el plástico desviado de rellenos sanitarios hacia mobiliario escolar.',
-      'Precaución científica: La biodegradabilidad requiere recolección selectiva y compostaje certificado.',
-    ],
-  },
-  {
-    id: 5,
-    title: 'Componente 3: Principios Ellen MacArthur & 9R',
-    sectionCode: 'COMP 3 · PRINCIPIOS',
-    timeAllocation: '3 min',
-    subtitle: 'Matriz de Evidencia contra Greenwashing y Jerarquía 9R',
-    keyPoints: [
-      'Principio 1 MacArthur: Eliminar residuos desde el diseño → Nivel 4 (Reducción 18% peso de vaso y cuchara de galleta).',
-      'Principio 2 MacArthur: Circular materiales en su valor más alto → Nivel 4 (Pupitres de madera plástica y mermas con Ramo/Nutresa).',
-      'Principio 3 MacArthur: Regenerar la naturaleza → Nivel 3 (Silvopastoreo y envases biobasados).',
-      'Jerarquía 9R priorizada: R2 (Reducir) > R3 (Reutilizar) > R8 (Reciclar mecánicamente).',
-    ],
-  },
-  {
-    id: 6,
-    title: 'Componente 4: Estrategias Priorizadas & Hoja de Ruta',
-    sectionCode: 'COMP 4 · ESTRATEGIAS',
-    timeAllocation: '5 min',
-    subtitle: '3 Programas Bandera en Matriz de Impacto / Facilidad',
-    keyPoints: [
-      'Estrategia 1: Insumos Circulares y Línea Bio (PLA/PHA, papel semilla, cuchara de galleta) → Corto plazo.',
-      'Estrategia 2: Estrategia Posconsumo Lúdica Escolar (Red PRAE, Concurso "Bon Yurt Transforma", Come-Vasos) → Corto plazo.',
-      'Estrategia 3: Simbiosis Industrial y Valorización Biológica (Aprovechamiento de kumis a quesos y mermas de cereales) → Mediano plazo.',
-      'Análisis de riesgos: Barreras sanitarias (cadena de frío a 4°C no negociable) y financieras gestionadas.',
-    ],
-  },
-  {
-    id: 7,
-    title: 'Componente 5: Indicadores & Sistema MRV',
-    sectionCode: 'COMP 5 · MRV',
-    timeAllocation: '4 min',
-    subtitle: 'Medición, Reporte y Verificación para Cumplimiento REP',
-    keyPoints: [
-      '7 Fichas Técnicas de Indicadores: Contenido reciclado (%), retorno PRAE (%), energía (kWh/t), agua (m³/t), pupitres donados y CO2eq evitado.',
-      'Escalas articuladas: Micro (Planta Sopó), Meso (Red de 250 colegios PRAE) y Macro (Metas REP Colombia).',
-      'Sistema MRV en 5 Etapas: 1. Medición operativa, 2. Reporte interno Looker, 3. Reporte externo ANLA/GRI, 4. Verificación ICONTEC, 5. Ajuste anual PHVA.',
-    ],
-  },
-  {
-    id: 8,
-    title: 'Conclusiones, Pensamiento Crítico & Limitaciones',
-    sectionCode: 'CONCLUSIONES',
-    timeAllocation: '2 min',
-    subtitle: 'Rigor académico y viabilidad del modelo circular',
-    keyPoints: [
-      'Cerrar el ciclo no es solo reciclar: integra la regeneración del suelo lechero con la educación ambiental de los niños colombianos.',
-      'Límite técnico reconocido: El reproceso de lácteos exige inocuidad microbiológica total; si se pierde cadena de frío se redirige a biogás.',
-      'Límite de infraestructura: La transición bio requiere desarrollo de compostaje industrial municipal en Colombia.',
-      'Retorno social medible: 1.800 pupitres escolares rurales entregados con plástico 100% posconsumo.',
-    ],
-  },
-  {
-    id: 9,
-    title: 'Referencias Normativas APA 7 & Simulación Interactiva',
-    sectionCode: 'REFERENCIAS & IA',
-    timeAllocation: '2 min',
-    subtitle: 'Sustentación fundamentada y herramientas de evaluación',
-    keyPoints: [
-      'Fuentes: Fundación Ellen MacArthur (2020), MinAmbiente (Resolución 1407/2018), Kirchherr et al. (2017 - 9R), ISO 14040/14044, GRI 301/306.',
-      'Simulador en vivo: Cálculo dinámico de tasa de circularidad global, plástico virgen ahorrado y huella de carbono.',
-      'Asistente Gemini AI: Validación de preguntas técnicas y simulador de jurado evaluador para calificación 5.0.',
-    ],
-  },
-];
-
-export const KEY_RESULTS_INFOGRAPHIC = [
-  {
-    id: 'res-1',
-    title: 'Menor impacto ambiental',
-    desc: 'Reducción drástica de emisiones de CO2 y desvío de toneladas de plástico de los rellenos sanitarios.',
-    icon: 'Leaf',
-    metric: '-28% CO₂eq',
-  },
-  {
-    id: 'res-2',
-    title: 'Mayor aprovechamiento',
-    desc: 'Cero desperdicio en fábrica gracias a la valorización de mermas lácteas y de cereales en cascada.',
-    icon: 'TrendingUp',
-    metric: '95% aprovechamiento',
-  },
-  {
-    id: 'res-3',
-    title: 'Educación comunitaria',
-    desc: 'Empoderamiento escolar a través de los proyectos PRAE y el concurso intercolegiado "Bon Yurt Transforma".',
-    icon: 'Users',
-    metric: '+250 colegios',
-  },
-  {
-    id: 'res-4',
-    title: 'Innovación en productos',
-    desc: 'Pioneros en cuchara comestible de galleta, envases Bio compostables y etiquetas germinables con semillas.',
-    icon: 'Sparkles',
-    metric: '100% Ecodiseño',
-  },
-  {
-    id: 'res-5',
-    title: 'Un planeta más nutritivo',
-    desc: 'Nutrición que alimenta el cuerpo de los colombianos sin comprometer el futuro de las nuevas generaciones.',
-    icon: 'Globe',
-    metric: 'Cradle to Cradle',
-  },
+    excellentCriteria: 'Comparativa verificable Alpina vs. sector (Forética, ANDI, DANE, Res. 1407), 8 indicadores con metas a 3 años, ciclo MRV PHVA y contribución a ODS.',
+    acceptableCriteria: 'Incluye metas generales sin referentes sectoriales ni sistema de auditoría.',
+    insufficientCriteria: 'Carece de fórmulas, periodicidad o verificación contra greenwashing.',
+    bonYurtFulfillment: '100% Cubierto: 5 métricas base Alpina vs. sector, 8 indicadores Forética/GRI/WBCSD, 5 etapas MRV (SAP→PHVA) y ODS 8, 9, 12, 13.'
+  }
 ];

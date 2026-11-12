@@ -1,24 +1,23 @@
 <script lang="ts">
   import {
-    Sprout,
-    Workflow,
-    Utensils,
-    RefreshCw,
-    GraduationCap,
-    Factory,
     Leaf,
-    Cpu,
-    Sparkles,
+    RefreshCw,
     ArrowRight,
-    TrendingUp,
-    Users,
-    Lightbulb,
-    Globe,
-    Info,
+    CheckCircle2,
     ExternalLink,
-    CheckCircle2
+    Sparkles,
+    AlertTriangle,
+    Image as ImageIcon,
+    ChevronDown,
+    ChevronUp,
+    TrendingUp
   } from 'lucide-svelte';
-  import { BUTTERFLY_LOOPS, KEY_RESULTS_INFOGRAPHIC } from '../data/circularData';
+  import {
+    BUTTERFLY_LOOPS,
+    KEY_RESULTS_INFOGRAPHIC,
+    CIRCULARITY_FLOWS_TABLE,
+    SEMI_CIRCULAR_DIAGNOSIS
+  } from '../data/circularData';
   import type { LoopItem } from '../types/circular';
 
   interface Props {
@@ -32,17 +31,7 @@
 
   const bioLoops = BUTTERFLY_LOOPS.filter((l) => l.cycle === 'biological');
   const tecLoops = BUTTERFLY_LOOPS.filter((l) => l.cycle === 'technical');
-
-  function renderResultIcon(iconName: string) {
-    switch (iconName) {
-      case 'Leaf': return Leaf;
-      case 'TrendingUp': return TrendingUp;
-      case 'Users': return Users;
-      case 'Sparkles': return Lightbulb;
-      case 'Globe': return Globe;
-      default: return Leaf;
-    }
-  }
+  let showSlideVisual = $state(false);
 
   function getMedallionImage(loopId: string): string {
     switch (loopId) {
@@ -56,8 +45,6 @@
         return '/images/medallion_upcycling.svg';
       case 'tec-local':
         return '/images/bonyurt_prae.jpg';
-      case 'tec-cascada':
-        return '/images/alpina_plant.jpg';
       default:
         return '/images/bonyurt_hero.jpg';
     }
@@ -65,53 +52,59 @@
 </script>
 
 <section class="py-6 sm:py-10 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-8">
-  <!-- Top Banner Exact to Official Infographic -->
-  <div class="text-center relative">
-    <!-- Curved dark blue top pill -->
-    <div class="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-[#003876] text-white shadow-md border-2 border-white mb-2">
+  <!-- Top Banner -->
+  <div class="text-center relative space-y-2">
+    <div class="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-[#003876] text-white shadow-md border-2 border-white">
       <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
       <span class="text-xs sm:text-sm font-extrabold tracking-wide uppercase font-brand">
-        Diagrama de Mariposa – Economía Circular
+        Componente 2 · Diagrama de Mariposa – Economía Circular
       </span>
-      <span class="text-emerald-300 font-bold">🌱</span>
     </div>
 
-    <!-- Title and Subtitle -->
-    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-[#003876] font-brand tracking-tight">
+    <h1 class="text-3xl sm:text-5xl font-black text-[#003876] font-brand tracking-tight">
       Bon Yurt de Alpina
     </h1>
-    <p class="text-base sm:text-xl font-bold italic text-blue-900 mt-1">
-      "Cerrar el ciclo, es nutrir el futuro"
+    <p class="text-sm sm:text-lg font-bold text-slate-600 max-w-2xl mx-auto">
+      Modelo híbrido de transición (<strong class="text-amber-700">semi-circular</strong>): alta circularidad en planta (<strong>95,2%</strong>) con fuga lineal posconsumo en vaso y cuchara.
     </p>
 
-    <!-- Quick action to compare with official image -->
-    <div class="mt-2 flex items-center justify-center gap-3">
+    <div class="pt-1 flex flex-wrap items-center justify-center gap-2.5">
       <button
         onclick={onOpenInfographic}
-        class="inline-flex items-center gap-1.5 text-xs text-emerald-800 bg-emerald-100/80 hover:bg-emerald-200 border border-emerald-300 px-3 py-1 rounded-full font-bold transition-colors cursor-pointer"
+        class="inline-flex items-center gap-1.5 text-xs text-emerald-800 bg-emerald-100/80 hover:bg-emerald-200 border border-emerald-300 px-3 py-1.5 rounded-full font-bold transition-colors cursor-pointer"
       >
         <ExternalLink class="w-3.5 h-3.5" />
-        <span>Abrir Infografía Oficial (REFERENCIA OFICIAL)</span>
+        <span>Ver Infografía Base</span>
       </button>
-      <span class="text-xs text-slate-400">· Ruta A: Alpina S.A.S. BIC</span>
+      <button
+        onclick={() => (showSlideVisual = !showSlideVisual)}
+        class="inline-flex items-center gap-1.5 text-xs text-[#003876] bg-blue-50 hover:bg-blue-100 border border-blue-200 px-3 py-1.5 rounded-full font-bold transition-colors cursor-pointer"
+      >
+        <ImageIcon class="w-3.5 h-3.5" />
+        <span>{showSlideVisual ? 'Ocultar Lámina Diapositiva 4' : 'Ver Lámina Oficial (Diapositiva 4)'}</span>
+        {#if showSlideVisual}<ChevronUp class="w-3.5 h-3.5" />{:else}<ChevronDown class="w-3.5 h-3.5" />{/if}
+      </button>
     </div>
   </div>
 
-  <!-- Main Butterfly Canvas Container with Milk Splash and Sky Background -->
-  <div class="relative bg-gradient-to-b from-[#EBF5FB] via-white to-[#F0F9ED] rounded-3xl p-4 sm:p-8 border-2 border-blue-200 shadow-xl overflow-hidden">
-    <!-- SVG Milk Splash Backdrops -->
-    <div class="absolute inset-0 pointer-events-none opacity-40 overflow-hidden">
-      <svg viewBox="0 0 1000 600" class="w-full h-full text-blue-100 fill-current">
-        <path d="M 500,200 C 420,150 350,180 320,240 C 290,300 330,380 400,420 C 470,460 530,460 600,420 C 670,380 710,300 680,240 C 650,180 580,150 500,200 Z" opacity="0.6" />
-        <path d="M 500,250 C 460,180 380,210 370,280 C 360,350 420,400 500,410 C 580,400 640,350 630,280 C 620,210 540,180 500,250 Z" opacity="0.4" />
-      </svg>
+  {#if showSlideVisual}
+    <div class="rounded-3xl overflow-hidden border-2 border-blue-200 bg-white shadow-lg p-3 space-y-2">
+      <img
+        src="/images/slides/slide_visual_2.png"
+        alt="Infografía oficial Componente 2: Diagrama de Mariposa Bon Yurt"
+        class="w-full h-auto rounded-2xl object-contain max-h-[540px] mx-auto bg-slate-50"
+      />
+      <p class="text-[11px] text-center text-slate-500 font-medium">
+        Lámina oficial de la presentación ejecutiva (Diapositiva 4): Ciclos Biológico y Técnico aplicados al Bon Yurt.
+      </p>
     </div>
+  {/if}
 
-    <!-- Cycle Headers (Biological on Left, Technical on Right) -->
+  <!-- Main Butterfly Interactive Canvas -->
+  <div class="relative bg-gradient-to-b from-[#EBF5FB] via-white to-[#F0F9ED] rounded-3xl p-4 sm:p-8 border-2 border-blue-200 shadow-xl overflow-hidden">
     <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-4 pb-6 border-b border-slate-200">
-      <!-- Left Header: Ciclo Biológico -->
       <div class="flex items-center gap-3 p-3.5 rounded-2xl bg-[#E8F5E9] border-2 border-[#81C784] shadow-xs">
-        <div class="w-10 h-10 rounded-xl bg-[#2B8A1E] text-white flex items-center justify-center font-bold shadow-xs">
+        <div class="w-10 h-10 rounded-xl bg-[#2B8A1E] text-white flex items-center justify-center font-bold shadow-xs shrink-0">
           <Leaf class="w-6 h-6" />
         </div>
         <div>
@@ -119,14 +112,13 @@
             Ciclo Biológico
           </h2>
           <p class="text-xs text-[#2E7D32] font-semibold">
-            Regeneración de recursos naturales y nutrientes para el suelo
+            Regeneración de capital natural: cucharas de galleta, kumis/mermas y envases Bio certificados
           </p>
         </div>
       </div>
 
-      <!-- Right Header: Ciclo Técnico -->
       <div class="flex items-center gap-3 p-3.5 rounded-2xl bg-[#E3F2FD] border-2 border-[#64B5F6] shadow-xs">
-        <div class="w-10 h-10 rounded-xl bg-[#003876] text-white flex items-center justify-center font-bold shadow-xs">
+        <div class="w-10 h-10 rounded-xl bg-[#003876] text-white flex items-center justify-center font-bold shadow-xs shrink-0">
           <RefreshCw class="w-6 h-6" />
         </div>
         <div>
@@ -134,15 +126,14 @@
             Ciclo Técnico
           </h2>
           <p class="text-xs text-[#1565C0] font-semibold">
-            Conservación del valor de los materiales, upcycling y madera plástica
+            Conservación de polímeros: sobrecopa 75% rPET, &gt;450 recicladores REP y red PRAE
           </p>
         </div>
       </div>
     </div>
 
-    <!-- 3-Column Interactive Butterfly: Left Wing (Bio) | Center (Bon Yurt) | Right Wing (Technical) -->
     <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center my-6">
-      <!-- ================= LEFT WING: CICLO BIOLÓGICO (4 cols) ================= -->
+      <!-- Left Wing: Biological Loops -->
       <div class="lg:col-span-4 space-y-4">
         {#each bioLoops as loop}
           <button
@@ -150,116 +141,65 @@
             onclick={() => onSelectLoop(loop)}
             class="w-full text-left relative flex items-center justify-between p-3.5 sm:p-4 rounded-2xl bg-white border-2 border-[#81C784] hover:border-[#2B8A1E] hover:shadow-lg transition-all cursor-pointer group"
           >
-            <!-- Content on left -->
-            <div class="flex-1 pr-3">
-              <div class="flex items-center gap-1.5 mb-1">
-                <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#E8F5E9] text-[#1B5E20] border border-[#A5D6A7]">
-                  {loop.title}
-                </span>
-                <span class="text-[10px] text-slate-400 font-medium">({loop.shortSubtitle})</span>
-              </div>
-              <ul class="text-xs text-slate-700 font-medium space-y-1">
-                {#if loop.id === 'bio-regenerativo'}
-                  <li class="flex items-start gap-1.5">
-                    <CheckCircle2 class="w-3.5 h-3.5 text-[#2B8A1E] shrink-0 mt-0.5" />
-                    <span>Envases de la línea Bio biodegradables</span>
-                  </li>
-                  <li class="flex items-start gap-1.5">
-                    <CheckCircle2 class="w-3.5 h-3.5 text-[#2B8A1E] shrink-0 mt-0.5" />
-                    <span>Etiquetas compostables con semillas</span>
-                  </li>
-                {:else if loop.id === 'bio-cascada'}
-                  <li class="flex items-start gap-1.5">
-                    <CheckCircle2 class="w-3.5 h-3.5 text-[#2B8A1E] shrink-0 mt-0.5" />
-                    <span>Kumis → Quesos</span>
-                  </li>
-                  <li class="flex items-start gap-1.5">
-                    <CheckCircle2 class="w-3.5 h-3.5 text-[#2B8A1E] shrink-0 mt-0.5" />
-                    <span>Mermas de cereales (Ramo, Jet, Nutresa)</span>
-                  </li>
-                {:else}
-                  <li class="flex items-start gap-1.5">
-                    <CheckCircle2 class="w-3.5 h-3.5 text-[#2B8A1E] shrink-0 mt-0.5" />
-                    <span>Cucharas de galleta</span>
-                  </li>
-                  <li class="flex items-start gap-1.5">
-                    <CheckCircle2 class="w-3.5 h-3.5 text-[#2B8A1E] shrink-0 mt-0.5" />
-                    <span>Aprovechamiento de material orgánico</span>
-                  </li>
-                {/if}
-              </ul>
-              <div class="mt-2 text-[10px] text-[#2B8A1E] font-bold underline flex items-center gap-1">
-                <span>Inspeccionar protocolo sanitario</span>
+            <div class="flex-1 pr-3 space-y-1">
+              <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#E8F5E9] text-[#1B5E20] border border-[#A5D6A7] inline-block">
+                {loop.highlightBadge}
+              </span>
+              <h3 class="text-xs sm:text-sm font-black text-slate-900 leading-snug">{loop.title}</h3>
+              <p class="text-[11px] text-slate-600 leading-relaxed">{loop.tagline}</p>
+              <div class="pt-1 text-[10px] text-[#2B8A1E] font-bold underline flex items-center gap-1">
+                <span>Ver protocolo y actores</span>
                 <ArrowRight class="w-3 h-3 group-hover:translate-x-1 transition-transform" />
               </div>
             </div>
-
-            <!-- Round Medallion on Right Edge facing the center cup -->
-            <div class="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full border-3 border-[#2B8A1E] overflow-hidden shadow-md shrink-0 bg-emerald-50">
-              <img
-                src={getMedallionImage(loop.id)}
-                alt={loop.title}
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-              />
+            <div class="w-16 h-16 rounded-full border-3 border-[#2B8A1E] overflow-hidden shadow-md shrink-0 bg-emerald-50">
+              <img src={getMedallionImage(loop.id)} alt={loop.title} class="w-full h-full object-cover" />
             </div>
           </button>
         {/each}
       </div>
 
-      <!-- ================= CENTER: BON YURT ALPINA (4 cols) ================= -->
+      <!-- Center: Bon Yurt Core -->
       <div class="lg:col-span-4 flex flex-col items-center text-center px-2 py-4">
-        <div class="relative w-full max-w-sm rounded-3xl bg-gradient-to-b from-white to-[#E3F2FD] p-5 border-2 border-blue-300 shadow-xl">
-          <!-- Curving Milk Waves -->
-          <div class="relative mx-auto aspect-square max-w-[220px] rounded-2xl overflow-hidden bg-white border border-blue-100 shadow-inner group">
-            <img
-              src="/images/bonyurt_hero.jpg"
-              alt="Bon Yurt de Alpina"
-              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-[#003876]/70 via-transparent to-transparent flex items-end justify-center p-3">
-              <span class="text-white text-xs font-black tracking-wider uppercase font-brand drop-shadow-md">
-                175 g Mezcla Láctea + Toppings
+        <div class="relative w-full max-w-sm rounded-3xl bg-gradient-to-b from-white to-[#E3F2FD] p-5 border-2 border-blue-300 shadow-xl space-y-3">
+          <div class="relative mx-auto aspect-square max-w-[200px] rounded-2xl overflow-hidden bg-white border border-blue-100 shadow-inner">
+            <img src="/images/bonyurt_hero.jpg" alt="Bon Yurt de Alpina" class="w-full h-full object-cover" />
+            <div class="absolute inset-0 bg-gradient-to-t from-[#003876]/80 via-transparent to-transparent flex items-end justify-center p-2.5">
+              <span class="text-white text-[11px] font-black tracking-wider uppercase font-brand">
+                Unidad Funcional: 175 g
               </span>
             </div>
           </div>
 
-          <!-- Central Brand Pill exact to Infographic -->
-          <div class="mt-4 inline-block px-5 py-2.5 rounded-full bg-[#003876] text-white shadow-lg border-2 border-white">
-            <h3 class="text-base sm:text-lg font-black font-brand leading-none">
-              Bon Yurt
-            </h3>
-            <span class="text-xs font-semibold text-emerald-300 block mt-0.5">
-              Nutrición que conecta con el planeta
+          <div class="p-3 rounded-2xl bg-amber-50 border border-amber-200 text-left">
+            <span class="text-[10px] font-black uppercase text-amber-800 block">
+              2.3. Diagnóstico Actual
             </span>
+            <p class="text-xs font-bold text-slate-900 mt-0.5">{SEMI_CIRCULAR_DIAGNOSIS.status}</p>
+            <p class="text-[11px] text-slate-600 mt-1 leading-relaxed">
+              95,2% aprovechamiento en planta · Brecha lineal tras el consumo en vaso (~25% piloto) y cuchara plástica.
+            </p>
           </div>
 
-          <!-- Unit and Scope Specs -->
-          <div class="mt-4 p-3 rounded-xl bg-white/90 border border-blue-100 text-left text-xs space-y-1 font-medium">
-            <div class="flex justify-between text-slate-500">
-              <span>Unidad Funcional:</span>
-              <span class="font-bold text-slate-800">175 g (Vaso + Sobrecopa)</span>
-            </div>
-            <div class="flex justify-between text-slate-500">
-              <span>Enfoque de Ciclo:</span>
-              <span class="font-bold text-[#2B8A1E]">Cradle-to-Cradle</span>
-            </div>
-            <div class="flex justify-between text-slate-500">
-              <span>Planta Núcleo:</span>
-              <span class="font-bold text-[#003876]">Sopó, Cundinamarca</span>
-            </div>
+          <div class="flex gap-2">
+            <button
+              onclick={onExploreAcv}
+              class="flex-1 py-2 px-3 rounded-xl bg-[#003876] hover:bg-blue-900 text-white text-xs font-bold transition-colors cursor-pointer"
+            >
+              Ver Fases ACV
+            </button>
+            <button
+              onclick={() => onAskAi('Explica el diagnóstico semi-circular del Bon Yurt en el Diagrama de Mariposa y los bucles prioritarios del ciclo biológico y técnico.')}
+              class="py-2 px-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-900 text-xs font-bold transition-colors cursor-pointer inline-flex items-center gap-1"
+            >
+              <Sparkles class="w-3.5 h-3.5" />
+              <span>IA</span>
+            </button>
           </div>
-
-          <button
-            onclick={onExploreAcv}
-            class="mt-4 w-full py-2.5 px-4 rounded-xl text-xs font-bold text-white bg-[#003876] hover:bg-blue-800 transition-colors shadow-xs flex items-center justify-center gap-2 cursor-pointer"
-          >
-            <span>Ver Diagnóstico ACV (6 Fases)</span>
-            <ArrowRight class="w-3.5 h-3.5" />
-          </button>
         </div>
       </div>
 
-      <!-- ================= RIGHT WING: CICLO TÉCNICO (4 cols) ================= -->
+      <!-- Right Wing: Technical Loops -->
       <div class="lg:col-span-4 space-y-4">
         {#each tecLoops as loop}
           <button
@@ -267,125 +207,95 @@
             onclick={() => onSelectLoop(loop)}
             class="w-full text-left relative flex items-center justify-between p-3.5 sm:p-4 rounded-2xl bg-white border-2 border-[#64B5F6] hover:border-[#003876] hover:shadow-lg transition-all cursor-pointer group"
           >
-            <!-- Round Medallion on Left Edge facing the center cup -->
-            <div class="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full border-3 border-[#003876] overflow-hidden shadow-md shrink-0 bg-blue-50">
-              <img
-                src={getMedallionImage(loop.id)}
-                alt={loop.title}
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-              />
-            </div>
-
-            <!-- Content on right -->
-            <div class="flex-1 pl-3 text-right">
-              <div class="flex items-center justify-end gap-1.5 mb-1">
-                <span class="text-[10px] text-slate-400 font-medium">({loop.shortSubtitle})</span>
-                <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#E3F2FD] text-[#0D47A1] border border-[#90CAF9]">
-                  {loop.title}
-                </span>
-              </div>
-              <ul class="text-xs text-slate-700 font-medium space-y-1">
-                {#if loop.id === 'tec-corto'}
-                  <li class="flex items-start justify-end gap-1.5">
-                    <span>Reutilización de vasos, tapas y empaques</span>
-                    <CheckCircle2 class="w-3.5 h-3.5 text-[#003876] shrink-0 mt-0.5" />
-                  </li>
-                  <li class="flex items-start justify-end gap-1.5">
-                    <span>Manualidades y nuevos usos</span>
-                    <CheckCircle2 class="w-3.5 h-3.5 text-[#003876] shrink-0 mt-0.5" />
-                  </li>
-                {:else if loop.id === 'tec-local'}
-                  <li class="flex items-start justify-end gap-1.5">
-                    <span>PRAE y concursos escolares</span>
-                    <CheckCircle2 class="w-3.5 h-3.5 text-[#003876] shrink-0 mt-0.5" />
-                  </li>
-                  <li class="flex items-start justify-end gap-1.5">
-                    <span>Canje de envases por premios</span>
-                    <CheckCircle2 class="w-3.5 h-3.5 text-[#003876] shrink-0 mt-0.5" />
-                  </li>
-                {:else}
-                  <li class="flex items-start justify-end gap-1.5">
-                    <span>Aprovechamiento empaques (cartón)</span>
-                    <CheckCircle2 class="w-3.5 h-3.5 text-[#003876] shrink-0 mt-0.5" />
-                  </li>
-                  <li class="flex items-start justify-end gap-1.5">
-                    <span>Reciclaje de plásticos a pupitres</span>
-                    <CheckCircle2 class="w-3.5 h-3.5 text-[#003876] shrink-0 mt-0.5" />
-                  </li>
-                {/if}
-              </ul>
-              <div class="mt-2 text-[10px] text-[#003876] font-bold underline flex items-center justify-end gap-1">
+            <div class="flex-1 pr-3 space-y-1">
+              <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#E3F2FD] text-[#0D47A1] border border-[#90CAF9] inline-block">
+                {loop.highlightBadge}
+              </span>
+              <h3 class="text-xs sm:text-sm font-black text-slate-900 leading-snug">{loop.title}</h3>
+              <p class="text-[11px] text-slate-600 leading-relaxed">{loop.tagline}</p>
+              <div class="pt-1 text-[10px] text-[#003876] font-bold underline flex items-center gap-1">
+                <span>Ver recuperación y REP</span>
                 <ArrowRight class="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                <span>Ver alianza y trazabilidad</span>
               </div>
+            </div>
+            <div class="w-16 h-16 rounded-full border-3 border-[#003876] overflow-hidden shadow-md shrink-0 bg-blue-50">
+              <img src={getMedallionImage(loop.id)} alt={loop.title} class="w-full h-full object-cover" />
             </div>
           </button>
         {/each}
-      </div>
-    </div>
 
-    <!-- Bottom Scenic Illustration: Hatos Lecheros (Left) + Planta Alpina / Reciclaje / Camión (Right) -->
-    <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 p-4 rounded-2xl bg-white/80 border border-slate-200">
-      <!-- Left: Ganadería Sostenible -->
-      <div class="flex items-center gap-3">
-        <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-2xl shrink-0">
-          🐄
-        </div>
-        <div>
-          <span class="text-xs font-black text-[#1B5E20] uppercase font-brand block">
-            Retorno Biológico: Silvopastoreo & Suelo
-          </span>
-          <p class="text-[11px] text-slate-600 leading-tight">
-            Más de 250 hatos aliados en Cundinamarca y Boyacá capturando carbono y cerrando el ciclo de nutrientes orgánicos.
-          </p>
-        </div>
-      </div>
-
-      <!-- Right: Planta Sopó, Contenedor y Camión -->
-      <div class="flex items-center gap-3 justify-end text-right">
-        <div>
-          <span class="text-xs font-black text-[#0D47A1] uppercase font-brand block">
-            Cierre Técnico: Planta Sopó & Rutas REP
-          </span>
-          <p class="text-[11px] text-slate-600 leading-tight">
-            Contenedores "Come-Vasos", reciclaje mecánico a pupitres escolares y flota con telemetría de frío.
-          </p>
-        </div>
-        <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center text-2xl shrink-0">
-          🏭
-        </div>
-      </div>
-    </div>
-
-    <!-- Bottom Section: The 5 Key Results Exact to Infographic -->
-    <div class="relative z-10 mt-8 pt-6 border-t-2 border-slate-200">
-      <div class="text-center mb-5">
-        <div class="inline-block px-5 py-1.5 rounded-full bg-[#003876] text-white shadow-xs font-brand text-xs sm:text-sm font-extrabold uppercase">
-          Resultados clave
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
-        {#each KEY_RESULTS_INFOGRAPHIC as item}
-          {@const IconComponent = renderResultIcon(item.icon)}
-          <div class="p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-md transition-shadow flex flex-col justify-between text-center space-y-2">
-            <div class="mx-auto w-10 h-10 rounded-full bg-emerald-50 text-[#2B8A1E] flex items-center justify-center border border-emerald-200">
-              <IconComponent class="w-5 h-5" />
-            </div>
-            <div>
-              <h4 class="text-xs font-bold text-slate-900 leading-tight">
-                {item.title}
-              </h4>
-              <p class="text-[11px] text-slate-500 mt-1 leading-snug">
-                {item.desc}
-              </p>
-            </div>
-            <div class="pt-2 border-t border-slate-100 text-xs font-black text-[#003876] font-mono-numbers">
-              {item.metric}
-            </div>
+        <!-- Sanitary Precaution Card inside Technical Wing -->
+        <div class="p-4 rounded-2xl bg-amber-50 border-2 border-amber-300 text-xs space-y-1.5">
+          <div class="flex items-center gap-1.5 text-amber-900 font-black">
+            <AlertTriangle class="w-4 h-4 text-amber-600 shrink-0" />
+            <span>Precaución Sanitaria y Técnica</span>
           </div>
-        {/each}
+          <p class="text-[11px] text-amber-950 leading-relaxed">
+            {SEMI_CIRCULAR_DIAGNOSIS.sanitaryPrecaution}
+          </p>
+        </div>
       </div>
+    </div>
+
+    <!-- Bottom Strip: 4 Verified Corporate Baseline Cards -->
+    <div class="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-4 border-t border-slate-200">
+      {#each KEY_RESULTS_INFOGRAPHIC as stat}
+        <div class="p-3.5 rounded-2xl bg-white/95 border border-slate-200 shadow-2xs space-y-1">
+          <div class="flex items-center justify-between">
+            <span class={`text-2xl font-black font-mono-numbers ${stat.color}`}>{stat.value}</span>
+            <TrendingUp class="w-4 h-4 text-emerald-600" />
+          </div>
+          <p class="text-xs font-bold text-slate-900 leading-snug">{stat.label}</p>
+          <p class="text-[10px] text-slate-500">{stat.sublabel}</p>
+        </div>
+      {/each}
+    </div>
+  </div>
+
+  <!-- 2.1 Tabla de Clasificación de Flujos y Circularidades -->
+  <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+    <div class="p-5 sm:p-6 border-b border-slate-100">
+      <h3 class="text-base sm:text-lg font-black text-slate-900 font-brand">
+        2.1. Clasificación de Flujos, Fugas Actuales y Oportunidad de Bucle más Interno
+      </h3>
+      <p class="text-xs text-slate-500 mt-0.5">
+        Mapeo completo de los 7 flujos materiales de Bon Yurt entre línea base, pérdida de valor y estrategia de cierre.
+      </p>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse text-xs">
+        <thead class="bg-slate-50 text-slate-600 uppercase text-[10px] font-black tracking-wider border-b border-slate-200">
+          <tr>
+            <th class="py-3 px-4">Flujo / Iniciativa</th>
+            <th class="py-3 px-4">Ciclo</th>
+            <th class="py-3 px-4">Línea Base</th>
+            <th class="py-3 px-4">Bucle Actual</th>
+            <th class="py-3 px-4">Fuga o Pérdida</th>
+            <th class="py-3 px-4">Oportunidad Bucle Interno</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          {#each CIRCULARITY_FLOWS_TABLE as row}
+            <tr class="hover:bg-slate-50/80">
+              <td class="py-3 px-4 font-bold text-slate-900">{row.material}</td>
+              <td class="py-3 px-4">
+                <span class={`px-2 py-0.5 rounded-full text-[10px] font-black ${
+                  row.cycle === 'Biológico'
+                    ? 'bg-emerald-100 text-emerald-800'
+                    : 'bg-blue-100 text-[#003876]'
+                }`}>
+                  {row.cycle}
+                </span>
+              </td>
+              <td class="py-3 px-4 text-slate-700">{row.baselineAmount}</td>
+              <td class="py-3 px-4 font-semibold text-slate-800">{row.currentLoop}</td>
+              <td class="py-3 px-4 text-rose-700 font-medium">{row.leakageOrLoss}</td>
+              <td class="py-3 px-4 text-[#2B8A1E] font-semibold">{row.innerLoopOpportunity}</td>
+            </tr>
+          {/each}
+        </tbody>
+      </table>
     </div>
   </div>
 </section>

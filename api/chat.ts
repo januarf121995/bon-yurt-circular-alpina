@@ -1,148 +1,144 @@
 import { GoogleGenAI } from '@google/genai';
 
-const SYSTEM_KNOWLEDGE = `
-Eres el "Experto Circular Alpina & Jurado Académico", asistente técnico de alta solvencia científica y pedagógica para el Plan de Implementación de Economía Circular de Bon Yurt de Alpina ("Cerrar el ciclo, es nutrir el futuro").
-Tu misión es preparar a los estudiantes para su sustentación final de 30 minutos frente al docente y evaluadores, garantizando la calificación máxima (5.0 / 5.0) en los 7 criterios de la rúbrica oficial de la guía de clase.
+export const SYSTEM_KNOWLEDGE = `
+Eres el "Experto Circular Alpina & Jurado Académico", asistente técnico para el Plan de Economía Circular del Bon Yurt de Alpina (Presentación clásica con vaso, sobrecopa transparente y cuchara), actualizado con la versión oficial más reciente (Noviembre 2026).
+La sustentación ejecutiva dura 13 minutos entre 4 presentadores (12 diapositivas) más 5 minutos de preguntas (y modo extendido 30 min).
 
-DATOS TÉCNICOS Y ESTRUCTURA OFICIAL (RUTA A - EMPRESA CON AVANCES: ALPINA S.A.S. BIC):
-1. CONTEXTO CORPORATIVO & RUTA DE TRABAJO:
-- Empresa: Alpina Productos Alimenticios S.A.S. BIC (plantas en Sopó, Caloto, Chinchiná; cobertura en el 97% de municipios de Colombia).
-- Ruta A: Empresa con reportes consolidados (GRI, memoria ESG, metas REP). El foco es contrastar lo declarado con lo practicado, cerrar brechas de downcycling y proponer el siguiente nivel de madurez tecnológica y social sin incurrir en greenwashing.
+DATOS OFICIALES VERIFICADOS (RUTA A · ALPINA PRODUCTOS ALIMENTICIOS S.A.S. BIC · INFORME 2025):
+1. LÍNEA BASE CORPORATIVA ALPINA (2025) VS. SECTOR COLOMBIA:
+- Índice de Reciclabilidad (IR): 51% en Alpina (Referente sector agroalimentario Colombia: 25%–30%) -> Meta 3 años: IR 70% / MCI ≥ 0,68.
+- Plástico Reincorporado: 75% rPET en sobrecopa y 25% en vaso piloto (Referente sector lácteo Colombia: 10%–15%) -> Meta: 85% promedio ponderado.
+- Plástico Neutralidad (REP): 59% recolectado/transformado con >450 recicladores de oficio, superando casi al doble la meta legal Res. 1407 de 2018 al 2030 (30%) -> Meta: 75%.
+- Aprovechamiento Residuos Postindustriales: 95,2% en plantas (Referente industria alimentos ANDI: 70%–80%), directriz Vertedero Cero -> Meta: 98% Vertedero Cero.
+- Autogeneración Energética: 24% nacional (Referente sector alimentos: 5%–10%), con 6% energía solar (CEDI Galapa) y 38% biogás en Planta Sopó desde PTAR (equivalente al 18% del consumo nacional) -> Meta: 30% y -8% intensidad energética.
+- Otros indicadores del plan (8 totales, Forética/GRI/WBCSD): Mermas de terceros 0% piloto -> 15% cereal virgen; sustitución cuchara plástica 5% piloto -> 80% línea clásica; ahorro neto mínimo ≥12% en empaque y toppings (costos unitarios son reservados por política industrial).
 
-2. COMPONENTE 1: DIAGNÓSTICO DE ANÁLISIS DE CICLO DE VIDA (ACV - 15% DE LA RÚBRICA):
-- Unidad Funcional: Entregar, proteger y fusionar 175 g de mezcla láctea (vaso termoformado con ~150 g de base láctea yogurt/kumis + sobrecopa transparente con ~25 g de toppings crocantes de aliados como Jet, Chocoramo o cereales + cuchara integrada).
-- Límites del Sistema: De la Cuna a la Tumba con Cierre Circular ("Cradle-to-Cradle"), abarcando 6 fases:
-  1. Extracción materias primas (hatos lecheros con ganadería regenerativa/silvopastoreo, cultivo de cereales y cacao, resinas PS/PP y biopolímeros).
-  2. Proveedores y transporte de entrada (rutas refrigeradas isotérmicas con trazabilidad térmica, canastillas retornables y cajas de cartón 100% reciclado).
-  3. Producción y transformación (Planta Sopó: pasteurización, fermentación, circuito cerrado CIP con reúso de agua de último enjuague, cogeneración con biogás de PTAR).
-  4. Empaque y distribución (termoformado, envasado aséptico, reemplazo de cuchara plástica virgen por cuchara comestible horneada, sobrecopas transparentes monomaterial, logística refrigerada capilar nacional).
-  5. Uso y consumo (rituales de consumo de niños y jóvenes, programa "Enjuaga, Aplana y Separa", ecodiseño apilable para upcycling).
-  6. Transformación posconsumo (recolección comunitaria escolar PRAE "Come-Vasos", reciclaje formal a madera plástica para pupitres rurales y compostaje de línea Bio y papel semilla).
-- Puntos Críticos (Hotspots):
-  * Hotspot 1: Emisiones entéricas en hatos lecheros (mitigado con silvopastoreo).
-  * Hotspot 2: Consumo energético y refrigerante en transporte y CEDI (mitigado con logística optimizada).
-  * Hotspot 3: Generación de empaques plásticos posconsumo de un solo uso (cucharita y foil), mitigados con sustitución comestible y acuerdos REP.
-- Indicadores GRI integrados: GRI 301 (Materiales), 302 (Energía), 303 (Agua), 305 (Emisiones GEI), 306 (Residuos).
+2. COMPONENTE 1 · ACV (6 FASES, UF 175 g, GRI 301–306) & HOTSPOTS/BRECHAS:
+- Unidad Funcional: Entregar, proteger y fusionar 175 g de mezcla láctea garantizando inocuidad en cadena de frío.
+- Límites: Cuna a la tumba con cierre circular, presencia en 97% de municipios y plantas en Sopó, Caloto y Chinchiná.
+- 4 Hotspots y Brechas Ruta A:
+  1) Plásticos de un solo uso (Fases 5 y 6): vaso principal y cuchara plástica convencional generan el mayor volumen de fuga hacia relleno sanitario.
+  2) Consumo intensivo de energía en cadena de frío (Fases 3 y 4): refrigeración continua en plantas, CEDI y puntos de venta (GRI 302 y 305).
+  3) Huella hídrica y GEI en producción primaria (Fase 1): ganadería lechera y cultivo de cereales.
+  4) Brechas en reportes públicos Ruta A: GRI corporativos consolidados en Fases 2–4 no desagregan por SKU (Bon Yurt) ni cuantifican exactamente energía de refrigeración doméstica (Fase 5) ni % exacto de vasos en relleno vs. recuperados (Fase 6).
 
-3. COMPONENTE 2: ANÁLISIS DE CIRCULARIDADES (DIAGRAMA DE MARIPOSA - 15% DE LA RÚBRICA):
-- Ala Izquierda (Ciclo Biológico - Verde / Regeneración de recursos naturales):
-  * Loop Regenerativo: Envases de la línea Bio biodegradables en PLA/PHA compostables y etiquetas desprendibles de papel semilla de caléndula, albahaca o lechuga.
-  * Loop en Cascada: Kumis a quesos análogos o sueros enriquecidos (validación sanitaria crítica: cadena de frío ininterrumpida máx 4°C y control microbiológico libre de Listeria y Salmonella); y aprovechamiento de mermas de cereales con aliados industriales (Ramo, Jet, Kellanova/Nutresa) para dietas animales y biogás.
-  * Loop Corto: Cuchara crujiente comestible de galleta horneada enriquecida con fibra de avena (aw < 0.5, resistente 20 min en yogurt, rotulado de gluten).
-- Ala Derecha (Ciclo Técnico - Azul / Conservación del valor de los materiales):
-  * Loop Corto: Reutilización de vasos y tapas en manualidades hogareñas (maceteros autorregables, portalápices, bloques modulares encajables).
-  * Loop Local: Concurso intercolegiado "Bon Yurt Transforma", puntos ecológicos "Come-Vasos" en cafeterías escolares, articulación con proyectos PRAE y canje por útiles escolares.
-  * Loop en Cascada: Alianza con empresas de extrusión para transformar plástico PS/PP recuperado en madera plástica para pupitres escolares rurales (norma de seguridad: no apto para contacto alimentario directo, certificado contra lixiviación y resistencia mecánica) y cajas de cartón 100% reciclado con Smurfit Westrock.
+3. COMPONENTE 2 · DIAGRAMA DE MARIPOSA & DIAGNÓSTICO SEMI-CIRCULAR:
+- Diagnóstico Actual: Modelo híbrido de transición (semi-circular): alta circularidad en manufactura (95,2% postindustrial y 75% rPET sobrecopa), con fuga lineal significativa tras el consumo en vaso y cuchara.
+- Ciclo Biológico: Loop corto (cucharas comestibles de galleta), Loop en cascada (excedentes kumis/yogurt a quesos y alimentación animal + mermas cereales/chocolates con aliados Ramo, Grupo Nutresa/Jet, Kellanova), Loop regenerativo (línea Bio y etiquetas con semillas).
+- Ciclo Técnico: Loop corto (vasos y tapas en manualidades/materas PRAE), Loop local (75% rPET sobrecopa, programa «Recicla, juega y gana premios», >450 recicladores y gestores REP).
+- Precaución Sanitaria: Bio solo va al ciclo biológico si tiene compostabilidad certificada y disposición real; de lo contrario contamina el reciclaje plástico. Excedentes lácteos sin cadena de frío exigen validación microbiológica antes de consumo humano.
 
-4. COMPONENTE 3: PRINCIPIOS ELLEN MACARTHUR & JERARQUÍA 9R (10% DE LA RÚBRICA):
-- Principio 1 Ellen MacArthur: Eliminar residuos y contaminación desde el diseño (Nivel 4 de madurez - reducción de calibre de pared -18% y adiós a cuchara plástica virgen).
-- Principio 2 Ellen MacArthur: Circular productos y materiales en su valor más alto (Nivel 4 de madurez - simbiosis industrial con Ramo/Nutresa y transformación a mobiliario escolar).
-- Principio 3 Ellen MacArthur: Regenerar los sistemas naturales (Nivel 3 de madurez - ganadería regenerativa y envases compostables Bio certificados EN 13432 / ASTM D6400).
-- 9R aplicadas: R2 Reducir (ahorro de 420 t de resina virgen al año), R3 Reutilizar (upcycling escolar), R8 Reciclar (cierre de ciclo formal trazable).
+4. COMPONENTE 3 · PRINCIPIOS ELLEN MACARTHUR Y JERARQUÍA 9R:
+- Principio 1 (Eliminar residuos desde el diseño): Sí (Parcial) · Madurez 4/5 (aligeramiento + sobrecopa transparente; brecha en cuchara desechable).
+- Principio 2 (Circular productos/materiales en su máximo valor): Sí · Madurez 4/5 (75% rPET sobrecopa y 59% plástico neutralidad).
+- Principio 3 (Regenerar la naturaleza): Sí · Madurez 5/5 (modelo BIC, ganadería sostenible, cero deforestación, 38% biogás Sopó).
+- Jerarquía 9R (Kirchherr et al., 2017):
+  * Nivel 4/5 (Consolidadas): R2 Reducir, R7 Reutilizar con otro propósito (cascada láctea/mermas), R8 Reciclar (51% IR, 95,2% postindustrial, REP), R9 Recuperar (biogás Sopó y co-procesamiento Vertedero Cero).
+  * Nivel 3/5 (Brechas a cerrar): R0 Rechazar (piloto cucharas galleta 5%), R1 Repensar (envases Bio y PRAE conceptuales), R3 Reutilizar (limitado a escuelas/hogares).
 
-5. COMPONENTE 4: ESTRATEGIAS RESOLVE & HOJA DE RUTA (25% DE LA RÚBRICA):
-- Estrategia 1: Insumos Circulares y Línea Bio (biopolímeros, papel semilla y cuchara de galleta).
-- Estrategia 2: Estrategia Posconsumo Lúdica Escolar (Red PRAE, "Bon Yurt Transforma" y Come-Vasos).
-- Estrategia 3: Simbiosis Industrial y Valorización Biológica (Aprovechamiento de kumis a quesos, cereales con Ramo/Jet y madera plástica para escuelas rurales).
+5. COMPONENTE 4 · 4 ESTRATEGIAS PRIORIZADAS (ORDEN EXACTO 1 A 4):
+- E1 (Prioridad 1 · Corto plazo 0–12m · R0): Escalamiento de cucharas comestibles de galleta. Impacto Alto / Facilidad Alta. Responsable: I+D+i y Operaciones; Aliados: panificación/biotecnología. Beneficio: hasta 80% menos cucharas plásticas y ahorro poliestireno.
+- E2 (Prioridad 2 · Corto plazo 6–18m · R7): Simbiosis industrial de mermas alimentarias. Impacto Alto / Facilidad Alta. Responsable: Calidad y Compras Sostenibles; Aliados: Ramo, Nutresa, Kellanova. Beneficio: sustituir ≥10% (meta 15%) cereal virgen y bajar huella hídrica.
+- E3 (Prioridad 3 · Mediano plazo 12–36m · R2 y R8): Transición del vaso a monomaterial 100% rPET / Bio certificado. Impacto Muy Alto / Facilidad Media (requiere validación INVIMA y ajuste de moldes). Responsable: Sostenibilidad y Empaques; Aliados: resinas circulares, INVIMA, gestores REP. Beneficio: IR corporativo 51% -> 70% y MCI ≥ 0,68.
+- E4 (Prioridad 4 · Corto-mediano plazo 6–24m · R3 y R8): Red de retorno escolar y comunitaria «Bon Yurt Transforma» (PRAE). Impacto Medio-Alto / Facilidad Alta. Responsable: Asuntos Corporativos y Mercadeo; Aliados: colegios PRAE, >450 recicladores y retail. Beneficio: Plástico Neutralidad 59% -> 75%.
+- Viabilidad y Riesgos: Regulatorio (INVIMA -> rPET grado alimentario FDA/INVIMA y cadena de frío continua); Financiero (costos unitarios mayores -> descuento renta y exclusión IVA Estatuto Tributario + crédito verde Bancóldex); Cultural (baja separación en hogar -> canje lúdico + PRAE).
 
-6. COMPONENTE 5: INDICADORES Y SISTEMA MRV (20% DE LA RÚBRICA):
-- 7 Indicadores Ficha Técnica en escalas Micro (Planta Sopó), Meso (Red PRAE 250 colegios) y Macro (Metas REP Colombia).
-- Sistema MRV en 5 Etapas: 1. Medición Operativa, 2. Reporte Interno, 3. Reporte Externo Normativo (Resolución 1407/2018), 4. Verificación Independiente (ICONTEC), 5. Ajuste y Mejora Continua (Ciclo PHVA).
+6. COMPONENTE 5 · 8 INDICADORES, 5 ETAPAS MRV, MULTIESCALA Y ODS:
+- MRV 5 Etapas: 1. Medición/Monitoreo (Diaria/Mensual, SAP ERP, básculas, medidores PTAR/solar), 2. Reporte Interno (Trimestral, Dashboard Economía Circular), 3. Reporte Externo (Anual, GRI, plataforma ANLA/VUCE REP Res. 1407, reporte BIC), 4. Verificación (Anual, Auditoría Interna + Tercero independiente ICONTEC/PwC/Deloitte, Vertedero Cero, ISO 14001), 5. Ajuste (Anual, Comité Directivo PHVA).
+- Escalas: Micro (Bon Yurt/Sopó) -> Meso (Simbiosis/PRAE) -> Macro (DANE CAEFM-RS y MinAmbiente ENEC).
+- ODS: ODS 8 (>450 recicladores), ODS 9 (Ecodiseño/biogás/solar), ODS 12 (Metas 12.5 plásticos y 12.3 desperdicio alimentos), ODS 13 (Mitigación GEI).
 
 REGLAS DE RESPUESTA:
-- Responde siempre en español, con lenguaje profesional, riguroso, motivador y sintético.
-- Si es simulación de jurado, formula preguntas directas sobre los criterios de la guía, o evalúa las respuestas otorgando retroalimentación técnica y nota sugerida (0.0 a 5.0).
+- Responde siempre en español con rigor académico, claridad y datos exactos de esta versión. Nunca inventes cifras ajenas al plan ni repitas números antiguos (como 38% recuperación o 3 estrategias).
+- En modo 'evaluator' (jurado), formula preguntas exigentes alineadas con los 12 slides y las 8 preguntas probables, o evalúa al estudiante de 0.0 a 5.0.
 `;
 
-function generateSmartFallback(message: string, mode?: string): string {
+export function generateSmartFallback(message: string, mode?: string): string {
   const msg = message.toLowerCase();
 
-  // Mode: Evaluator / Jurado simulator
   if (mode === 'evaluator' || msg.includes('docente') || msg.includes('jurado') || msg.includes('rúbrica') || msg.includes('rubrica') || msg.includes('simular')) {
-    if (msg.includes('portada') || msg.includes('equipo')) {
-      return `🎓 PREGUNTA DEL JURADO (Portada & Contexto):
-"Como evaluador, veo que han clasificado a Alpina en la Ruta A. ¿Qué evidencia concreta del último informe de sostenibilidad de Alpina justifica que no están haciendo greenwashing, y por qué seleccionaron exactamente 175 gramos como la Unidad Funcional del Bon Yurt?"
+    if (msg.includes('semi') || msg.includes('mariposa') || msg.includes('circular')) {
+      return `🎓 PREGUNTA DEL JURADO (Diagnóstico Semi-circular & Mariposa · Presentador 2):
+"¿Qué tan circular es hoy el Bon Yurt de Alpina y por qué los envases Bio requieren una precaución sanitaria específica en el Diagrama de Mariposa?"
 
 💡 Clave para responder 5.0:
-• Citar la meta corporativa de Alpina (>95% de aprovechamiento postindustrial en Sopó) y el cumplimiento de la Resolución 1407/2018.
-• Explicar que la UF de 175 g representa la función real del producto: contener e integrar ~150 g de base láctea con ~25 g de cereal garantizando inocuidad en cadena de frío.`;
+• Diagnóstico: Es semi-circular (modelo híbrido de transición): muy circular en manufactura (95,2% aprovechamiento postindustrial y 75% rPET en sobrecopa), pero con fuga lineal en el vaso y la cuchara plástica tras el consumo.
+• Precaución Bio: Solo cierran el ciclo biológico si tienen compostabilidad certificada y disposición real; de lo contrario contaminan el reciclaje plástico.`;
     }
 
-    if (msg.includes('acv') || msg.includes('ciclo de vida') || msg.includes('hotspot')) {
-      return `🎓 PREGUNTA DEL JURADO (Componente 1 · ACV):
-"En su análisis de ciclo de vida identifican tres hotspots principales. Expliquen: ¿cuál de esos puntos críticos tiene el mayor factor de emisión en Alcance 3, qué indicador GRI lo mide y cuál es la solución circular concreta que propone el equipo?"
+    if (msg.includes('cuchara') || msg.includes('prioridad') || msg.includes('estrategia') || msg.includes('e1') || msg.includes('e3')) {
+      return `🎓 PREGUNTA DEL JURADO (Estrategias E1–E4 · Presentador 3):
+"¿Por qué priorizan la cuchara comestible (E1) como Prioridad 1 sobre el vaso monomaterial rPET/Bio (E3) si el vaso representa mayor peso en el empaque, y cuánto cuesta el plan?"
 
 💡 Clave para responder 5.0:
-• Identificar el Hotspot 1 (Hatos lecheros: emisiones entéricas de metano CH4 medido bajo GRI 305).
-• Demostrar cómo el silvopastoreo intensivo con 250 hatos aliados captura carbono y restaura praderas, mitigando este impacto desde la cuna.`;
+• E1 tiene impacto alto y facilidad alta con tecnología alimentaria disponible, ejecutable en 0–12 meses (elimina hasta 80% de cucharas plásticas). E3 tiene impacto Muy Alto pero facilidad Media porque requiere validación INVIMA y ajuste de moldes (12–36 meses, lleva IR de 51% a 70%).
+• Costos: Los costos unitarios son reservados por política industrial; las metas financieras se expresan en variación relativa con ahorro neto ≥12% en empaque y toppings, apoyado con incentivos tributarios y crédito verde Bancóldex.`;
     }
 
-    if (msg.includes('mariposa') || msg.includes('circularidad') || msg.includes('bucle') || msg.includes('loop')) {
-      return `🎓 PREGUNTA DEL JURADO (Componente 2 · Mariposa de Ellen MacArthur):
-"En el Diagrama de Mariposa, ustedes proponen envases biodegradables en la línea Bio y cucharas comestibles. ¿Por qué la guía advierte que la biodegradabilidad por sí sola no garantiza el cierre del ciclo biológico, y qué condición sanitaria impide destinar kumis que perdió frío a consumo humano?"
+    if (msg.includes('mrv') || msg.includes('greenwashing') || msg.includes('indicador') || msg.includes('sector')) {
+      return `🎓 PREGUNTA DEL JURADO (Indicadores vs. Sector & MRV · Presentadores 3 y 4):
+"¿Cómo evitan el greenwashing en este plan y cómo compara Alpina sus indicadores de 2025 frente al sector colombiano?"
 
 💡 Clave para responder 5.0:
-• Explicar que sin plantas de compostaje industrial certificadas (norma EN 13432), los biopolímeros terminan contaminando el flujo de reciclaje mecánico de plásticos.
-• Reiterar el principio de inocuidad: el kumis a más de 4°C o con riesgo microbiológico solo puede redirigirse a biodigestión o nutrición animal, jamás a alimentos humanos.`;
+• Comparativa sectorial 2025: IR 51% (vs. 25%–30% agroalimentario), rPET 75% sobrecopa (vs. 10%–15% lácteo), Plástico Neutralidad 59% (vs. 30% Res. 1407 al 2030), Postindustriales 95,2% (vs. 70%–80% ANDI) y autogeneración 24% / 38% biogás Sopó (vs. 5%–10% alimentos).
+• Anti-greenwashing: 8 indicadores medibles (Forética/GRI/WBCSD) trazados en 5 etapas MRV (SAP diario/mensual, Dashboard trimestral, GRI/ANLA/BIC anual, auditoría externa ICONTEC/PwC/Deloitte y ajuste PHVA).`;
     }
 
-    if (msg.includes('estrategia') || msg.includes('resolve') || msg.includes('prioriz')) {
-      return `🎓 PREGUNTA DEL JURADO (Componente 4 · Estrategias RESOLVE - 25% Rúbrica):
-"El Componente 4 representa la cuarta parte de su nota final. ¿Cómo justifican que la Estrategia 2 (Red PRAE Come-Vasos) tenga mayor facilidad de implementación en el corto plazo que la Estrategia 3 (Simbiosis industrial de quesos), y quiénes son los aliados externos clave?"
+    return `🎓 PREGUNTA DEL JURADO EVALUADOR:
+"¿Es seguro incorporar plásticos reciclados y mermas alimentarias con alimentos lácteos, y qué hacen si el consumidor no separa los envases en municipios apartados?"
 
 💡 Clave para responder 5.0:
-• La Red PRAE aprovecha infraestructura educativa existente y alianzas con recicladores de oficio (Resolución 1407), requiriendo baja inversión inicial de capital.
-• La simbiosis láctea exige desarrollos biotecnológicos de I+D+I a mediano plazo (1-3 años) para estandarizar formulaciones y superar barreras regulatorias ante el INVIMA.`;
-    }
-
-    if (msg.includes('mrv') || msg.includes('indicador')) {
-      return `🎓 PREGUNTA DEL JURADO (Componente 5 · Indicadores & Sistema MRV):
-"Presenten dos indicadores de su ficha técnica: uno a escala Micro y otro a escala Meso. ¿Quién es el responsable de medirlos y cómo se auditan en la etapa 4 del ciclo MRV?"
-
-💡 Clave para responder 5.0:
-• Micro: % Contenido de material reciclado en empaque (medido mensualmente por Ingeniería de Empaques en planta).
-• Meso: Tasa de retorno escolar PRAE (medida trimestralmente mediante pesaje conjunto con recicladores).
-• Etapa 4: Auditoría de tercera parte independiente (ICONTEC / Bureau Veritas) bajo norma ISO 14021 / ISAE 3000.`;
-    }
-
-    return `🎓 PREGUNTA GENERAL DEL JURADO EVALUADOR:
-"Equipo de Bon Yurt Alpina: Su propuesta busca transformar un producto tradicional en un referente de economía circular. ¿Cuál consideran que es la mayor limitación financiera y cultural de su propuesta y cómo la han mitigado en su hoja de ruta?"
-
-💡 Clave para responder 5.0:
-• Financiera: El costo superior de los biopolímeros (25-35%), mitigado por economías de escala y la prima de valor de marca de la línea Bio.
-• Cultural: El hábito de descarte de empaques sucios por parte de los niños, mitigado con la lúdica del contenedor "Come-Vasos" y el canje de ecopuntos por kits escolares.`;
+• Inocuidad INVIMA: Se usan resinas rPET con certificación grado alimentario FDA/INVIMA, validación microbiológica por lote y trazabilidad ininterrumpida de la cadena de frío.
+• Brecha cultural posconsumo: Se mitiga con canje lúdico en puntos de venta («Recicla, juega y gana premios») y la red escolar PRAE «Bon Yurt Transforma» con >450 recicladores, manteniendo supuestos conservadores en las tasas de retorno.`;
   }
 
-  // Topic-specific technical responses
   if (msg.includes('hola') || msg.includes('buenos') || msg.includes('saludos') || msg.includes('quién eres') || msg.includes('quien eres')) {
-    return '¡Hola! Soy el Experto Circular de Bon Yurt Alpina y tu asesor para la sustentación final de clase. Conozco cada cifra del documento técnico (Ruta A, 175 g de UF, 6 fases ACV, los 6 loops del Diagrama de Mariposa, 9R y MRV). Puedes pedirme datos específicos, argumentos para la rúbrica o activar el "Simulador de Jurado" para practicar preguntas de examen.';
+    return '¡Hola! Soy el Experto Circular de Bon Yurt Alpina (actualizado a la Nueva Versión del Plan Ruta A · Alpina 2025). Conozco los indicadores comparados contra el sector (IR 51%, rPET 75%, Plástico Neutralidad 59%, 95,2% postindustriales, 24% autogeneración / 38% biogás Sopó), las 4 estrategias priorizadas E1–E4, los principios 4/4/5, las 7 Rs de la matriz 9R y el guión de 12 diapositivas (13 min). ¿Qué deseas revisar?';
   }
 
-  if (msg.includes('kumis') || msg.includes('queso') || msg.includes('frío') || msg.includes('frio') || msg.includes('sanitaria')) {
-    return 'Respecto al aprovechamiento de Kumis a quesos (Loop en cascada biológico):\n• Lotes no conformes por volumen o viscosidad se investigan para derivación a quesos análogos o sueros desmineralizados.\n• Precaución sanitaria crítica: Se exige verificación estricta de la cadena de frío (máximo 4°C ininterrumpida) y análisis microbiológico libre de patógenos (Listeria monocytogenes y Salmonella). Lotes con alteración sensorial o quiebre térmico NO pueden destinarse a consumo humano y se derivan a biodigestión o alimentos pecuarios.';
+  if (msg.includes('sector') || msg.includes('indicador') || msg.includes('51%') || msg.includes('95,2') || msg.includes('75%') || msg.includes('59%')) {
+    return `Comparativa Oficial de Indicadores Alpina (2025) vs. Sector en Colombia y Metas a 3 Años:
+• Índice de Reciclabilidad (IR): 51% Alpina (Sector agroalimentario CO: 25%–30%) → Meta 3 años: IR 70% / MCI ≥ 0,68.
+• Plástico Reincorporado: 75% rPET sobrecopa y 25% vaso piloto (Sector lácteo CO: 10%–15%) → Meta: 85% ponderado.
+• Plástico Neutralidad (REP): 59% con >450 recicladores (supera la meta legal Res. 1407 al 2030 del 30%) → Meta: 75%.
+• Residuos Postindustriales: 95,2% aprovechados (Referente alimentos ANDI: 70%–80%), directriz Vertedero Cero → Meta: 98%.
+• Energía Limpia: 24% autogeneración nacional (Sector alimentos: 5%–10%), con 6% solar (CEDI Galapa) y 38% biogás Sopó (18% nacional) → Meta: 30% y -8% intensidad.
+• Otros del plan: Mermas de terceros 0% → 15%; cucharas galleta 5% → 80%; ahorro neto mínimo ≥12% en empaque y toppings.`;
   }
 
-  if (msg.includes('macarthur') || msg.includes('ellen') || msg.includes('principio') || msg.includes('9r')) {
-    return 'El proyecto aplica los 3 principios de Ellen MacArthur y las 9R con evidencia rigurosa:\n1. Eliminar residuos desde el diseño (Nivel 4): Aligeramiento del 18% del peso del vaso y sustitución de la cuchara plástica por cuchara horneada comestible de avena.\n2. Circular materiales en su valor más alto (Nivel 4): Simbiosis industrial de mermas con Ramo/Nutresa y transformación mecánica de vasos en pupitres escolares.\n3. Regenerar la naturaleza (Nivel 3): Silvopastoreo con 250 hatos proveedores y línea Bio en PLA/PHA compostable con papel semilla.\n• Jerarquía 9R: Se priorizan R2 (Reducir 420 t de resina fósil), R3 (Reutilizar en manualidades) y R8 (Reciclar formalmente hacia madera plástica).';
+  if (msg.includes('estrategia') || msg.includes('e1') || msg.includes('e2') || msg.includes('e3') || msg.includes('e4') || msg.includes('cuchara') || msg.includes('simbiosis') || msg.includes('vaso') || msg.includes('transforma')) {
+    return `Las 4 Estrategias Priorizadas (Impacto vs. Facilidad):
+1. Prioridad 1 · E1 Cucharas comestibles de galleta (0–12m · R0 · Impacto Alto / Facilidad Alta): I+D+i y panificadoras; suprime hasta 80% de cucharas plásticas en línea clásica.
+2. Prioridad 2 · E2 Simbiosis industrial de mermas (6–18m · R7 · Impacto Alto / Facilidad Alta): Calidad y Compras Sostenibles junto a Ramo, Nutresa y Kellanova; reemplaza ≥10% (meta 15%) del cereal virgen.
+3. Prioridad 3 · E3 Vaso monomaterial 100% rPET / Bio certificado (12–36m · R2 y R8 · Impacto Muy Alto / Facilidad Media): Sostenibilidad y Empaques + validación sanitaria INVIMA; sube el IR del 51% al 70%.
+4. Prioridad 4 · E4 Red escolar «Bon Yurt Transforma» PRAE (6–24m · R3 y R8 · Impacto Medio-Alto / Facilidad Alta): Asuntos Corporativos + colegios + >450 recicladores; lleva plástico neutralidad de 59% a 75%.`;
   }
 
-  if (msg.includes('unidad funcional') || msg.includes('acv') || msg.includes('hotspot') || msg.includes('límite') || msg.includes('limite')) {
-    return 'Componente 1 · Análisis de Ciclo de Vida (ACV):\n• Unidad Funcional (UF): 175 gramos de mezcla láctea (vaso de yogurt/kumis base de ~150 g + sobrecopa con ~25 g de toppings crocantes de aliados como Jet o Chocoramo + cuchara).\n• Límites del Sistema: Cuna a la Tumba con Cierre Circular ("Cradle-to-Cradle"), abarcando 6 fases desde hatos lecheros hasta la transformación posconsumo.\n• 3 Hotspots clave: 1. Emisiones entéricas en hatos (mitigadas por silvopastoreo), 2. Consumo energético en refrigeración de transporte/CEDI, y 3. Residuos plásticos posconsumo de un solo uso.\n• Estándares GRI: GRI 301 (Materiales), GRI 302 (Energía), GRI 303 (Agua), GRI 305 (Emisiones) y GRI 306 (Residuos).';
+  if (msg.includes('macarthur') || msg.includes('ellen') || msg.includes('principio') || msg.includes('9r') || msg.includes('r0')) {
+    return `Componente 3 · Principios Ellen MacArthur y Jerarquía 9R (Kirchherr et al., 2017):
+• Principios MacArthur:
+  1. Eliminar residuos y contaminación desde el diseño: Sí (Parcial) — Madurez 4/5 (sobrecopa transparente y menor gramaje; brecha en cuchara plástica).
+  2. Circular productos y materiales en su máximo valor: Sí — Madurez 4/5 (75% rPET sobrecopa y 59% plástico neutralidad).
+  3. Regenerar la naturaleza: Sí — Madurez 5/5 (BIC, ganadería sostenible cero deforestación, 38% biogás Sopó).
+• Matriz 9R (7 estrategias evaluadas):
+  - Nivel 4/5 (Consolidadas): R2 Reducir, R7 Reutilizar con otro propósito (kumis a quesos y mermas), R8 Reciclar (51% IR, 95,2% planta, REP), R9 Recuperar (biogás PTAR Sopó y co-procesamiento).
+  - Nivel 3/5 (Brechas): R0 Rechazar (piloto cucharas galleta 5%), R1 Repensar (envases Bio y PRAE conceptuales), R3 Reutilizar (escuelas y hogares).`;
   }
 
-  if (msg.includes('cuchara') || msg.includes('galleta') || msg.includes('bio') || msg.includes('semilla') || msg.includes('etiqueta')) {
-    return 'Estrategia de Insumos Circulares y Línea Bio:\n• Cuchara comestible: Horneada a base de salvado de avena y harina enriquecida (aw < 0.5), resistente 20 minutos en yogurt espeso sin ablandarse, eliminando 45 millones de cucharitas plásticas al año.\n• Envases Línea Bio: Fabricados con biopolímeros (PLA/PHA) compostables certificados bajo normas EN 13432 y ASTM D6400.\n• Etiquetas germinables: Impresas con tintas vegetales sobre papel semilla de caléndula, albahaca o lechuga para huertos escolares y caseros.';
+  if (msg.includes('acv') || msg.includes('ciclo de vida') || msg.includes('hotspot') || msg.includes('brecha') || msg.includes('vencido') || msg.includes('kumis')) {
+    return `Componente 1 (ACV 175 g · GRI 301–306) y Diagnóstico Semi-circular:
+• 6 Fases: 1. Hatos y cultivos → 2. Transporte a Sopó/Caloto/Chinchiná → 3. Producción (95,2% aprovechamiento) → 4. CEDI y distribución (97% municipios, CEDI Galapa solar) → 5. Uso en hogares → 6. Fin de vida (canje «Recicla, juega y gana premios», >450 recicladores, valorización de vencidos a alimento para mascotas, quesos e investigación en alimentos funcionales).
+• 4 Hotspots y Brechas Ruta A: 1. Plásticos de un solo uso (F5–6), 2. Cadena de frío (F3–4), 3. Hatos y cereales agua/GEI (F1), 4. Brecha de reportes públicos que no desagregan por SKU Bon Yurt ni refrigeración en hogares.`;
   }
 
-  if (msg.includes('prae') || msg.includes('colegio') || msg.includes('transforma') || msg.includes('come-vasos') || msg.includes('pupitre')) {
-    return 'Estrategia Posconsumo Comunitaria Escolar:\n• Red PRAE: Se articula con los Proyectos Ambientales Escolares de colegios colombianos.\n• Puntos "Come-Vasos": Contenedores lúdicos con sección escurridora para evitar olores y acumulación de vectores.\n• Concurso "Bon Yurt Transforma": Los colegios que más recolectan compiten por parques infantiles y pupitres de madera plástica reciclada, mientras los niños canjean ecopuntos por útiles escolares.\n• Retorno social: Más de 250 colegios vinculados y donación de 1.800 pupitres certificados a escuelas rurales en zonas lecheras.';
+  if (msg.includes('mrv') || msg.includes('riesgo') || msg.includes('bancoldex') || msg.includes('invima') || msg.includes('ods')) {
+    return `Sistema MRV (5 Etapas), Riesgos y ODS:
+• MRV: 1. Medición ERP SAP (Diaria/Mensual) → 2. Dashboard Economía Circular (Trimestral) → 3. Reporte Externo GRI/ANLA-VUCE Res. 1407/BIC (Anual) → 4. Verificación Tercero ICONTEC/PwC/Deloitte e ISO 14001/Vertedero Cero (Anual) → 5. Ajuste Comité Directivo PHVA (Anual).
+• Viabilidad: Regulatorio INVIMA (rPET grado alimentario FDA/INVIMA + frío continuo); Financiero (descuento renta e exclusión IVA Estatuto Tributario + crédito verde Bancóldex); Cultural (canje + PRAE).
+• ODS: 8 (>450 recicladores), 9 (ecodiseño/biogás), 12 (Metas 12.3 y 12.5) y 13 (mitigación GEI).`;
   }
 
-  if (msg.includes('mrv') || msg.includes('1407') || msg.includes('resolución') || msg.includes('ley 2232') || msg.includes('indicador')) {
-    return 'Componente 5 · Indicadores y Sistema MRV:\n• 7 Fichas Técnicas: Contenido reciclado (%), retorno PRAE (%), aprovechamiento postindustrial (>95%), intensidad energética (kWh/t), intensidad hídrica (m³/t), pupitres donados y CO2eq evitado.\n• 5 Fases MRV: 1. Medición operativa (básculas y sensores IoT en Sopó), 2. Reporte interno (tableros mensuales PowerBI/Looker), 3. Reporte externo (cumplimiento Resolución 1407/2018 ante la ANLA y GRI 301/306), 4. Verificación independiente (auditoría ICONTEC/Bureau Veritas), y 5. Ajuste anual (ciclo PHVA por Comité Directivo Alpina BIC).';
-  }
-
-  return 'El Plan de Economía Circular de Bon Yurt Alpina articula armónicamente el Ciclo Biológico (envases bio, cuchara comestible de galleta, aprovechamiento de kumis y cereales) y el Ciclo Técnico (reutilización en el hogar, red PRAE Come-Vasos y reciclaje a pupitres). Cumple con la Ruta A de la guía de clase, demostrando que cerrar el ciclo es nutrir el futuro sin caer en greenwashing.';
+  return 'El Plan de Economía Circular del Bon Yurt de Alpina (Ruta A · 2025) parte de un diagnóstico semi-circular (95,2% postindustrial, 75% rPET sobrecopa, 59% plástico neutralidad, 51% IR) y ejecuta 4 estrategias priorizadas (E1 Cucharas de galleta, E2 Simbiosis mermas, E3 Vaso monomaterial rPET/Bio y E4 Bon Yurt Transforma) monitoreadas mediante 8 indicadores y 5 etapas MRV. ¿Sobre qué componente o cifra deseas profundizar?';
 }
 
 export default async function handler(req: any, res: any) {
@@ -150,7 +146,6 @@ export default async function handler(req: any, res: any) {
     return res.status(405).json({ error: 'Método no permitido' });
   }
 
-  // Safe body parsing for Vercel and Node environments
   let body = req.body;
   if (typeof body === 'string') {
     try {
@@ -176,8 +171,8 @@ export default async function handler(req: any, res: any) {
     const ai = new GoogleGenAI({ apiKey });
 
     const modePrompt = mode === 'evaluator'
-      ? 'MODO DOCENTE/JURADO EVALUADOR DE LA SUSTENTACIÓN: Actúa como el profesor o jurado evaluador estricto pero constructivo. Formula preguntas incisivas sobre los puntos críticos, cita criterios de la rúbrica de clase (Ciclo de Vida, Mariposa, Principios, Estrategias RESOLVE, MRV) o evalúa la respuesta del estudiante otorgando calificación de 0.0 a 5.0 y sugerencias para un 5.0.'
-      : 'MODO EXPERTO TÉCNICO CIRCULAR ALPINA: Responde con solvencia técnica, calidez pedagógica y datos exactos del plan del Bon Yurt.';
+      ? 'MODO DOCENTE/JURADO EVALUADOR DE LA SUSTENTACIÓN: Actúa como jurado exigente pero constructivo para la presentación de 13 min (+5 min Q&A). Formula preguntas precisas o evalúa respuestas de 0.0 a 5.0.'
+      : 'MODO EXPERTO TÉCNICO CIRCULAR ALPINA: Responde con precisión técnica y los datos exactos de la nueva versión del plan (Alpina 2025, sector Colombia, E1–E4, R0–R9, MRV).';
 
     const conversationPrompt = `
 ${SYSTEM_KNOWLEDGE}
@@ -191,7 +186,6 @@ PREGUNTA O PETICIÓN ACTUAL:
 ${message}
 `;
 
-    // Try gemini-2.0-flash first; if not available, fallback to gemini-1.5-flash
     let responseText = '';
     try {
       const response = await ai.models.generateContent({

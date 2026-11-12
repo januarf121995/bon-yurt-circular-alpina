@@ -41,11 +41,11 @@
   let messagesEndRef: HTMLDivElement | null = $state(null);
 
   const PRELOADED_QUESTIONS = [
-    '¿Por qué el kumis exige validación estricta de cadena de frío a 4°C en el loop en cascada?',
-    '¿Cómo funciona la cuchara comestible de galleta y la línea de bio-envases?',
-    '¿Cómo se articula el concurso "Bon Yurt Transforma" con los colegios PRAE?',
-    '¿Qué metas establece la Resolución 1407/2018 de MinAmbiente para Colombia?',
-    'Simular pregunta difícil de sustentación sobre el Componente 4 (Estrategias RESOLVE)',
+    'Compara los indicadores actuales de Alpina (IR 51%, rPET 75%, 95,2% postindustrial) vs. el sector en Colombia',
+    '¿Por qué la cuchara comestible (E1) es Prioridad 1 sobre el vaso rPET/Bio (E3)?',
+    'Explica los 3 principios MacArthur (4/5, 4/5, 5/5) y la matriz 9R (R0–R9)',
+    '¿Cómo se mitigan los riesgos ante INVIMA y con incentivos tributarios / Bancóldex?',
+    'Simular pregunta del jurado sobre el diagnóstico semi-circular y las metas a 3 años',
   ];
 
   function scrollToBottom() {
@@ -116,7 +116,7 @@
       const fallbackMsg: Message = {
         id: (Date.now() + 1).toString(),
         sender: 'assistant',
-        text: 'El plan de Bon Yurt Alpina articula el ciclo biológico (envases bio, cuchara de galleta horneada y aprovechamiento de kumis y cereales) con el ciclo técnico (red escolar PRAE y reciclaje mecánico a pupitres). Cumple la Ruta A de la guía y cuenta con sistema MRV en 5 etapas.',
+        text: 'El plan de Bon Yurt Alpina (Ruta A · 2025) parte de un diagnóstico semi-circular (95,2% aprovechamiento postindustrial, 75% rPET sobrecopa, 59% plástico neutralidad, 51% IR) y ejecuta E1–E4 monitoreadas en 8 indicadores y 5 etapas MRV.',
         source: 'knowledge_engine_fallback',
       };
       messages = [...messages, fallbackMsg];
